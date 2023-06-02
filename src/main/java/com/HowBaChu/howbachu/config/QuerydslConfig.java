@@ -1,4 +1,4 @@
-package com.example.howbachu.config;
+package com.HowBaChu.howbachu.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.context.annotation.Bean;

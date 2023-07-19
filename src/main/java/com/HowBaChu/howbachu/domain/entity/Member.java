@@ -1,8 +1,11 @@
 package com.HowBaChu.howbachu.domain.entity;
 
+import com.HowBaChu.howbachu.domain.constants.MBTI;
 import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,6 +35,10 @@ public class Member {
 
     @Column(nullable = false)
     private String username;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private MBTI mbti;
 
     public static Member toEntity(MemberRequestDto requestDto, PasswordEncoder passwordEncoder) {
         return Member.builder()

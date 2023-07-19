@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/members")
+@RequestMapping(value = "/api/member")
 public class MemberController {
 
     private final MemberService memberService;
@@ -25,7 +25,7 @@ public class MemberController {
     @PostMapping("/signup")
     public ResponseEntity<ResResult> register(@RequestBody MemberRequestDto requestDto) {
         ResponseCode responseCode = ResponseCode.MEMBER_SAVE;
-        return new ResponseEntity(ResResult.builder()
+        return new ResponseEntity<>(ResResult.builder()
             .responseCode(responseCode)
             .code(responseCode.getCode())
             .message(responseCode.getMessage())
@@ -34,6 +34,7 @@ public class MemberController {
     }
 
     /*로그인*/
+    
 
     /*회원검색*/
 

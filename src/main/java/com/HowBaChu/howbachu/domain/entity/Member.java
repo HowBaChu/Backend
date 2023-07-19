@@ -45,6 +45,7 @@ public class Member {
             .email(requestDto.getEmail())
             .password(passwordEncoder.encode(requestDto.getPassword()))
             .username(requestDto.getUsername())
+            .mbti(requestDto.getMbti())
             .build();
     }
 }

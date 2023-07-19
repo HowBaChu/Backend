@@ -1,10 +1,10 @@
 package com.HowBaChu.howbachu.domain.dto.member;
 
+import com.HowBaChu.howbachu.domain.constants.MBTI;
 import com.HowBaChu.howbachu.domain.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 @Builder
@@ -14,6 +14,7 @@ public class MemberResponseDto {
     private String email;
     private String password;
     private String username;
+    private MBTI mbti;
 
     public static MemberResponseDto of(Member member) {
         return MemberResponseDto.builder()
@@ -21,6 +22,7 @@ public class MemberResponseDto {
             .email(member.getEmail())
             .password(member.getPassword())
             .username(member.getUsername())
+            .mbti(member.getMbti())
             .build();
     }
 
@@ -31,6 +33,7 @@ public class MemberResponseDto {
             ", email='" + email + '\'' +
             ", password='" + password + '\'' +
             ", username='" + username + '\'' +
+            ", mbti='" + mbti + '\'' +
             '}';
     }
 }

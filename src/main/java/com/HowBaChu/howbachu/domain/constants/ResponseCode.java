@@ -9,22 +9,19 @@ import org.springframework.http.HttpStatus;
 public enum ResponseCode {
 
     /* OPIN */
-    OPIN_LIST(HttpStatus.OK, "200 OK", "Opin - Find successfully"),
-    OPIN_SAVE(HttpStatus.CREATED, "201 Created", "Opin - Create successfully"),
-    OPIN_UPDATE(HttpStatus.NO_CONTENT, "204 No Content", "Opin - Modified successfully"),
-    OPIN_DELETE(HttpStatus.NO_CONTENT, "204 No Content", "Opin - Delete successfully"),
+    OPIN_LIST(HttpStatus.OK, "200", "댓글 조회 성공"),
+    OPIN_SAVE(HttpStatus.CREATED, "201", "댓글 등록 성공"),
+    OPIN_UPDATE(HttpStatus.NO_CONTENT, "204", "댓글 수정 성공"),
+    OPIN_DELETE(HttpStatus.NO_CONTENT, "204", "댓글 삭제 성공"),
 
     /* MEMBER */
-    MEMBER_SAVE(HttpStatus.CREATED,"201 Created","Memeber - Signup successfully"),
-    MEMBER_LOGIN(HttpStatus.OK,"200 OK","Memeber - Login successfully"),
+    MEMBER_SAVE(HttpStatus.CREATED,"201","회원가입 성공"),
+    MEMBER_LOGIN(HttpStatus.OK,"200","로그인 성공"),
 
-    /* TOPIC */
-    TOPIC_GET(HttpStatus.OK, "200 OK", "Topic - Find successfully"),
-    TOPIC_CREATE(HttpStatus.CREATED, "201 Created", "Topic - Create successfully"),
-    TOPIC_UPDATE(HttpStatus.NO_CONTENT, "204 No Content", "Topic - Modified successfully"),
-    TOPIC_DELETE(HttpStatus.NO_CONTENT,"204 No Content", "Topic - Delete successfully"),
-
-    VOTING_SUCCESS(HttpStatus.CREATED, "201 Created", "Vote - successfully");
+    /* VOTE */
+    VOTING_SUCCESS(HttpStatus.CREATED, "201", "투표 성공"),
+    VOTING_UPDATE(HttpStatus.NO_CONTENT,"204","투표 수정 성공"),
+    VOTING_DELETE(HttpStatus.NO_CONTENT,"204","투표 취소 성공");
 
     private final HttpStatus httpStatus;
     private final String code;

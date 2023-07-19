@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active: dev
+
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+  thymeleaf:
+    prefix: classpath:/templates/
+
+  mvc:
+    path-match:
+      matching-strategy: ant_path_matcher
+
+logging:
+  level:
+    org.springframework.security: ERROR
+    org.springframework.boot.autoconfigure.security: ERROR

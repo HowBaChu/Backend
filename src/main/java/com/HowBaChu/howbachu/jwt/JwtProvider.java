@@ -27,7 +27,7 @@ public class JwtProvider {
     private final JwtConfig jwtConfig;
 
     /**
-     * @param email      유저의 이메일
+     * @param email 유저의 이메일
      * @return accessToken 과 refreshToken 이 담긴 token 객체를 리턴한다.
      */
     public TokenDto generateJwtToken(String email) {
@@ -63,11 +63,11 @@ public class JwtProvider {
 
 
     /**
-     * @param response    클라이언트에 전달할 response
+     * @param response 클라이언트에 전달할 response
      * @param accessToken 헤더에 저장할 액세스 토큰
      */
     public void setHeaderAccessToken(HttpServletResponse response, String accessToken) {
-        response.setHeader("access", accessToken);
+        response.setHeader("Authorization", accessToken);
     }
 
 
@@ -92,17 +92,15 @@ public class JwtProvider {
     }
 
     /**
-     * @param token      만료검증할 토큰
-     * @return 만료되지 않았다면 1, 만료되었다면 0, 그 외의 예외는 -1
+     * @param token 만료검증할 토큰
+     * @return 만료되지 않았다면 1, 만료되었다면 0, 그 외의 예외는 익센셥 처리
      */
     public Boolean validateToken(String token) {
         try {
             parseClaims(token);
         } catch (ExpiredJwtException e) {
             return false;
-        } catch (UnsupportedJwtException e) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN_TYPE);
-        } catch (MalformedJwtException e) {
+        } catch (UnsupportedJwtException | MalformedJwtException e) {
             throw new CustomException(ErrorCode.INVALID_TOKEN_TYPE);
         } catch (SignatureException e) {
             throw new CustomException(ErrorCode.MODIFIED_TOKEN_DETECTED);

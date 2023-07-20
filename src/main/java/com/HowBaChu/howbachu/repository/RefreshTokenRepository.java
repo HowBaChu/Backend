@@ -8,7 +8,5 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Stri
 
     Optional<RefreshToken> findByKey(String email);
 
-    boolean existsByKey(String email);
-
     void deleteByKey(String email);
 }

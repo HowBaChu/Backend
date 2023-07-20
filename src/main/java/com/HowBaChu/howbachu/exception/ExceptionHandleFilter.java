@@ -1,6 +1,7 @@
 package com.HowBaChu.howbachu.exception;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,11 +19,13 @@ public class ExceptionHandleFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
         } catch (CustomException e) {
-            log.info("Filter Exception Caught");
-            log.info("FilterCustomException: "+ e.getErrorCode().getMessage());
+            log.error("Filter Exception Caught");
+            log.error("FilterCustomException: "+ e.getErrorCode().getMessage());
             response.setStatus(e.getErrorCode().getStatus().value());
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
+            String json = new ObjectMapper().writeValueAsString(e.getErrorCode().toString());
+            response.getWriter().write(json);
         }
     }
 }

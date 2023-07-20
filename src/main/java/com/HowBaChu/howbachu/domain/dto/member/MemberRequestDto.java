@@ -11,4 +11,5 @@ public class MemberRequestDto {
     private String password;
     private String username;
     private MBTI mbti;
+    private String statusMessage;
 }

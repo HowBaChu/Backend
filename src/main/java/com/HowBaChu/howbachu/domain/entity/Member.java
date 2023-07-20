@@ -40,12 +40,16 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private MBTI mbti;
 
+    @Column
+    private String statusMessage;
+
     public static Member toEntity(MemberRequestDto requestDto, PasswordEncoder passwordEncoder) {
         return Member.builder()
             .email(requestDto.getEmail())
             .password(passwordEncoder.encode(requestDto.getPassword()))
             .username(requestDto.getUsername())
             .mbti(requestDto.getMbti())
+            .statusMessage(requestDto.getStatusMessage())
             .build();
     }
 }

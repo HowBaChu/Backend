@@ -9,10 +9,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Slf4j
 @RestController
@@ -45,9 +48,22 @@ public class MemberController {
             .data(memberService.login(requestDto,response))
             .build(),HttpStatus.OK);
     }
-    /*회원검색*/
+
+    /*회원 상세정보*/
+    @GetMapping
+    public ResponseEntity<ResResult> findMemberDetail(@ApiIgnore Authentication authentication) {
+        ResponseCode responseCode = ResponseCode.MEMBER_DETAIL;
+        return new ResponseEntity<>(ResResult.builder()
+            .responseCode(responseCode)
+            .code(responseCode.getCode())
+            .message(responseCode.getMessage())
+            .data(memberService.findMemberDetail(authentication.getName()))
+            .build(), HttpStatus.OK);
+    }
 
     /*회원정보 수정*/
 
     /*회원탈퇴*/
+
+    /*다른 회원 정보*/
 }

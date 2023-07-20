@@ -17,6 +17,7 @@ public enum ResponseCode {
     /* MEMBER */
     MEMBER_SAVE(HttpStatus.CREATED,"201","회원가입 성공"),
     MEMBER_LOGIN(HttpStatus.OK,"200","로그인 성공"),
+    MEMBER_DETAIL(HttpStatus.OK,"200","회원정보 불러오기 성공"),
 
     /* VOTE */
     VOTING_SUCCESS(HttpStatus.CREATED, "201", "투표 성공"),

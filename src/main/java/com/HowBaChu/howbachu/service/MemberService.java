@@ -14,8 +14,8 @@ public interface MemberService {
     /*로그인*/
     MemberResponseDto login(MemberRequestDto requestDto, HttpServletResponse response);
 
-    /*회원검색*/
-    void findMember(String email);
+    /*회원 상세정보*/
+    MemberResponseDto findMemberDetail(String email);
 
     /*회원정보 수정*/
     void updateMember(String email, MemberRequestDto requestDto);

@@ -54,8 +54,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void findMember(String email) {
-
+    public MemberResponseDto findMemberDetail(String email) {
+        return MemberResponseDto.of(memberRepository.findByEmail(email));
     }
 
     @Override

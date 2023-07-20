@@ -13,7 +13,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
     protected ResponseEntity<?> handlerCustomException(CustomException e) {
-        log.error("Exception: " + e.getErrorCode().getMessage());
+        log.error("CustomException: " + e.getErrorCode().getMessage());
         ErrorResponse response = new ErrorResponse(e.getErrorCode());
         return new ResponseEntity<>(response, e.getErrorCode().getStatus());
     }
@@ -21,6 +21,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<?> handlerException(Exception e) {
         log.error("Exception : " + e.getMessage());
-        return ResponseEntity.status(500).body("UNEXPECTED_EXCEPTION: " + e.getMessage());
+        return ResponseEntity.status(500).body("UNEXPECTED_EXCEPTION: " + e);
     }
 }

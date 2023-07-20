@@ -1,10 +1,12 @@
 package com.HowBaChu.howbachu.jwt;
 
+import com.HowBaChu.howbachu.domain.entity.RefreshToken;
 import com.HowBaChu.howbachu.exception.CustomException;
 import com.HowBaChu.howbachu.exception.constants.ErrorCode;
 import com.HowBaChu.howbachu.repository.RefreshTokenRepository;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -24,25 +26,26 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
     private final RefreshTokenRepository refreshTokenRepository;
-    final String SECRET_KEY;
 
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         // 토큰 꺼내기
         String accessToken = resolveToken(request, "access");
 
-        // 엑세스 토큰이 없다면 익셉션 발생 -> 에러 처리
-        if (accessToken == null) { throw new CustomException(ErrorCode.NO_JWT_TOKEN); }
+        if (accessToken == null) {
+            chain.doFilter(request,response);
+            return;
+        }
 
-        String email = jwtProvider.getEmailFromToken(accessToken, SECRET_KEY);
-        String refreshToken = refreshTokenRepository.findByKey(email);
+        String email = jwtProvider.getEmailFromToken(accessToken);
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByKey(email);
 
-        if (jwtProvider.validateToken(accessToken, SECRET_KEY)) { setAuthentication(email, request); } // 액세스 토큰이 유효하다면
-        else if (refreshToken != null) { // 액세스 토큰이 만료되었으며 리프레쉬토큰이 존재하는 경우
-            if (jwtProvider.validateToken(refreshToken, SECRET_KEY)) { // 액세스 토큰이 만려되면 리프레쉬 토큰으로 새로운 액세스 토큰 발급
-                String newAccessToken = jwtProvider.createAccessToken(email, SECRET_KEY);
+        if (jwtProvider.validateToken(accessToken)) { setAuthentication(email, request); } // 액세스 토큰이 유효하다면
+        else if (refreshToken.isPresent()) { // 액세스 토큰이 만료되었으며 리프레쉬토큰이 존재하는 경우
+            if (jwtProvider.validateToken(refreshToken.get().getValue())) { // 액세스 토큰이 만려되면 리프레쉬 토큰으로 새로운 액세스 토큰 발급
+                String newAccessToken = jwtProvider.createAccessToken(email);
                 jwtProvider.setHeaderAccessToken(response, newAccessToken);
-                setAuthentication(jwtProvider.getEmailFromToken(newAccessToken, SECRET_KEY), request);
+                setAuthentication(jwtProvider.getEmailFromToken(newAccessToken), request);
             } else { throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN); } // 액세스 토큰과 리프레쉬 토큰이 모두 만료되었다면 익셉션 발생 -> 재로그인 필요
         }
         else { throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN); } // 액세스 토큰이 만료되고 리프레쉬 토큰이 존재하지 않는 경우

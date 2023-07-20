@@ -18,5 +18,4 @@ public class CustomException extends RuntimeException{
             '}';
     }
 
-    public ErrorCode getErrorCode() {return errorCode;}
 }

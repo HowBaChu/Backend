@@ -1,62 +1,68 @@
 package com.HowBaChu.howbachu.config;
 
+import com.HowBaChu.howbachu.exception.ExceptionHandleFilter;
+import com.HowBaChu.howbachu.jwt.JwtFilter;
+import com.HowBaChu.howbachu.jwt.JwtProvider;
+import com.HowBaChu.howbachu.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
-/*    @Value("${spring.jwt.password}")
-    private String SECRET_KEY;
+
     private final JwtProvider jwtProvider;
-    private static final String[] PERMIT_URL_ARRAY = {
-            *//* swagger v2 *//*
-            "/v2/api-docs",
-            "/swagger-resources",
-            "/swagger-resources/**",
-            "/configuration/ui",
-            "/configuration/security",
-            "/swagger-ui.html",
-            "/webjars/**",
-            *//* swagger v3 *//*
-            "/v3/api-docs/**",
-            "/swagger-ui/**",
-            *//* Login, Signup *//*
-            "/api/members/login",
-            "/api/members/sign-up"
-    };*/
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
-                .httpBasic().disable()
-                .csrf().disable()
-                .cors().and()
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring()
+            .antMatchers("/v3/api-docs")
+            .antMatchers("/swagger-resources/**")
+            .antMatchers("/swagger-ui/**")
+            .antMatchers("/webjars/**")
+            .antMatchers("/swagger/**")
+            .antMatchers("/api-docs/**")
+            .antMatchers("/swagger-ui/**")
+            ;
+    }
 
-                // 세션 비활성화
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity security) throws Exception {
+        security
+            .httpBasic().disable()
+            .csrf().disable()
+            .cors();
 
-                // 로그인, 회원가입은 허용 -> 나머지 인증 인가 필요
-                .authorizeRequests()
-//                .antMatchers(PERMIT_URL_ARRAY).permitAll()
-//                .anyRequest().authenticated()
-                .anyRequest().permitAll() // 임시로 모두 허용
-                .and()
+            // 세션 비활성화
+        security
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-                // 필터 적용
-//                .addFilterBefore(new JwtFilter(jwtProvider,SECRET_KEY),
-//                        UsernamePasswordAuthenticationFilter.class)
-                .build();
+            // 로그인, 회원가입은 허용 -> 나머지 인증 인가 필요
+        security
+            .authorizeRequests()
+            .antMatchers("/api/member/signup","/api/member/login").permitAll()
+            .anyRequest().authenticated();
+
+            // 필터 적용
+        security
+            .addFilterBefore(new JwtFilter(jwtProvider, refreshTokenRepository),
+                UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new ExceptionHandleFilter(),
+                UsernamePasswordAuthenticationFilter.class);
+
+        return security.build();
     }
 
     @Bean

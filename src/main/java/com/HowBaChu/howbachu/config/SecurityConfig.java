@@ -57,10 +57,11 @@ public class SecurityConfig {
 
             // 필터 적용
         security
-            .addFilterBefore(new JwtFilter(jwtProvider, refreshTokenRepository),
-                UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(new ExceptionHandleFilter(),
+                UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new JwtFilter(jwtProvider, refreshTokenRepository),
                 UsernamePasswordAuthenticationFilter.class);
+
 
         return security.build();
     }

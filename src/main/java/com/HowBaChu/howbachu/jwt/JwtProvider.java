@@ -77,10 +77,14 @@ public class JwtProvider {
      * @return token 의 정보가 담긴 claims
      */
     public Claims parseClaims(String token) {
-        return Jwts.parser()
-            .setSigningKey(Base64.getEncoder().encode(jwtConfig.getSecretKey().getBytes()))
-            .parseClaimsJws(token)
-            .getBody();
+        try {
+            return Jwts.parser()
+                .setSigningKey(Base64.getEncoder().encode(jwtConfig.getSecretKey().getBytes()))
+                .parseClaimsJws(token)
+                .getBody();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims();
+        }
     }
 
     public String getEmailFromToken(String token) {
@@ -95,16 +99,12 @@ public class JwtProvider {
         try {
             parseClaims(token);
         } catch (ExpiredJwtException e) {
-            log.error("토큰이 만료되었습니다.");
             return false;
         } catch (UnsupportedJwtException e) {
-            log.error("올바른 JWT 토큰 형식이 아닙니다.");
             throw new CustomException(ErrorCode.INVALID_TOKEN_TYPE);
         } catch (MalformedJwtException e) {
-            log.error("올바른 JWT 토큰 구조가 아닙니다.");
             throw new CustomException(ErrorCode.INVALID_TOKEN_TYPE);
         } catch (SignatureException e) {
-            log.error("JWT 토큰이 변조되었습니다.");
             throw new CustomException(ErrorCode.MODIFIED_TOKEN_DETECTED);
         }
         return true;

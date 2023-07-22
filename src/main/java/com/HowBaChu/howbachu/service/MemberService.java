@@ -18,7 +18,7 @@ public interface MemberService {
     MemberResponseDto findMemberDetail(String email);
 
     /*회원정보 수정*/
-    void updateMember(String email, MemberRequestDto requestDto);
+    MemberResponseDto updateMember(String email, MemberRequestDto requestDto);
 
     /*회원탈퇴*/
     void deleteMember(String email, MemberRequestDto requestDto);

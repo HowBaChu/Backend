@@ -21,5 +21,5 @@ public interface MemberService {
     MemberResponseDto updateMember(String email, MemberRequestDto requestDto);
 
     /*회원탈퇴*/
-    void deleteMember(String email, MemberRequestDto requestDto);
+    void deleteMember(String email);
 }

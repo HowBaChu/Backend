@@ -71,8 +71,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void deleteMember(String email, MemberRequestDto requestDto) {
-
+    public void deleteMember(String email) {
+        Member member = memberRepository.findByEmail(email);
+        memberRepository.deleteById(member.getId());
     }
 
     public boolean validatePassword(String input, String encoded) {

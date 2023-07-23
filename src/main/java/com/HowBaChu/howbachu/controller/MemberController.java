@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -87,5 +88,15 @@ public class MemberController {
             .build(), HttpStatus.OK);
     }
 
-    /*다른 회원 정보*/
+    /*이메일 중복 검사*/
+    @GetMapping("/user-email/{email}/exists")
+    public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable String email) {
+        return ResponseEntity.ok(memberService.checkEmailDuplicate(email));
+    }
+
+    /*닉네임 중복 검사*/
+    @GetMapping("/user-username/{username}/exists")
+    public ResponseEntity<Boolean> checkUsernameDuplicate(@PathVariable String username) {
+        return ResponseEntity.ok(memberService.checkUsernameDuplicate(username));
+    }
 }

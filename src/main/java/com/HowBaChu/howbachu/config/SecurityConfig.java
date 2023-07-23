@@ -52,7 +52,12 @@ public class SecurityConfig {
             // 로그인, 회원가입은 허용 -> 나머지 인증 인가 필요
         security
             .authorizeRequests()
-            .antMatchers("/api/member/signup","/api/member/login").permitAll()
+            .antMatchers(
+                "/api/member/signup",
+                "/api/member/login",
+                "/api/member/user-email/{email}/exists",
+                "/api/member/user-username/{username}/exists"
+                ).permitAll()
             .anyRequest().authenticated();
 
             // 필터 적용

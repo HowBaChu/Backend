@@ -22,4 +22,10 @@ public interface MemberService {
 
     /*회원탈퇴*/
     void deleteMember(String email);
+
+    /*이메일 중복검사*/
+    boolean checkEmailDuplicate(String email);
+
+    /*닉네임 중복검사*/
+    boolean checkUsernameDuplicate(String username);
 }

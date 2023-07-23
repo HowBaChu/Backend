@@ -76,6 +76,16 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.deleteById(member.getId());
     }
 
+    @Override
+    public boolean checkEmailDuplicate(String email) {
+        return memberRepository.existsByEmail(email);
+    }
+
+    @Override
+    public boolean checkUsernameDuplicate(String username) {
+        return memberRepository.existsByUsername(username);
+    }
+
     public boolean validatePassword(String input, String encoded) {
         return passwordEncoder.matches(input, encoded);
     }

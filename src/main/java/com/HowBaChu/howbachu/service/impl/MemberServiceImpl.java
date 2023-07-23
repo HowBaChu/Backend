@@ -60,9 +60,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberResponseDto updateMember(String email, MemberRequestDto requestDto) {
-        Member member = memberRepository.findByEmail(requestDto.getEmail());
+        Member member = memberRepository.findByEmail(email);
 
-        if (!member.getEmail().equals(email)) {
+        if (!member.getEmail().equals(requestDto.getEmail())) {
             throw new CustomException(ErrorCode.NOT_AUTHORIZED_CONTENT);
         }
 

@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 @ToString
 public enum ErrorCode {
 
+    /* COMMON */
+    NOT_AUTHORIZED_CONTENT(HttpStatus.UNAUTHORIZED, "권한이 거부되었습니다."),
+
     /* JWT */
     NO_JWT_TOKEN(HttpStatus.UNAUTHORIZED,"토큰이 존재하지 않습니다."),
     NOT_AUTHORIZED_TOKEN(HttpStatus.FORBIDDEN, "접근이 거부되었습니다."),

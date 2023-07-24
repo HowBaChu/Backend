@@ -59,16 +59,41 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void updateMember(String email, MemberRequestDto requestDto) {
+    public MemberResponseDto updateMember(String email, MemberRequestDto requestDto) {
+        Member member = memberRepository.findByEmail(email);
 
+        if (!member.getEmail().equals(requestDto.getEmail())) {
+            throw new CustomException(ErrorCode.NOT_AUTHORIZED_CONTENT);
+        }
+
+        member.update(requestDto, passwordEncoder);
+        return MemberResponseDto.of(member);
     }
 
     @Override
-    public void deleteMember(String email, MemberRequestDto requestDto) {
+    public void deleteMember(String email) {
+        Member member = memberRepository.findByEmail(email);
+        memberRepository.deleteById(member.getId());
+    }
 
+    @Override
+    public boolean checkEmailDuplicate(String email) {
+        return memberRepository.existsByEmail(email);
+    }
+
+    @Override
+    public boolean checkUsernameDuplicate(String username) {
+        return memberRepository.existsByUsername(username);
+    }
+
+    @Override
+    public void logout(String email) {
+        refreshTokenRepository.deleteByKey(email);
     }
 
     public boolean validatePassword(String input, String encoded) {
         return passwordEncoder.matches(input, encoded);
     }
+
+
 }

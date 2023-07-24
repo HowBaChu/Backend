@@ -4,7 +4,16 @@ import com.HowBaChu.howbachu.exception.ExceptionHandleFilter;
 import com.HowBaChu.howbachu.jwt.JwtFilter;
 import com.HowBaChu.howbachu.jwt.JwtProvider;
 import com.HowBaChu.howbachu.repository.RefreshTokenRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
@@ -43,7 +52,12 @@ public class SecurityConfig {
             // 로그인, 회원가입은 허용 -> 나머지 인증 인가 필요
         security
             .authorizeRequests()
-            .antMatchers("/api/member/signup","/api/member/login").permitAll()
+            .antMatchers(
+                "/api/v1/auth/signup",
+                "/api/v1/auth/login",
+                "/api/v1/member/email/{email}/exists",
+                "/api/v1/member/username/{username}/exists"
+                ).permitAll()
             .anyRequest().authenticated();
 
             // 필터 적용

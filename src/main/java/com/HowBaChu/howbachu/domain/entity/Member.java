@@ -33,7 +33,7 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String username;
 
     @Column(nullable = false)
@@ -51,5 +51,12 @@ public class Member {
             .mbti(requestDto.getMbti())
             .statusMessage(requestDto.getStatusMessage())
             .build();
+    }
+
+    public void update(MemberRequestDto requestDto, PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(requestDto.getPassword());
+        this.username = requestDto.getUsername();
+        this.mbti = requestDto.getMbti();
+        this.statusMessage = requestDto.getStatusMessage();
     }
 }

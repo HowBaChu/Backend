@@ -53,10 +53,10 @@ public class SecurityConfig {
         security
             .authorizeRequests()
             .antMatchers(
-                "/api/member/signup",
-                "/api/member/login",
-                "/api/member/user-email/{email}/exists",
-                "/api/member/user-username/{username}/exists"
+                "/api/v1/auth/signup",
+                "/api/v1/auth/login",
+                "/api/v1/member/email/{email}/exists",
+                "/api/v1/member/username/{username}/exists"
                 ).permitAll()
             .anyRequest().authenticated();
 

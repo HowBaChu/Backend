@@ -28,4 +28,6 @@ public interface MemberService {
 
     /*닉네임 중복검사*/
     boolean checkUsernameDuplicate(String username);
+
+    void logout(String email);
 }

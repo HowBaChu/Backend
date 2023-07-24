@@ -86,7 +86,14 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.existsByUsername(username);
     }
 
+    @Override
+    public void logout(String email) {
+        refreshTokenRepository.deleteByKey(email);
+    }
+
     public boolean validatePassword(String input, String encoded) {
         return passwordEncoder.matches(input, encoded);
     }
+
+
 }

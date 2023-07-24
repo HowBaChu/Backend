@@ -4,7 +4,6 @@ import com.HowBaChu.howbachu.domain.constants.ResponseCode;
 import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
 import com.HowBaChu.howbachu.domain.dto.response.ResResult;
 import com.HowBaChu.howbachu.service.MemberService;
-import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,34 +21,10 @@ import springfox.documentation.annotations.ApiIgnore;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/member")
+@RequestMapping(value = "/api/v1/member")
 public class MemberController {
 
     private final MemberService memberService;
-
-    /*회원가입*/
-    @PostMapping("/signup")
-    public ResponseEntity<ResResult> register(@RequestBody MemberRequestDto requestDto) {
-        ResponseCode responseCode = ResponseCode.MEMBER_SAVE;
-        return new ResponseEntity<>(ResResult.builder()
-            .responseCode(responseCode)
-            .code(responseCode.getCode())
-            .message(responseCode.getMessage())
-            .data(memberService.signup(requestDto))
-            .build(), HttpStatus.OK);
-    }
-
-    /*로그인*/
-    @PostMapping("/login")
-    public ResponseEntity<ResResult> login(@RequestBody MemberRequestDto requestDto, HttpServletResponse response) {
-        ResponseCode responseCode = ResponseCode.MEMBER_LOGIN;
-        return new ResponseEntity<>(ResResult.builder()
-            .responseCode(responseCode)
-            .code(responseCode.getCode())
-            .message(responseCode.getMessage())
-            .data(memberService.login(requestDto,response))
-            .build(),HttpStatus.OK);
-    }
 
     /*회원 상세정보*/
     @GetMapping
@@ -89,13 +63,13 @@ public class MemberController {
     }
 
     /*이메일 중복 검사*/
-    @GetMapping("/user-email/{email}/exists")
+    @GetMapping("/email/{email}/exists")
     public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable String email) {
         return ResponseEntity.ok(memberService.checkEmailDuplicate(email));
     }
 
     /*닉네임 중복 검사*/
-    @GetMapping("/user-username/{username}/exists")
+    @GetMapping("/username/{username}/exists")
     public ResponseEntity<Boolean> checkUsernameDuplicate(@PathVariable String username) {
         return ResponseEntity.ok(memberService.checkUsernameDuplicate(username));
     }

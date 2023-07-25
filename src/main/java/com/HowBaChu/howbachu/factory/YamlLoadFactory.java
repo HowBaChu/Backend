@@ -1,7 +1,7 @@
 package com.HowBaChu.howbachu.factory;
 
 import java.io.IOException;
-import java.util.Properties;
+
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.core.env.PropertiesPropertySource;
 import org.springframework.core.env.PropertySource;
@@ -12,9 +12,10 @@ public class YamlLoadFactory implements PropertySourceFactory {
 
     @Override
     public PropertySource<?> createPropertySource(String name, EncodedResource resource) throws IOException {
+
         YamlPropertiesFactoryBean ypfb = new YamlPropertiesFactoryBean();
         ypfb.setResources(resource.getResource());
-        Properties properties = ypfb.getObject();
-        return new PropertiesPropertySource(resource.getResource().getFilename(), properties);
+
+        return new PropertiesPropertySource(resource.getResource().getFilename(), ypfb.getObject());
     }
 }

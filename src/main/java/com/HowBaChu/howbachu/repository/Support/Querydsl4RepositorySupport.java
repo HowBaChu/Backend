@@ -61,6 +61,7 @@ public abstract class Querydsl4RepositorySupport {
     protected JPAQueryFactory getQueryFactory() {
         return queryFactory;
     }
+
     protected Querydsl getQuerydsl() {
         return querydsl;
     }
@@ -77,7 +78,7 @@ public abstract class Querydsl4RepositorySupport {
         return getQueryFactory().delete(from);
     }
 
-    protected <T> JPAInsertClause insert(EntityPath<T> from){
+    protected <T> JPAInsertClause insert(EntityPath<T> from) {
         return getQueryFactory().insert(from);
     }
 

@@ -17,9 +17,10 @@ public class MemberRepositoryImpl extends Querydsl4RepositorySupport implements 
 
     @Override
     public Member findByEmail(String email) {
-        return Optional.ofNullable(selectFrom(member)
-            .where(member.email.eq(email))
-            .fetchFirst()
+        return Optional.ofNullable(
+                selectFrom(member)
+                .where(member.email.eq(email))
+                .fetchFirst()
         ).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
     }
 }

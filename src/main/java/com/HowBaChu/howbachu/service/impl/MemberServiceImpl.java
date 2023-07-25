@@ -11,7 +11,9 @@ import com.HowBaChu.howbachu.jwt.JwtProvider;
 import com.HowBaChu.howbachu.repository.MemberRepository;
 import com.HowBaChu.howbachu.repository.RefreshTokenRepository;
 import com.HowBaChu.howbachu.service.MemberService;
+
 import javax.servlet.http.HttpServletResponse;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,12 +33,13 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberResponseDto signup(MemberRequestDto requestDto) {
-        Member member = Member.toEntity(requestDto, passwordEncoder);
-        return MemberResponseDto.of(memberRepository.save(member));
+        return MemberResponseDto.of(memberRepository.save(
+                Member.toEntity(requestDto, passwordEncoder.encode(requestDto.getPassword()))));
     }
 
     @Override
     public MemberResponseDto login(MemberRequestDto requestDto, HttpServletResponse response) {
+
         Member member = memberRepository.findByEmail(requestDto.getEmail());
 
         if (!validatePassword(requestDto.getPassword(), member.getPassword())) {
@@ -44,11 +47,12 @@ public class MemberServiceImpl implements MemberService {
         }
 
         TokenDto tokenDto = jwtProvider.generateJwtToken(member.getEmail());
-        jwtProvider.setHeaderAccessToken(response,tokenDto.getAccessToken());
-        if (refreshTokenRepository.findByKey(member.getEmail()).isPresent()){
+        jwtProvider.setHeaderAccessToken(response, tokenDto.getAccessToken());
+
+        if (refreshTokenRepository.findByKey(member.getEmail()).isPresent()) {
             refreshTokenRepository.deleteByKey(member.getEmail());
         }
-        refreshTokenRepository.save(new RefreshToken(member.getEmail(),tokenDto.getRefreshToken()));
+        refreshTokenRepository.save(new RefreshToken(member.getEmail(), tokenDto.getRefreshToken()));
 
         return MemberResponseDto.of(member);
     }
@@ -59,16 +63,40 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void updateMember(String email, MemberRequestDto requestDto) {
+    public MemberResponseDto updateMember(String email, MemberRequestDto requestDto) {
+        Member member = memberRepository.findByEmail(email);
 
+        if (!member.getEmail().equals(requestDto.getEmail())) {
+            throw new CustomException(ErrorCode.NOT_AUTHORIZED_CONTENT);
+        }
+
+        member.update(requestDto, passwordEncoder.encode(requestDto.getPassword()));
+        return MemberResponseDto.of(member);
     }
 
     @Override
-    public void deleteMember(String email, MemberRequestDto requestDto) {
+    public void deleteMember(String email) {
+        memberRepository.deleteById(memberRepository.findByEmail(email).getId());
+    }
 
+    @Override
+    public boolean checkEmailDuplicate(String email) {
+        return memberRepository.existsByEmail(email);
+    }
+
+    @Override
+    public boolean checkUsernameDuplicate(String username) {
+        return memberRepository.existsByUsername(username);
+    }
+
+    @Override
+    public void logout(String email) {
+        refreshTokenRepository.deleteByKey(email);
     }
 
     public boolean validatePassword(String input, String encoded) {
         return passwordEncoder.matches(input, encoded);
     }
+
+
 }

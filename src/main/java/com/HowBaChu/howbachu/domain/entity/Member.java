@@ -14,7 +14,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Getter
@@ -24,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class Member {
 
     @Id
+    @Column(name = "member_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -33,7 +33,7 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String username;
 
     @Column(nullable = false)
@@ -43,13 +43,22 @@ public class Member {
     @Column
     private String statusMessage;
 
-    public static Member toEntity(MemberRequestDto requestDto, PasswordEncoder passwordEncoder) {
+    public static Member toEntity(MemberRequestDto requestDto, String encodedPassword) {
         return Member.builder()
-            .email(requestDto.getEmail())
-            .password(passwordEncoder.encode(requestDto.getPassword()))
-            .username(requestDto.getUsername())
-            .mbti(requestDto.getMbti())
-            .statusMessage(requestDto.getStatusMessage())
-            .build();
+                .email(requestDto.getEmail())
+                .password(encodedPassword)
+                .username(requestDto.getUsername())
+                .mbti(requestDto.getMbti())
+                .statusMessage(requestDto.getStatusMessage())
+                .build();
     }
+
+
+    public void update(MemberRequestDto requestDto, String encodedPassword) {
+        this.password = encodedPassword;
+        this.username = requestDto.getUsername();
+        this.mbti = requestDto.getMbti();
+        this.statusMessage = requestDto.getStatusMessage();
+    }
+
 }

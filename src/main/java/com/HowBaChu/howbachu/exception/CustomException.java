@@ -16,8 +16,8 @@ public class CustomException extends RuntimeException {
     @Override
     public String toString() {
         return "CustomException{" +
-                "errorCode=" + errorCode +
-                '}';
+            "errorCode=" + errorCode +
+            '}';
     }
 
     public ErrorCode getErrorCode() {

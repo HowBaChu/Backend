@@ -19,7 +19,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<?> handlerException(Exception e) {
-        log.error("Exception : " + e.getMessage());
+        log.error("Unexpected_Exception : " + e.getMessage());
         return ResponseEntity.status(500).body("UNEXPECTED_EXCEPTION: " + e);
     }
 }

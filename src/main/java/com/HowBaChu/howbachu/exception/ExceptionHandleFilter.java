@@ -2,10 +2,12 @@ package com.HowBaChu.howbachu.exception;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -22,14 +24,16 @@ public class ExceptionHandleFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, java.io.IOException {
         try {
             filterChain.doFilter(request, response);
-        } catch (CustomException e) {handleCustomException(response, e);}
+        } catch (CustomException e) {
+            handleCustomException(response, e);
+        }
     }
 
     private void handleCustomException(HttpServletResponse response, CustomException e) {
 
         // 에러 메시지 출력
         log.error("Filter Exception Caught");
-        log.error("CustomException: "+ e.getErrorCode().getMessage());
+        log.error("CustomException: " + e.getErrorCode().getMessage());
 
         // HTTP Response 의 상태 코드와 컨텐츠 타입 설정
         response.setStatus(e.getErrorCode().getStatus().value());

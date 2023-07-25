@@ -2,7 +2,9 @@ package com.HowBaChu.howbachu.service;
 
 import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
 import com.HowBaChu.howbachu.domain.dto.member.MemberResponseDto;
+
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,8 +20,16 @@ public interface MemberService {
     MemberResponseDto findMemberDetail(String email);
 
     /*회원정보 수정*/
-    void updateMember(String email, MemberRequestDto requestDto);
+    MemberResponseDto updateMember(String email, MemberRequestDto requestDto);
 
     /*회원탈퇴*/
-    void deleteMember(String email, MemberRequestDto requestDto);
+    void deleteMember(String email);
+
+    /*이메일 중복검사*/
+    boolean checkEmailDuplicate(String email);
+
+    /*닉네임 중복검사*/
+    boolean checkUsernameDuplicate(String username);
+
+    void logout(String email);
 }

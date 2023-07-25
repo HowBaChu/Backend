@@ -27,41 +27,46 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
-                .antMatchers("/v3/api-docs")
-                .antMatchers("/swagger-resources/**")
-                .antMatchers("/swagger-ui/**")
-                .antMatchers("/webjars/**")
-                .antMatchers("/swagger/**")
-                .antMatchers("/api-docs/**")
-                .antMatchers("/swagger-ui/**")
-                ;
+            .antMatchers("/v3/api-docs")
+            .antMatchers("/swagger-resources/**")
+            .antMatchers("/swagger-ui/**")
+            .antMatchers("/webjars/**")
+            .antMatchers("/swagger/**")
+            .antMatchers("/api-docs/**")
+            .antMatchers("/swagger-ui/**")
+            ;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity security) throws Exception {
 
         security
-                .httpBasic().disable()
-                .csrf().disable()
-                .cors();
+            .httpBasic().disable()
+            .csrf().disable()
+            .cors();
 
         // 세션 비활성화
         security
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // 로그인, 회원가입은 허용 -> 나머지 인증 인가 필요
         security
-                .authorizeRequests()
-                .antMatchers("/api/member/signup", "/api/member/login").permitAll()
-                .anyRequest().authenticated();
+            .authorizeRequests()
+            .antMatchers(
+                "/api/v1/auth/signup",
+                "/api/v1/auth/login",
+                "/api/v1/member/email/{email}/exists",
+                "/api/v1/member/username/{username}/exists"
+            ).permitAll()
+            .anyRequest().authenticated();
 
         // 필터 적용
         security
-                .addFilterBefore(new ExceptionHandleFilter(),
-                        UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JwtFilter(jwtProvider, refreshTokenRepository),
-                        UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(new ExceptionHandleFilter(),
+                UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(new JwtFilter(jwtProvider, refreshTokenRepository),
+                UsernamePasswordAuthenticationFilter.class);
 
 
         return security.build();

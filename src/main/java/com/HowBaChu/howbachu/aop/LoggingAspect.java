@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,8 +42,8 @@ public class LoggingAspect {
 
     private String paramMapToString(Map<String, String[]> paraStringMap) {
         return paraStringMap.entrySet().stream()
-                .map(entry -> String.format("%s : %s",
-                        entry.getKey(), Arrays.toString(entry.getValue())))
-                .collect(Collectors.joining(", "));
+            .map(entry -> String.format("%s : %s",
+                entry.getKey(), Arrays.toString(entry.getValue())))
+            .collect(Collectors.joining(", "));
     }
 }

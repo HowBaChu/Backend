@@ -2,6 +2,7 @@ package com.HowBaChu.howbachu.config;
 
 import java.util.Collections;
 import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -18,7 +19,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @Configuration
 public class SwaggerConfig {
-  
+
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.OAS_30)
@@ -44,7 +45,9 @@ public class SwaggerConfig {
         return List.of(new SecurityReference("Authorization", authorizationScopes));
     }
 
-    private ApiKey apiKey() {return new ApiKey("Authorization", "Authorization", "header");}
+    private ApiKey apiKey() {
+        return new ApiKey("Authorization", "Authorization", "header");
+    }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()

@@ -4,7 +4,9 @@ import com.HowBaChu.howbachu.domain.constants.ResponseCode;
 import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
 import com.HowBaChu.howbachu.domain.dto.response.ResResult;
 import com.HowBaChu.howbachu.service.MemberService;
+
 import javax.servlet.http.HttpServletResponse;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -44,8 +46,8 @@ public class AuthController {
             .responseCode(responseCode)
             .code(responseCode.getCode())
             .message(responseCode.getMessage())
-            .data(memberService.login(requestDto,response))
-            .build(),HttpStatus.OK);
+            .data(memberService.login(requestDto, response))
+            .build(), HttpStatus.OK);
     }
 
     @PostMapping("/logout")

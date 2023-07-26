@@ -1,6 +1,5 @@
 package com.HowBaChu.howbachu.jwt;
 
-
 import com.HowBaChu.howbachu.config.JwtConfig;
 import com.HowBaChu.howbachu.domain.dto.jwt.TokenDto;
 import com.HowBaChu.howbachu.exception.CustomException;
@@ -12,9 +11,11 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
+
 import java.util.Base64;
 import java.util.Date;
 import javax.servlet.http.HttpServletResponse;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -63,7 +64,7 @@ public class JwtProvider {
 
 
     /**
-     * @param response 클라이언트에 전달할 response
+     * @param response    클라이언트에 전달할 response
      * @param accessToken 헤더에 저장할 액세스 토큰
      */
     public void setHeaderAccessToken(HttpServletResponse response, String accessToken) {
@@ -72,9 +73,9 @@ public class JwtProvider {
 
 
     /**
-     * @implNote 토큰을 해독하여 토큰에 담긴 정보를 가져온다.
      * @param token Claims 부분을 가져올 token
      * @return token 의 정보가 담긴 claims
+     * @implNote 토큰을 해독하여 토큰에 담긴 정보를 가져온다.
      */
     public Claims parseClaims(String token) {
         try {

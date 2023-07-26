@@ -1,6 +1,5 @@
 package com.HowBaChu.howbachu.exception;
 
-
 import com.HowBaChu.howbachu.exception.constants.ErrorCode;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

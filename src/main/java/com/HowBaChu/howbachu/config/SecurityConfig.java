@@ -16,9 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@Configuration
 public class SecurityConfig {
 
     private final JwtProvider jwtProvider;
@@ -39,17 +39,18 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity security) throws Exception {
+
         security
             .httpBasic().disable()
             .csrf().disable()
             .cors();
 
-            // 세션 비활성화
+        // 세션 비활성화
         security
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-            // 로그인, 회원가입은 허용 -> 나머지 인증 인가 필요
+        // 로그인, 회원가입은 허용 -> 나머지 인증 인가 필요
         security
             .authorizeRequests()
             .antMatchers(
@@ -57,10 +58,10 @@ public class SecurityConfig {
                 "/api/v1/auth/login",
                 "/api/v1/member/email/{email}/exists",
                 "/api/v1/member/username/{username}/exists"
-                ).permitAll()
+            ).permitAll()
             .anyRequest().authenticated();
 
-            // 필터 적용
+        // 필터 적용
         security
             .addFilterBefore(new ExceptionHandleFilter(),
                 UsernamePasswordAuthenticationFilter.class)

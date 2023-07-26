@@ -40,7 +40,7 @@ public class MemberController {
 
     /*회원정보 수정*/
     @PatchMapping
-    public ResponseEntity<ResResult> updateMemberDetail(@ApiIgnore Authentication authentication, @RequestBody MemberRequestDto requestDto){
+    public ResponseEntity<ResResult> updateMemberDetail(@ApiIgnore Authentication authentication, @RequestBody MemberRequestDto requestDto) {
         ResponseCode responseCode = ResponseCode.MEMBER_UPDATE;
         return new ResponseEntity<>(ResResult.builder()
             .responseCode(responseCode)

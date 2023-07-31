@@ -45,10 +45,10 @@ public class Member {
     @Column
     private String statusMessage;
 
-    public static Member toEntity(MemberRequestDto requestDto, String encodedPassword) {
+    public static Member toEntity(MemberRequestDto requestDto) {
         return Member.builder()
             .email(requestDto.getEmail())
-            .password(encodedPassword)
+            .password(requestDto.getPassword())
             .username(requestDto.getUsername())
             .mbti(requestDto.getMbti())
             .statusMessage(requestDto.getStatusMessage())

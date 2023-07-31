@@ -33,8 +33,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberResponseDto signup(MemberRequestDto requestDto) {
-        return MemberResponseDto.of(memberRepository.save(
-            Member.toEntity(requestDto, passwordEncoder.encode(requestDto.getPassword()))));
+        requestDto.encodePassword(passwordEncoder.encode(requestDto.getPassword()));
+        return MemberResponseDto.of(memberRepository.save(Member.toEntity(requestDto)));
     }
 
     @Override

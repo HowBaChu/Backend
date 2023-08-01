@@ -17,6 +17,7 @@ import com.HowBaChu.howbachu.repository.MemberRepository;
 import com.HowBaChu.howbachu.service.MemberService;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -55,6 +56,7 @@ class MemberControllerTest {
     }
 
     @Test
+    @DisplayName("회원 상세정보 조회 테스트 - 컨트롤러")
     void findMemberDetail() throws Exception {
         //given
 
@@ -75,6 +77,7 @@ class MemberControllerTest {
     }
 
     @Test
+    @DisplayName("회원 정보 수정 테스트 - 컨틀롤러")
     void updateMemberDetail() throws Exception {
         //given
         MemberRequestDto updateRequestDto = new MemberRequestDto("testEmail", "testPassword", "testUsername22",
@@ -101,6 +104,7 @@ class MemberControllerTest {
     }
 
     @Test
+    @DisplayName("회원 삭제 테스트 - 컨트롤러")
     void deleteMember() throws Exception {
         //given
 
@@ -120,6 +124,7 @@ class MemberControllerTest {
     }
 
     @Test
+    @DisplayName("이메일로 중복 회원 검사 테스트 - 컨트롤러")
     void checkEmailDuplicate() throws Exception {
         //given
 
@@ -135,6 +140,7 @@ class MemberControllerTest {
     }
 
     @Test
+    @DisplayName("유저네임으로 중복 회원 검사 테스트 - 컨트롤러")
     void checkUsernameDuplicate() throws Exception {
         //given
 

@@ -15,6 +15,7 @@ import com.HowBaChu.howbachu.service.MemberService;
 import com.google.gson.Gson;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -51,6 +52,7 @@ class AuthControllerTest {
     }
 
     @Test
+    @DisplayName("회원가입 테스트 - 컨트롤러")
     void register() throws Exception {
         //given
 
@@ -70,6 +72,7 @@ class AuthControllerTest {
     }
 
     @Test
+    @DisplayName("로그인 테스트 - 컨트롤러")
     void login() throws Exception {
         //given
         memberRequestDto.encodePassword("testPassword");
@@ -90,6 +93,7 @@ class AuthControllerTest {
     }
 
     @Test
+    @DisplayName("로그아웃 테스트 - 컨트롤러")
     void logout() throws Exception {
         //given
         memberService.signup(memberRequestDto);

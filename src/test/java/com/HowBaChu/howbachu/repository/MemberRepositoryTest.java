@@ -5,6 +5,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import com.HowBaChu.howbachu.domain.constants.MBTI;
 import com.HowBaChu.howbachu.domain.entity.Member;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,6 +34,7 @@ class MemberRepositoryTest {
     }
 
     @Test
+    @DisplayName("회원 상세 조회 테스트 - 레포지토리")
     void findByEmail() {
         //given
         String testEmail = "test@naver.com";
@@ -46,6 +48,7 @@ class MemberRepositoryTest {
     }
 
     @Test
+    @DisplayName("이메일로 회원 찾기 테스트(Boolean) - 레포지토리")
     void existsByEmail() {
         //given
         String testEmail = "test@naver.com";
@@ -59,6 +62,7 @@ class MemberRepositoryTest {
     }
 
     @Test
+    @DisplayName("유저네임으로 회원 찾기 테스트(Boolean) - 레포지토리")
     void existsByUsername() {
         //given
         String testUsername = "testUsername";

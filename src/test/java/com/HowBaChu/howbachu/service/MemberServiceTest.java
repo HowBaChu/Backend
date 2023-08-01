@@ -114,7 +114,7 @@ class MemberServiceTest {
         //when
 
         //then
-        assertThat(memberService.checkEmailDuplicate(memberRequestDto.getEmail())).isTrue();
+        assertThat(memberService.checkEmailDuplicate(memberRequestDto.getEmail()).getStatus()).isTrue();
     }
 
     @Test
@@ -125,7 +125,7 @@ class MemberServiceTest {
         //when
 
         //then
-        assertThat(memberService.checkUsernameDuplicate(memberRequestDto.getUsername())).isTrue();
+        assertThat(memberService.checkUsernameDuplicate(memberRequestDto.getUsername()).getStatus()).isTrue();
     }
 
     @Test

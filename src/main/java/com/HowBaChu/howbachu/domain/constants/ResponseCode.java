@@ -23,6 +23,7 @@ public enum ResponseCode {
     MEMBER_DETAIL(HttpStatus.OK, "200", "회원정보 불러오기 성공"),
     MEMBER_UPDATE(HttpStatus.OK, "200", "회원정보 수정 성공"),
     MEMBER_DELETE(HttpStatus.NO_CONTENT, "204", "회원정보 삭제 성공"),
+    MEMBER_EXISTS(HttpStatus.OK,"200","회원존재 여부 조회 성공"),
 
     /* VOTE */
     VOTING_SUCCESS(HttpStatus.CREATED, "201", "투표 성공"),

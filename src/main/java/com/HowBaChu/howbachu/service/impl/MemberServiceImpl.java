@@ -4,6 +4,7 @@ import com.HowBaChu.howbachu.domain.dto.jwt.TokenDto;
 import com.HowBaChu.howbachu.domain.dto.jwt.TokenResponseDto;
 import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
 import com.HowBaChu.howbachu.domain.dto.member.MemberResponseDto;
+import com.HowBaChu.howbachu.domain.dto.member.StatusResponseDto;
 import com.HowBaChu.howbachu.domain.entity.Member;
 import com.HowBaChu.howbachu.domain.entity.RefreshToken;
 import com.HowBaChu.howbachu.exception.CustomException;
@@ -80,13 +81,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public boolean checkEmailDuplicate(String email) {
-        return memberRepository.existsByEmail(email);
+    public StatusResponseDto checkEmailDuplicate(String email) {
+        return new StatusResponseDto(memberRepository.existsByEmail(email));
     }
 
     @Override
-    public boolean checkUsernameDuplicate(String username) {
-        return memberRepository.existsByUsername(username);
+    public StatusResponseDto checkUsernameDuplicate(String username) {
+        return new StatusResponseDto(memberRepository.existsByUsername(username));
     }
 
     @Override

@@ -1,10 +1,8 @@
 package com.HowBaChu.howbachu.service;
 
+import com.HowBaChu.howbachu.domain.dto.jwt.TokenResponseDto;
 import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
 import com.HowBaChu.howbachu.domain.dto.member.MemberResponseDto;
-
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,7 +12,7 @@ public interface MemberService {
     MemberResponseDto signup(MemberRequestDto requestDto);
 
     /*로그인*/
-    MemberResponseDto login(MemberRequestDto requestDto, HttpServletResponse response);
+    TokenResponseDto login(MemberRequestDto requestDto);
 
     /*회원 상세정보*/
     MemberResponseDto findMemberDetail(String email);

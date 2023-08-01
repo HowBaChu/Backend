@@ -1,6 +1,7 @@
 package com.HowBaChu.howbachu.service.impl;
 
 import com.HowBaChu.howbachu.domain.dto.jwt.TokenDto;
+import com.HowBaChu.howbachu.domain.dto.jwt.TokenResponseDto;
 import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
 import com.HowBaChu.howbachu.domain.dto.member.MemberResponseDto;
 import com.HowBaChu.howbachu.domain.entity.Member;
@@ -11,9 +12,6 @@ import com.HowBaChu.howbachu.jwt.JwtProvider;
 import com.HowBaChu.howbachu.repository.MemberRepository;
 import com.HowBaChu.howbachu.repository.RefreshTokenRepository;
 import com.HowBaChu.howbachu.service.MemberService;
-
-import javax.servlet.http.HttpServletResponse;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,7 +36,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberResponseDto login(MemberRequestDto requestDto, HttpServletResponse response) {
+    public TokenResponseDto login(MemberRequestDto requestDto) {
 
         Member member = memberRepository.findByEmail(requestDto.getEmail());
 
@@ -47,14 +45,13 @@ public class MemberServiceImpl implements MemberService {
         }
 
         TokenDto tokenDto = jwtProvider.generateJwtToken(member.getEmail());
-        jwtProvider.setHeaderAccessToken(response, tokenDto.getAccessToken());
 
         if (refreshTokenRepository.findByKey(member.getEmail()).isPresent()) {
             refreshTokenRepository.deleteByKey(member.getEmail());
         }
         refreshTokenRepository.save(new RefreshToken(member.getEmail(), tokenDto.getRefreshToken()));
 
-        return MemberResponseDto.of(member);
+        return new TokenResponseDto(tokenDto.getAccessToken());
     }
 
     @Override

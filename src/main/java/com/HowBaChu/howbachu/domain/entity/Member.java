@@ -56,8 +56,8 @@ public class Member {
     }
 
 
-    public void update(MemberRequestDto requestDto, String encodedPassword) {
-        this.password = encodedPassword;
+    public void update(MemberRequestDto requestDto) {
+        this.password = requestDto.getPassword();
         this.username = requestDto.getUsername();
         this.mbti = requestDto.getMbti();
         this.statusMessage = requestDto.getStatusMessage();

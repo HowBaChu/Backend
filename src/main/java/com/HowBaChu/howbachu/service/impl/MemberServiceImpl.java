@@ -66,8 +66,8 @@ public class MemberServiceImpl implements MemberService {
         if (!member.getEmail().equals(requestDto.getEmail())) {
             throw new CustomException(ErrorCode.NOT_AUTHORIZED_CONTENT);
         }
-
-        member.update(requestDto, passwordEncoder.encode(requestDto.getPassword()));
+        requestDto.encodePassword(requestDto.getPassword());
+        member.update(requestDto);
         return MemberResponseDto.of(member);
     }
 

@@ -1,8 +1,10 @@
 package com.HowBaChu.howbachu.service.impl;
 
 import com.HowBaChu.howbachu.domain.dto.jwt.TokenDto;
+import com.HowBaChu.howbachu.domain.dto.jwt.TokenResponseDto;
 import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
 import com.HowBaChu.howbachu.domain.dto.member.MemberResponseDto;
+import com.HowBaChu.howbachu.domain.dto.member.StatusResponseDto;
 import com.HowBaChu.howbachu.domain.entity.Member;
 import com.HowBaChu.howbachu.domain.entity.RefreshToken;
 import com.HowBaChu.howbachu.exception.CustomException;
@@ -11,9 +13,6 @@ import com.HowBaChu.howbachu.jwt.JwtProvider;
 import com.HowBaChu.howbachu.repository.MemberRepository;
 import com.HowBaChu.howbachu.repository.RefreshTokenRepository;
 import com.HowBaChu.howbachu.service.MemberService;
-
-import javax.servlet.http.HttpServletResponse;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,12 +32,12 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberResponseDto signup(MemberRequestDto requestDto) {
-        return MemberResponseDto.of(memberRepository.save(
-            Member.toEntity(requestDto, passwordEncoder.encode(requestDto.getPassword()))));
+        requestDto.encodePassword(passwordEncoder.encode(requestDto.getPassword()));
+        return MemberResponseDto.of(memberRepository.save(Member.toEntity(requestDto)));
     }
 
     @Override
-    public MemberResponseDto login(MemberRequestDto requestDto, HttpServletResponse response) {
+    public TokenResponseDto login(MemberRequestDto requestDto) {
 
         Member member = memberRepository.findByEmail(requestDto.getEmail());
 
@@ -47,14 +46,13 @@ public class MemberServiceImpl implements MemberService {
         }
 
         TokenDto tokenDto = jwtProvider.generateJwtToken(member.getEmail());
-        jwtProvider.setHeaderAccessToken(response, tokenDto.getAccessToken());
 
         if (refreshTokenRepository.findByKey(member.getEmail()).isPresent()) {
             refreshTokenRepository.deleteByKey(member.getEmail());
         }
         refreshTokenRepository.save(new RefreshToken(member.getEmail(), tokenDto.getRefreshToken()));
 
-        return MemberResponseDto.of(member);
+        return new TokenResponseDto(tokenDto.getAccessToken());
     }
 
     @Override
@@ -69,24 +67,27 @@ public class MemberServiceImpl implements MemberService {
         if (!member.getEmail().equals(requestDto.getEmail())) {
             throw new CustomException(ErrorCode.NOT_AUTHORIZED_CONTENT);
         }
-
-        member.update(requestDto, passwordEncoder.encode(requestDto.getPassword()));
+        requestDto.encodePassword(requestDto.getPassword());
+        member.update(requestDto);
         return MemberResponseDto.of(member);
     }
 
     @Override
     public void deleteMember(String email) {
         memberRepository.deleteById(memberRepository.findByEmail(email).getId());
+        if (refreshTokenRepository.findByKey(email).isPresent()) {
+            refreshTokenRepository.deleteByKey(email);
+        }
     }
 
     @Override
-    public boolean checkEmailDuplicate(String email) {
-        return memberRepository.existsByEmail(email);
+    public StatusResponseDto checkEmailDuplicate(String email) {
+        return new StatusResponseDto(memberRepository.existsByEmail(email));
     }
 
     @Override
-    public boolean checkUsernameDuplicate(String username) {
-        return memberRepository.existsByUsername(username);
+    public StatusResponseDto checkUsernameDuplicate(String username) {
+        return new StatusResponseDto(memberRepository.existsByUsername(username));
     }
 
     @Override

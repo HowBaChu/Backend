@@ -64,13 +64,25 @@ public class MemberController {
 
     /*이메일 중복 검사*/
     @GetMapping("/email/{email}/exists")
-    public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable String email) {
-        return ResponseEntity.ok(memberService.checkEmailDuplicate(email));
+    public ResponseEntity<ResResult> checkEmailDuplicate(@PathVariable String email) {
+        ResponseCode responseCode = ResponseCode.MEMBER_EXISTS;
+        return new ResponseEntity<>(ResResult.builder()
+            .responseCode(responseCode)
+            .code(responseCode.getCode())
+            .message(responseCode.getMessage())
+            .data(memberService.checkEmailDuplicate(email))
+            .build(), HttpStatus.OK);
     }
 
     /*닉네임 중복 검사*/
     @GetMapping("/username/{username}/exists")
-    public ResponseEntity<Boolean> checkUsernameDuplicate(@PathVariable String username) {
-        return ResponseEntity.ok(memberService.checkUsernameDuplicate(username));
+    public ResponseEntity<ResResult> checkUsernameDuplicate(@PathVariable String username) {
+        ResponseCode responseCode = ResponseCode.MEMBER_EXISTS;
+        return new ResponseEntity<>(ResResult.builder()
+            .responseCode(responseCode)
+            .code(responseCode.getCode())
+            .message(responseCode.getMessage())
+            .data(memberService.checkUsernameDuplicate(username))
+            .build(), HttpStatus.OK);
     }
 }

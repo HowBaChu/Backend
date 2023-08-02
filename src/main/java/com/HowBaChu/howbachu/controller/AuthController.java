@@ -40,13 +40,13 @@ public class AuthController {
 
     /*로그인*/
     @PostMapping("/login")
-    public ResponseEntity<ResResult> login(@RequestBody MemberRequestDto requestDto, HttpServletResponse response) {
+    public ResponseEntity<ResResult> login(@RequestBody MemberRequestDto requestDto) {
         ResponseCode responseCode = ResponseCode.MEMBER_LOGIN;
         return new ResponseEntity<>(ResResult.builder()
             .responseCode(responseCode)
             .code(responseCode.getCode())
             .message(responseCode.getMessage())
-            .data(memberService.login(requestDto, response))
+            .data(memberService.login(requestDto))
             .build(), HttpStatus.OK);
     }
 

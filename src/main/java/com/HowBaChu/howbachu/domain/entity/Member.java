@@ -24,7 +24,7 @@ import org.hibernate.annotations.Where;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE member SET is_deleted = true WHERE user_id = ?")
+@SQLDelete(sql = "UPDATE member SET is_deleted = true WHERE member_id = ?")
 @Where(clause = "is_deleted != true")
 public class Member {
 
@@ -69,7 +69,5 @@ public class Member {
         this.mbti = requestDto.getMbti();
         this.statusMessage = requestDto.getStatusMessage();
     }
-
-    public void delete() { this.isDeleted = true; }
 
 }

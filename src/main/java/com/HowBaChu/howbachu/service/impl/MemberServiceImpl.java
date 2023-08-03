@@ -74,8 +74,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void deleteMember(String email) {
-        Member member = memberRepository.findByEmail(email);
-        member.delete();
+        memberRepository.deleteById(memberRepository.findByEmail(email).getId());
         if (refreshTokenRepository.findByKey(email).isPresent()) {
             refreshTokenRepository.deleteByKey(email);
         }

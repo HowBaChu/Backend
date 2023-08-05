@@ -16,12 +16,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE member SET is_deleted = true WHERE member_id = ?")
+@Where(clause = "is_deleted != true")
 public class Member {
 
     @Id
@@ -43,6 +47,9 @@ public class Member {
     private MBTI mbti;
 
     @Column
+    private Boolean isDeleted;
+
+    @Column
     private String statusMessage;
 
     public static Member toEntity(MemberRequestDto requestDto) {
@@ -52,9 +59,9 @@ public class Member {
             .username(requestDto.getUsername())
             .mbti(requestDto.getMbti())
             .statusMessage(requestDto.getStatusMessage())
+            .isDeleted(false)
             .build();
     }
-
 
     public void update(MemberRequestDto requestDto) {
         this.password = requestDto.getPassword();

@@ -29,6 +29,7 @@ class MemberRepositoryTest {
                 .username("testUsername" + i)
                 .mbti(MBTI.ENTJ)
                 .statusMessage("testStatusMessage" + i)
+                .isDeleted(false)
                 .build());
         }
     }

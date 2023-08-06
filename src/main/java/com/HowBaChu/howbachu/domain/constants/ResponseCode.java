@@ -24,6 +24,8 @@ public enum ResponseCode {
     MEMBER_UPDATE(HttpStatus.OK, "200", "회원정보 수정 성공"),
     MEMBER_DELETE(HttpStatus.NO_CONTENT, "204", "회원정보 삭제 성공"),
     MEMBER_EXISTS(HttpStatus.OK,"200","회원존재 여부 조회 성공"),
+    AVATAR_UPLOAD(HttpStatus.OK,"200","이미지 업로드 성공"),
+    AVATAR_DELETE(HttpStatus.NO_CONTENT,"204","이미지 삭제 성공"),
 
     /* VOTE */
     VOTING_SUCCESS(HttpStatus.CREATED, "201", "투표 성공"),

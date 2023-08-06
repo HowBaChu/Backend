@@ -5,6 +5,7 @@ import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
 import com.HowBaChu.howbachu.domain.dto.member.MemberResponseDto;
 import com.HowBaChu.howbachu.domain.dto.member.StatusResponseDto;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public interface MemberService {
@@ -31,4 +32,8 @@ public interface MemberService {
     StatusResponseDto checkUsernameDuplicate(String username);
 
     void logout(String email);
+
+    MemberResponseDto uploadAvatar(String email, MultipartFile image);
+
+    void deleteAvatar(String email);
 }

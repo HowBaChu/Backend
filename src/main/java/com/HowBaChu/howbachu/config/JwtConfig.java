@@ -1,6 +1,6 @@
 package com.HowBaChu.howbachu.config;
 
-import com.HowBaChu.howbachu.factory.YamlLoadFactory;
+import com.HowBaChu.howbachu.core.factory.YamlLoadFactory;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

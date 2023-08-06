@@ -52,6 +52,9 @@ public class Member {
     @Column
     private String statusMessage;
 
+    @Column
+    private String avatar;
+
     public static Member toEntity(MemberRequestDto requestDto) {
         return Member.builder()
             .email(requestDto.getEmail())
@@ -70,4 +73,7 @@ public class Member {
         this.statusMessage = requestDto.getStatusMessage();
     }
 
+    public void uploadAvatar(String url) {
+        this.avatar = url;
+    }
 }

@@ -1,4 +1,4 @@
-package com.HowBaChu.howbachu.factory;
+package com.HowBaChu.howbachu.core.factory;
 
 import java.io.IOException;
 

@@ -2,6 +2,7 @@ package com.HowBaChu.howbachu.domain.dto.member;
 
 import com.HowBaChu.howbachu.domain.constants.MBTI;
 import com.HowBaChu.howbachu.domain.entity.Member;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MemberResponseDto {
 
     private Long id;
@@ -17,6 +19,7 @@ public class MemberResponseDto {
     private String username;
     private MBTI mbti;
     private String statusMessage;
+    private String avatar;
 
     public static MemberResponseDto of(Member member) {
         return MemberResponseDto.builder()
@@ -26,6 +29,7 @@ public class MemberResponseDto {
             .username(member.getUsername())
             .mbti(member.getMbti())
             .statusMessage(member.getStatusMessage())
+            .avatar(member.getAvatar())
             .build();
     }
 
@@ -38,6 +42,7 @@ public class MemberResponseDto {
             ", username='" + username + '\'' +
             ", mbti='" + mbti + '\'' +
             ", statusMessage='" + statusMessage + '\'' +
+            ", avatar='" + avatar + '\''+
             '}';
     }
 }

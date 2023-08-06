@@ -1,5 +1,6 @@
 package com.HowBaChu.howbachu.service.impl;
 
+import com.HowBaChu.howbachu.core.manager.AWSFileManager;
 import com.HowBaChu.howbachu.domain.dto.jwt.TokenDto;
 import com.HowBaChu.howbachu.domain.dto.jwt.TokenResponseDto;
 import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Service
@@ -29,6 +31,7 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtProvider jwtProvider;
+    private final AWSFileManager awsFileManager;
 
     @Override
     public MemberResponseDto signup(MemberRequestDto requestDto) {
@@ -93,6 +96,20 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void logout(String email) {
         refreshTokenRepository.deleteByKey(email);
+    }
+
+    @Override
+    public MemberResponseDto uploadAvatar(String email, MultipartFile image){
+        Member member = memberRepository.findByEmail(email);
+        member.uploadAvatar(awsFileManager.upload("profile", image));
+
+        return MemberResponseDto.of(member);
+    }
+
+    @Override
+    public void deleteAvatar(String email) {
+        Member member = memberRepository.findByEmail(email);
+        member.uploadAvatar(null);
     }
 
     public boolean validatePassword(String input, String encoded) {

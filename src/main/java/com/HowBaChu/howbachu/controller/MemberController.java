@@ -102,7 +102,21 @@ public class MemberController {
             .responseCode(responseCode)
             .code(responseCode.getCode())
             .message(responseCode.getMessage())
-            .data(memberService.uploadImage(authentication.getName(), image))
-            .build(),HttpStatus.OK);
+            .data(memberService.uploadAvatar(authentication.getName(), image))
+            .build(), HttpStatus.OK);
+    }
+
+    /*프로필 사진 삭제*/
+    @DeleteMapping("/avatar")
+    public ResponseEntity<ResResult> deleteAvatar(
+        @ApiIgnore Authentication authentication
+    ) {
+        memberService.deleteAvatar(authentication.getName());
+        ResponseCode responseCode = ResponseCode.AVATAR_DELETE;
+        return new ResponseEntity<>(ResResult.builder()
+            .responseCode(responseCode)
+            .code(responseCode.getCode())
+            .message(responseCode.getMessage())
+            .build(), HttpStatus.OK);
     }
 }

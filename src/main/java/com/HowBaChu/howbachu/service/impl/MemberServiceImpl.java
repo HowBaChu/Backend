@@ -99,11 +99,17 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberResponseDto uploadImage(String email, MultipartFile image){
+    public MemberResponseDto uploadAvatar(String email, MultipartFile image){
         Member member = memberRepository.findByEmail(email);
         member.uploadAvatar(awsFileManager.upload("profile", image));
 
         return MemberResponseDto.of(member);
+    }
+
+    @Override
+    public void deleteAvatar(String email) {
+        Member member = memberRepository.findByEmail(email);
+        member.uploadAvatar(null);
     }
 
     public boolean validatePassword(String input, String encoded) {

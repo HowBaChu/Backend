@@ -4,8 +4,6 @@ import com.HowBaChu.howbachu.core.factory.YamlLoadFactory;
 import com.HowBaChu.howbachu.exception.CustomException;
 import com.HowBaChu.howbachu.exception.constants.ErrorCode;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import java.io.File;
@@ -46,10 +44,10 @@ public class AWSFileManager implements FileManager {
 
     @Override
     public boolean delete(String fileName) {
-        if (!amazonS3.doesObjectExist(bucket, fileName)) {
+        /*if (!amazonS3.doesObjectExist(bucket, fileName)) {
             throw new AmazonS3Exception(fileName + " 은(는) 존재하지 않는 이미지 입니다");
         }
-        amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
+        amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));*/
         return true;
     }
 

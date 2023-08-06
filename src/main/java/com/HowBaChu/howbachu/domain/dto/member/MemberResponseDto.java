@@ -17,6 +17,7 @@ public class MemberResponseDto {
     private String username;
     private MBTI mbti;
     private String statusMessage;
+    private String avatar;
 
     public static MemberResponseDto of(Member member) {
         return MemberResponseDto.builder()
@@ -26,6 +27,7 @@ public class MemberResponseDto {
             .username(member.getUsername())
             .mbti(member.getMbti())
             .statusMessage(member.getStatusMessage())
+            .avatar(member.getAvatar())
             .build();
     }
 
@@ -38,6 +40,7 @@ public class MemberResponseDto {
             ", username='" + username + '\'' +
             ", mbti='" + mbti + '\'' +
             ", statusMessage='" + statusMessage + '\'' +
+            ", avatar='" + avatar + '\''+
             '}';
     }
 }

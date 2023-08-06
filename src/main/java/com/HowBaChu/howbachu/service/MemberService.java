@@ -4,7 +4,9 @@ import com.HowBaChu.howbachu.domain.dto.jwt.TokenResponseDto;
 import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
 import com.HowBaChu.howbachu.domain.dto.member.MemberResponseDto;
 import com.HowBaChu.howbachu.domain.dto.member.StatusResponseDto;
+import java.io.IOException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public interface MemberService {
@@ -31,4 +33,6 @@ public interface MemberService {
     StatusResponseDto checkUsernameDuplicate(String username);
 
     void logout(String email);
+
+    MemberResponseDto uploadImage(String email, MultipartFile image) throws IOException;
 }

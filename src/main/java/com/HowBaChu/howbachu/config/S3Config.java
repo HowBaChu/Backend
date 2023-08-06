@@ -1,6 +1,6 @@
 package com.HowBaChu.howbachu.config;
 
-import com.HowBaChu.howbachu.factory.YamlLoadFactory;
+import com.HowBaChu.howbachu.core.factory.YamlLoadFactory;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;

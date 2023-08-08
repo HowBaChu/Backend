@@ -67,11 +67,13 @@ dependencies {
 	// Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+
 	//Gson
 	implementation 'com.google.code.gson:gson:2.9.0'
 
 	//S3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	testImplementation 'io.findify:s3mock_2.13:0.2.6'
 }
 
 tasks.named('test') {

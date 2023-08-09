@@ -1,6 +1,8 @@
 spring:
   profiles:
     active: dev
+    include:
+      - s3
 
   jpa:
     open-in-view: false
@@ -20,3 +22,4 @@ logging:
   level:
     org.springframework.security: ERROR
     org.springframework.boot.autoconfigure.security: ERROR
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

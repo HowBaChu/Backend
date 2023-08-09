@@ -22,7 +22,10 @@ public enum ErrorCode {
     /* MEMBER */
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "등록되지 않은 회원입니다."),
     WRONG_LOGIN_REQUEST(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
-    FILE_NOT_EXIST(HttpStatus.NOT_FOUND, "파일이 존재하지 않습니다.");
+    FILE_NOT_EXIST(HttpStatus.NOT_FOUND, "파일이 존재하지 않습니다."),
+
+    /* TOPIC */
+    TOPIC_NOT_FOUND(HttpStatus.NOT_FOUND, "토픽 정보가 존재하지 않습니다.");
 
     private final HttpStatus status;
     private final String message;

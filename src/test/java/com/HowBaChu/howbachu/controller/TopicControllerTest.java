@@ -1,5 +1,6 @@
 package com.HowBaChu.howbachu.controller;
 
+import com.HowBaChu.howbachu.domain.dto.jwt.TokenResponseDto;
 import com.HowBaChu.howbachu.domain.entity.Topic;
 import com.HowBaChu.howbachu.domain.entity.embedded.TopicSubTitle;
 import com.HowBaChu.howbachu.domain.entity.embedded.VotingStatus;
@@ -33,6 +34,7 @@ public class TopicControllerTest {
 
     @MockBean
     private TopicService topicService;
+
 
     @Test
     @WithMockUser(username = "user")

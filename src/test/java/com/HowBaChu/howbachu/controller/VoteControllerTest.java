@@ -1,0 +1,86 @@
+package com.HowBaChu.howbachu.controller;
+
+import com.HowBaChu.howbachu.domain.constants.Option;
+import com.HowBaChu.howbachu.domain.dto.vote.VoteRequestDto;
+import com.HowBaChu.howbachu.jwt.JwtProvider;
+import com.HowBaChu.howbachu.service.MemberService;
+import com.HowBaChu.howbachu.service.VoteService;
+import com.google.gson.Gson;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+
+@ActiveProfiles("test")
+@MockBean(JpaMetamodelMappingContext.class)
+@WebMvcTest(VoteController.class)
+class VoteControllerTest {
+
+    @Autowired
+    MockMvc mockMvc;
+
+    @MockBean
+    VoteService voteService;
+
+    @MockBean
+    Authentication authentication;
+
+    @MockBean
+    MemberService memberService;
+
+    private String token;
+
+    @MockBean
+    private JwtProvider jwtTokenProvider;
+
+    @BeforeEach
+    void init() {
+        token = "Bearer fake.jwt.token.here";
+        given(jwtTokenProvider.validateToken(anyString())).willReturn(true);
+        given(jwtTokenProvider.getEmailFromToken(anyString())).willReturn("testUser");
+    }
+
+    @Test
+    @DisplayName("[POST] 투표 - 성공")
+    public void votingTest() throws Exception {
+
+        // given
+        VoteRequestDto requestDto = new VoteRequestDto(Option.A);
+        given(voteService.voting(requestDto, authentication.getName()))
+            .willReturn(1L);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/vote")
+            .header("Authorization", token)
+            .content(new Gson().toJson(requestDto))
+            .contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        resultActions.andExpect(status().isCreated())
+            .andExpect(jsonPath("$.responseCode").exists())
+            .andExpect(jsonPath("$.code").exists())
+            .andExpect(jsonPath("$.message").exists())
+            .andExpect(jsonPath("$.data").exists())
+            .andDo(print());
+
+        verify(voteService).voting(requestDto, authentication.getName());
+    }
+
+}

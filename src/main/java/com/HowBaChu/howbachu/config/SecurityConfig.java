@@ -54,6 +54,7 @@ public class SecurityConfig {
         security
             .authorizeRequests()
             .antMatchers(
+                "/api/v1/topic",
                 "/api/v1/auth/signup",
                 "/api/v1/auth/login",
                 "/api/v1/member/email/{email}/exists",

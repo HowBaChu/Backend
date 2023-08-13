@@ -30,7 +30,10 @@ public enum ResponseCode {
     /* VOTE */
     VOTING_SUCCESS(HttpStatus.CREATED, "201", "투표 성공"),
     VOTING_UPDATE(HttpStatus.NO_CONTENT, "204", "투표 수정 성공"),
-    VOTING_DELETE(HttpStatus.NO_CONTENT, "204", "투표 취소 성공");
+    VOTING_DELETE(HttpStatus.NO_CONTENT, "204", "투표 취소 성공"),
+
+    /* TOPIC */
+    TOPIC_SUCCESS(HttpStatus.OK, "200", "토픽 조회 성공");
 
 
     private final HttpStatus httpStatus;

@@ -1,21 +1,20 @@
 package com.HowBaChu.howbachu.repository.impl;
 
+import static com.HowBaChu.howbachu.domain.entity.QTopic.topic;
+
 import com.HowBaChu.howbachu.domain.entity.Topic;
 import com.HowBaChu.howbachu.exception.CustomException;
 import com.HowBaChu.howbachu.exception.constants.ErrorCode;
 import com.HowBaChu.howbachu.repository.Support.Querydsl4RepositorySupport;
 import com.HowBaChu.howbachu.repository.custom.TopicRepositoryCustom;
 import com.querydsl.core.types.dsl.BooleanExpression;
-
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static com.HowBaChu.howbachu.domain.entity.QTopic.topic;
 
+public class TopicRepositoryImpl extends Querydsl4RepositorySupport implements TopicRepositoryCustom {
 
-public class TopicRepositoryCustomImpl extends Querydsl4RepositorySupport implements TopicRepositoryCustom {
-
-    public TopicRepositoryCustomImpl() {
+    public TopicRepositoryImpl() {
         super(Topic.class);
     }
 

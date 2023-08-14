@@ -3,10 +3,8 @@ package com.HowBaChu.howbachu.controller;
 import com.HowBaChu.howbachu.domain.constants.ResponseCode;
 import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
 import com.HowBaChu.howbachu.domain.dto.response.ResResult;
+import com.HowBaChu.howbachu.service.MailService;
 import com.HowBaChu.howbachu.service.MemberService;
-
-import javax.servlet.http.HttpServletResponse;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -25,6 +24,7 @@ import springfox.documentation.annotations.ApiIgnore;
 public class AuthController {
 
     private final MemberService memberService;
+    private final MailService mailService;
 
     /*회원가입*/
     @PostMapping("/signup")
@@ -54,6 +54,17 @@ public class AuthController {
     public ResponseEntity<ResResult> logout(@ApiIgnore Authentication authentication) {
         memberService.logout(authentication.getName());
         ResponseCode responseCode = ResponseCode.MEMBER_LOGOUT;
+        return new ResponseEntity<>(ResResult.builder()
+            .responseCode(responseCode)
+            .code(responseCode.getCode())
+            .message(responseCode.getMessage())
+            .build(), HttpStatus.OK);
+    }
+
+    @PostMapping("/mail-verification")
+    public ResponseEntity<ResResult> mailSend(@RequestParam String email){
+        mailService.sendMessage(email);
+        ResponseCode responseCode = ResponseCode.VERIFICATION_SEND;
         return new ResponseEntity<>(ResResult.builder()
             .responseCode(responseCode)
             .code(responseCode.getCode())

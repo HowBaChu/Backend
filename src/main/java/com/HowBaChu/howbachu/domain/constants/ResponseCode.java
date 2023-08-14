@@ -18,6 +18,9 @@ public enum ResponseCode {
     MEMBER_SAVE(HttpStatus.CREATED, "201", "회원가입 성공"),
     MEMBER_LOGIN(HttpStatus.OK, "200", "로그인 성공"),
     MEMBER_LOGOUT(HttpStatus.NO_CONTENT, "204", "로그아웃 성공"),
+    VERIFICATION_SEND(HttpStatus.OK,"200","인증메일을 전송하였습니다."),
+    VERIFICATION_SUCCESS(HttpStatus.OK,"200","인증 성공"),
+
 
     /* MEMBER */
     MEMBER_DETAIL(HttpStatus.OK, "200", "회원정보 불러오기 성공"),

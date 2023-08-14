@@ -3,6 +3,7 @@ spring:
     active: dev
     include:
       - s3
+      - mail
 
   jpa:
     open-in-view: false

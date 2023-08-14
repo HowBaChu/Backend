@@ -1,8 +1,11 @@
 package com.HowBaChu.howbachu.domain.constants;
 
+import com.HowBaChu.howbachu.domain.dto.response.ResResult;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 
 @Getter
 @ToString
@@ -45,6 +48,15 @@ public enum ResponseCode {
         this.httpStatus = httpStatus;
         this.code = code;
         this.message = message;
+    }
+
+    public <T> ResponseEntity<ResResult> toResponse(@Nullable T data) {
+        return new ResponseEntity<>(ResResult.builder()
+            .responseCode(this)
+            .code(this.getCode())
+            .message(this.getMessage())
+            .data(data)
+            .build(), HttpStatus.OK);
     }
 
 }

@@ -7,7 +7,6 @@ import com.HowBaChu.howbachu.service.MemberService;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,12 +33,7 @@ public class MemberController {
     @GetMapping
     public ResponseEntity<ResResult> findMemberDetail(@ApiIgnore Authentication authentication) {
         ResponseCode responseCode = ResponseCode.MEMBER_DETAIL;
-        return new ResponseEntity<>(ResResult.builder()
-            .responseCode(responseCode)
-            .code(responseCode.getCode())
-            .message(responseCode.getMessage())
-            .data(memberService.findMemberDetail(authentication.getName()))
-            .build(), HttpStatus.OK);
+        return responseCode.toResponse(memberService.findMemberDetail(authentication.getName()));
     }
 
     /*회원정보 수정*/
@@ -47,12 +41,8 @@ public class MemberController {
     public ResponseEntity<ResResult> updateMemberDetail(@ApiIgnore Authentication authentication,
         @RequestBody MemberRequestDto requestDto) {
         ResponseCode responseCode = ResponseCode.MEMBER_UPDATE;
-        return new ResponseEntity<>(ResResult.builder()
-            .responseCode(responseCode)
-            .code(responseCode.getCode())
-            .message(responseCode.getMessage())
-            .data(memberService.updateMember(authentication.getName(), requestDto))
-            .build(), HttpStatus.OK);
+        return responseCode.toResponse(
+            memberService.updateMember(authentication.getName(), requestDto));
     }
 
     /*회원탈퇴*/
@@ -60,35 +50,21 @@ public class MemberController {
     public ResponseEntity<ResResult> deleteMember(@ApiIgnore Authentication authentication) {
         ResponseCode responseCode = ResponseCode.MEMBER_DELETE;
         memberService.deleteMember(authentication.getName());
-        return new ResponseEntity<>(ResResult.builder()
-            .responseCode(responseCode)
-            .code(responseCode.getCode())
-            .message(responseCode.getMessage())
-            .build(), HttpStatus.OK);
+        return responseCode.toResponse(null);
     }
 
     /*이메일 중복 검사*/
     @GetMapping("/email/{email}/exists")
     public ResponseEntity<ResResult> checkEmailDuplicate(@PathVariable String email) {
         ResponseCode responseCode = ResponseCode.MEMBER_EXISTS;
-        return new ResponseEntity<>(ResResult.builder()
-            .responseCode(responseCode)
-            .code(responseCode.getCode())
-            .message(responseCode.getMessage())
-            .data(memberService.checkEmailDuplicate(email))
-            .build(), HttpStatus.OK);
+        return responseCode.toResponse(memberService.checkEmailDuplicate(email));
     }
 
     /*닉네임 중복 검사*/
     @GetMapping("/username/{username}/exists")
     public ResponseEntity<ResResult> checkUsernameDuplicate(@PathVariable String username) {
         ResponseCode responseCode = ResponseCode.MEMBER_EXISTS;
-        return new ResponseEntity<>(ResResult.builder()
-            .responseCode(responseCode)
-            .code(responseCode.getCode())
-            .message(responseCode.getMessage())
-            .data(memberService.checkUsernameDuplicate(username))
-            .build(), HttpStatus.OK);
+        return responseCode.toResponse(memberService.checkUsernameDuplicate(username));
     }
 
     /*프로필 사진 추가*/
@@ -98,12 +74,7 @@ public class MemberController {
         @RequestPart(value = "file")
         MultipartFile image) throws IOException {
         ResponseCode responseCode = ResponseCode.AVATAR_UPLOAD;
-        return new ResponseEntity<>(ResResult.builder()
-            .responseCode(responseCode)
-            .code(responseCode.getCode())
-            .message(responseCode.getMessage())
-            .data(memberService.uploadAvatar(authentication.getName(), image))
-            .build(), HttpStatus.OK);
+        return responseCode.toResponse(memberService.uploadAvatar(authentication.getName(), image));
     }
 
     /*프로필 사진 삭제*/
@@ -113,10 +84,6 @@ public class MemberController {
     ) {
         memberService.deleteAvatar(authentication.getName());
         ResponseCode responseCode = ResponseCode.AVATAR_DELETE;
-        return new ResponseEntity<>(ResResult.builder()
-            .responseCode(responseCode)
-            .code(responseCode.getCode())
-            .message(responseCode.getMessage())
-            .build(), HttpStatus.OK);
+        return responseCode.toResponse(null);
     }
 }

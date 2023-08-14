@@ -4,6 +4,7 @@ spring:
     include:
       - s3
       - mail
+      - redis
 
   jpa:
     open-in-view: false

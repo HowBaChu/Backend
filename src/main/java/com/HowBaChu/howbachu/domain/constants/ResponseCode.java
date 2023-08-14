@@ -19,7 +19,8 @@ public enum ResponseCode {
     MEMBER_LOGIN(HttpStatus.OK, "200", "로그인 성공"),
     MEMBER_LOGOUT(HttpStatus.NO_CONTENT, "204", "로그아웃 성공"),
     VERIFICATION_SEND(HttpStatus.OK,"200","인증메일을 전송하였습니다."),
-    VERIFICATION_SUCCESS(HttpStatus.OK,"200","인증 성공"),
+    VERIFICATION_SUCCESS(HttpStatus.OK,"200","인증에 성공했습니다."),
+    VERIFICATION_FAILED(HttpStatus.UNAUTHORIZED, "401", "인증에 실패했습니다."),
 
 
     /* MEMBER */

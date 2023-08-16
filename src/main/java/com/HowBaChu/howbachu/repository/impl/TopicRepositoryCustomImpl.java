@@ -8,6 +8,8 @@ import com.HowBaChu.howbachu.exception.constants.ErrorCode;
 import com.HowBaChu.howbachu.repository.Support.Querydsl4RepositorySupport;
 import com.HowBaChu.howbachu.repository.custom.TopicRepositoryCustom;
 import com.querydsl.core.types.dsl.BooleanExpression;
+
+import org.springframework.lang.Nullable;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -19,7 +21,7 @@ public class TopicRepositoryCustomImpl extends Querydsl4RepositorySupport implem
     }
 
     @Override
-    public Topic getTopic(LocalDate date) {
+    public Topic getTopic(@Nullable LocalDate date) {
         return Optional.ofNullable(
             selectFrom(topic)
                 .where(searchByDate(date))
@@ -27,7 +29,8 @@ public class TopicRepositoryCustomImpl extends Querydsl4RepositorySupport implem
         ).orElseThrow(() -> new CustomException(ErrorCode.TOPIC_NOT_FOUND));
     }
 
+
     private BooleanExpression searchByDate(LocalDate date) {
-        return Optional.ofNullable(date).isPresent() ? topic.date.eq(date) : topic.date.eq(LocalDate.now());
+        return topic.date.eq(Optional.ofNullable(date).orElse(LocalDate.now()));
     }
 }

@@ -25,6 +25,9 @@ public enum ErrorCode {
     WRONG_LOGIN_REQUEST(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
     FILE_NOT_EXIST(HttpStatus.NOT_FOUND, "파일이 존재하지 않습니다."),
 
+    /* VOTE */
+    VOTE_ALREADY_DONE(HttpStatus.BAD_REQUEST, "이미 투표에 참가하셨습니다."),
+
     /* TOPIC */
     TOPIC_NOT_FOUND(HttpStatus.NOT_FOUND, "토픽 정보가 존재하지 않습니다.");
 

@@ -1,8 +1,11 @@
 package com.HowBaChu.howbachu.domain.constants;
 
+import com.HowBaChu.howbachu.domain.dto.response.ResResult;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 
 @Getter
 @ToString
@@ -18,6 +21,10 @@ public enum ResponseCode {
     MEMBER_SAVE(HttpStatus.CREATED, "201", "회원가입 성공"),
     MEMBER_LOGIN(HttpStatus.OK, "200", "로그인 성공"),
     MEMBER_LOGOUT(HttpStatus.NO_CONTENT, "204", "로그아웃 성공"),
+    VERIFICATION_SEND(HttpStatus.OK,"200","인증메일을 전송하였습니다."),
+    VERIFICATION_SUCCESS(HttpStatus.OK,"200","인증에 성공했습니다."),
+    VERIFICATION_FAILED(HttpStatus.UNAUTHORIZED, "401", "인증에 실패했습니다."),
+
 
     /* MEMBER */
     MEMBER_DETAIL(HttpStatus.OK, "200", "회원정보 불러오기 성공"),
@@ -44,6 +51,15 @@ public enum ResponseCode {
         this.httpStatus = httpStatus;
         this.code = code;
         this.message = message;
+    }
+
+    public <T> ResponseEntity<ResResult> toResponse(@Nullable T data) {
+        return new ResponseEntity<>(ResResult.builder()
+            .responseCode(this)
+            .code(this.getCode())
+            .message(this.getMessage())
+            .data(data)
+            .build(), HttpStatus.OK);
     }
 
 }

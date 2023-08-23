@@ -7,5 +7,5 @@ import org.springframework.lang.Nullable;
 import java.time.LocalDate;
 
 public interface TopicRepositoryCustom {
-    Topic getTopic(@Nullable LocalDate date);
+    Topic getTopicByDate(@Nullable LocalDate date);
 }

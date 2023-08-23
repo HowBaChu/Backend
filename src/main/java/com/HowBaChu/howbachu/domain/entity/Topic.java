@@ -1,6 +1,6 @@
 package com.HowBaChu.howbachu.domain.entity;
 
-import com.HowBaChu.howbachu.domain.entity.embedded.TopicSubTitle;
+import com.HowBaChu.howbachu.domain.entity.embedded.SubTitle;
 import com.HowBaChu.howbachu.domain.entity.embedded.VotingStatus;
 import lombok.*;
 
@@ -26,7 +26,7 @@ public class Topic {
     private LocalDate date;
 
     @Embedded
-    private TopicSubTitle topicSubTitle;
+    private SubTitle subTitle;
 
     @Embedded
     private VotingStatus votingStatus;

@@ -17,6 +17,6 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public Topic getTopic(LocalDate date) {
-        return topicRepository.getTopic(date);
+        return topicRepository.getTopicByDate(date);
     }
 }

@@ -1,6 +1,5 @@
 package com.HowBaChu.howbachu.controller;
 
-import com.HowBaChu.howbachu.domain.constants.Option;
 import com.HowBaChu.howbachu.domain.constants.ResponseCode;
 import com.HowBaChu.howbachu.domain.dto.response.ResResult;
 import com.HowBaChu.howbachu.domain.dto.vote.VoteRequestDto;

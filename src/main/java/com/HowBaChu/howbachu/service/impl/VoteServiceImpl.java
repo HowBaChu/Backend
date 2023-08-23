@@ -27,7 +27,7 @@ public class VoteServiceImpl implements VoteService {
 
     @Override
     public Long voting(VoteRequestDto requestDto, String email) {
-        Topic topic = topicRepository.getTopic(LocalDate.now());
+        Topic topic = topicRepository.getTopicByDate(LocalDate.now());
         Member member = memberRepository.findByEmail(email);
 
         if (hasAlreadyVoted(topic.getId(), member.getId())) {

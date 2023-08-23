@@ -21,7 +21,7 @@ public class TopicRepositoryCustomImpl extends Querydsl4RepositorySupport implem
     }
 
     @Override
-    public Topic getTopic(@Nullable LocalDate date) {
+    public Topic getTopicByDate(@Nullable LocalDate date) {
         return Optional.ofNullable(
             selectFrom(topic)
                 .where(searchByDate(date))

@@ -1,6 +1,6 @@
 package com.HowBaChu.howbachu.controller;
 
-import com.HowBaChu.howbachu.domain.constants.Option;
+import com.HowBaChu.howbachu.domain.constants.Selection;
 import com.HowBaChu.howbachu.domain.dto.vote.VoteRequestDto;
 import com.HowBaChu.howbachu.jwt.JwtProvider;
 import com.HowBaChu.howbachu.service.MemberService;
@@ -62,7 +62,7 @@ class VoteControllerTest {
     public void votingTest() throws Exception {
 
         // given
-        VoteRequestDto requestDto = new VoteRequestDto(Option.A);
+        VoteRequestDto requestDto = new VoteRequestDto(Selection.A);
         given(voteService.voting(requestDto, authentication.getName()))
             .willReturn(1L);
 

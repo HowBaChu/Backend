@@ -1,5 +1,6 @@
 package com.HowBaChu.howbachu.domain.entity;
 
+import com.HowBaChu.howbachu.domain.base.BaseEntity;
 import com.HowBaChu.howbachu.domain.constants.MBTI;
 import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
 
@@ -26,7 +27,7 @@ import org.hibernate.annotations.Where;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE member SET is_deleted = true WHERE member_id = ?")
 @Where(clause = "is_deleted != true")
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
     @Column(name = "member_id")

@@ -1,6 +1,6 @@
 package com.HowBaChu.howbachu.domain.constants;
 
-public enum Option {
+public enum Selection {
     A,
     B;
 }

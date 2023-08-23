@@ -13,6 +13,7 @@ public enum ResponseCode {
 
     /* OPIN */
     OPIN_LIST(HttpStatus.OK, "200", "댓글 조회 성공"),
+    OPIN_CHILD_LIST(HttpStatus.OK, "200", "대댓글 조회 성공"),
     OPIN_SAVE(HttpStatus.CREATED, "201", "댓글 등록 성공"),
     OPIN_UPDATE(HttpStatus.NO_CONTENT, "204", "댓글 수정 성공"),
     OPIN_DELETE(HttpStatus.NO_CONTENT, "204", "댓글 삭제 성공"),

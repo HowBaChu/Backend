@@ -27,6 +27,11 @@ public enum ErrorCode {
 
     /* VOTE */
     VOTE_ALREADY_DONE(HttpStatus.BAD_REQUEST, "이미 투표에 참가하셨습니다."),
+    VOTE_NOT_FOUND(HttpStatus.NOT_FOUND, "투표 정보가 존재하지 않습니다."),
+
+    /* OPIN */
+    OPIN_NOT_FOUND(HttpStatus.BAD_REQUEST, "존재하지 않는 오핀입니다."),
+    OPIN_MISS_MATCH(HttpStatus.BAD_REQUEST, "해당 오핀과 정보가 일치하는 유저가 없습니다."),
 
     /* TOPIC */
     TOPIC_NOT_FOUND(HttpStatus.NOT_FOUND, "토픽 정보가 존재하지 않습니다.");

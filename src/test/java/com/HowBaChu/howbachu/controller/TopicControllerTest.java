@@ -1,8 +1,7 @@
 package com.HowBaChu.howbachu.controller;
 
-import com.HowBaChu.howbachu.domain.dto.jwt.TokenResponseDto;
 import com.HowBaChu.howbachu.domain.entity.Topic;
-import com.HowBaChu.howbachu.domain.entity.embedded.TopicSubTitle;
+import com.HowBaChu.howbachu.domain.entity.embedded.SubTitle;
 import com.HowBaChu.howbachu.domain.entity.embedded.VotingStatus;
 import com.HowBaChu.howbachu.service.TopicService;
 import org.junit.jupiter.api.DisplayName;
@@ -83,7 +82,7 @@ public class TopicControllerTest {
             .id(1L)
             .title("탕수육은 부먹 vs 찍먹")
             .date(LocalDate.now())
-            .topicSubTitle(new TopicSubTitle("탕수육은 원래 부어먹는 음식이다", "찍먹이 진리다 바삭바삭"))
+            .subTitle(new SubTitle("탕수육은 원래 부어먹는 음식이다", "찍먹이 진리다 바삭바삭"))
             .votingStatus(new VotingStatus())
             .build();
     }

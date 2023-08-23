@@ -1,7 +1,7 @@
 package com.HowBaChu.howbachu.service;
 
 import com.HowBaChu.howbachu.domain.entity.Topic;
-import com.HowBaChu.howbachu.domain.entity.embedded.TopicSubTitle;
+import com.HowBaChu.howbachu.domain.entity.embedded.SubTitle;
 import com.HowBaChu.howbachu.domain.entity.embedded.VotingStatus;
 import com.HowBaChu.howbachu.repository.TopicRepository;
 import com.HowBaChu.howbachu.repository.custom.TopicRepositoryCustom;
@@ -38,7 +38,7 @@ class TopicServiceTest {
             .id(1L)
             .title("부먹이냐 찍먹이냐")
             .date(LocalDate.now())
-            .topicSubTitle(new TopicSubTitle("부먹이다", "찍먹이다"))
+            .subTitle(new SubTitle("부먹이다", "찍먹이다"))
             .votingStatus(new VotingStatus())
             .build();
 

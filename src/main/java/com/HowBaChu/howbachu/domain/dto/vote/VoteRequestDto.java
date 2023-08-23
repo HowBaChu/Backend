@@ -1,6 +1,6 @@
 package com.HowBaChu.howbachu.domain.dto.vote;
 
-import com.HowBaChu.howbachu.domain.constants.Option;
+import com.HowBaChu.howbachu.domain.constants.Selection;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VoteRequestDto {
-    private Option option;
+    private Selection selection;
 }

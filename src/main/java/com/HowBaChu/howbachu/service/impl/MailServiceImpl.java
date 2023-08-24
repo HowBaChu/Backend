@@ -28,13 +28,13 @@ public class MailServiceImpl implements MailService {
     @Value("${spring.mail.username}")
     private String id;
 
-    @Value("${spring.mail.expired}")
+    @Value("${spring.mail.properties.auth-code-expiration-millis}")
     private Long expired;
 
     @Override
     public void sendMessage(String to) {
         MimeMessage message = createMessage(to);
-        redisUtil.setDataExpire(verificationCode,to,60*50L);
+        redisUtil.setDataExpire(verificationCode,to,expired);
         javaMailSender.send(message);
     }
 

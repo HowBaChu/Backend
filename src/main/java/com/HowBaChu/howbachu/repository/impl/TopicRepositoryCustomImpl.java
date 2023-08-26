@@ -14,9 +14,9 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 
-public class TopicRepositoryCustomImpl extends Querydsl4RepositorySupport implements TopicRepositoryCustom {
+public class TopicRepositoryImpl extends Querydsl4RepositorySupport implements TopicRepositoryCustom {
 
-    public TopicRepositoryCustomImpl() {
+    public TopicRepositoryImpl() {
         super(Topic.class);
     }
 

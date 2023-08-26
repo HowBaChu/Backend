@@ -16,6 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 @ActiveProfiles(value = "test")
 class TopicRepositoryTest {
 
+    static {
+        System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
+    }
+
     @Autowired
     TopicRepository topicRepository;
 

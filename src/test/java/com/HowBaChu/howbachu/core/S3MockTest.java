@@ -17,6 +17,10 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest
 public class S3MockTest {
 
+    static {
+        System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
+    }
+
     @Autowired
     private S3Mock s3Mock;
     @Autowired

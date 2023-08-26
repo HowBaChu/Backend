@@ -31,6 +31,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 class AuthControllerTest {
 
+    static {
+        System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
+    }
+
     @Autowired
     private MemberService memberService;
     @Autowired

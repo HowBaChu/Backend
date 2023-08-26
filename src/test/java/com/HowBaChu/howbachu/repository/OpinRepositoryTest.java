@@ -27,6 +27,10 @@ import java.time.LocalDate;
 @ActiveProfiles(value = "test")
 class OpinRepositoryTest {
 
+    static {
+        System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
+    }
+
     @Autowired
     OpinRepository opinRepository;
 

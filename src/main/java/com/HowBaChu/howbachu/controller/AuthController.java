@@ -5,6 +5,7 @@ import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
 import com.HowBaChu.howbachu.domain.dto.response.ResResult;
 import com.HowBaChu.howbachu.service.MemberService;
 import com.HowBaChu.howbachu.service.impl.MailServiceImpl;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -28,14 +29,14 @@ public class AuthController {
 
     /*회원가입*/
     @PostMapping("/signup")
-    public ResponseEntity<ResResult> register(@RequestBody MemberRequestDto requestDto) {
+    public ResponseEntity<ResResult> register(@Valid @RequestBody MemberRequestDto requestDto) {
         ResponseCode responseCode = ResponseCode.MEMBER_SAVE;
         return responseCode.toResponse(memberService.signup(requestDto));
     }
 
     /*로그인*/
     @PostMapping("/login")
-    public ResponseEntity<ResResult> login(@RequestBody MemberRequestDto requestDto) {
+    public ResponseEntity<ResResult> login(@Valid @RequestBody MemberRequestDto requestDto) {
         ResponseCode responseCode = ResponseCode.MEMBER_LOGIN;
         return responseCode.toResponse(memberService.login(requestDto));
     }

@@ -1,6 +1,5 @@
 package com.HowBaChu.howbachu.exception;
 
-import com.HowBaChu.howbachu.exception.constants.ErrorCode;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,15 +13,11 @@ import org.springframework.http.HttpStatus;
 public class ErrorResponse {
 
     private int status;
-    private String code;
     private String message;
-    private ErrorCode errorCode;
     private HttpStatus httpStatus;
 
-    public ErrorResponse(ErrorCode errorCode) {
-        this.status = errorCode.getStatus().value();
-        this.errorCode = errorCode;
-        this.httpStatus = errorCode.getStatus();
-        this.message = errorCode.getMessage();
+    public ErrorResponse(HttpStatus status, String message) {
+        this.httpStatus = status;
+        this.message = message;
     }
 }

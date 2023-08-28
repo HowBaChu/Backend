@@ -79,6 +79,14 @@ public class MemberRequestDto {
         public void encodePassword(String encoded) { this.password = encoded; }
     }
 
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class passwordVerification{
+        @NotBlank(message = "비밀번호를 입력해주세요.")
+        @Pattern(message = "비밀번호는 영어, 숫자, 특수 문자를 포함한 (8~24)자 이어야 합니다.", regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,24}$")
+        private String password;
+    }
 
 
 

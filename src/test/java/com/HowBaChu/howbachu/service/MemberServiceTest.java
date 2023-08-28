@@ -5,6 +5,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import com.HowBaChu.howbachu.domain.constants.MBTI;
 import com.HowBaChu.howbachu.domain.dto.jwt.TokenResponseDto;
 import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
+import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto.login;
+import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto.signup;
+import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto.update;
 import com.HowBaChu.howbachu.domain.dto.member.MemberResponseDto;
 import com.HowBaChu.howbachu.domain.entity.Member;
 import com.HowBaChu.howbachu.jwt.JwtProvider;
@@ -36,12 +39,16 @@ class MemberServiceTest {
     @Autowired
     RefreshTokenRepository refreshTokenRepository;
 
-    private MemberRequestDto memberRequestDto;
+    private MemberRequestDto.signup memberSignupDto;
+    private MemberRequestDto.login memberLoginDto;
+    private MemberRequestDto.update memberUpdateDto;
+
 
     @BeforeEach
     void init() {
-        memberRequestDto = new MemberRequestDto("testEmail", "testPassword", "testUsername",
+        memberSignupDto = new signup("testEmail@naver.com", "testPassword!123", "testUsername",
             MBTI.ENTJ, "testStatusMessage");
+        memberLoginDto = new login("testEmail@naver.com", "testPassword!123");
     }
 
     @Test
@@ -50,44 +57,45 @@ class MemberServiceTest {
         //given
 
         //when
-        memberService.signup(memberRequestDto);
+        memberService.signup(memberSignupDto);
 
         //then
-        Member savedMember = memberRepository.findByEmail(memberRequestDto.getEmail());
-        assertThat(savedMember.getEmail()).isEqualTo(memberRequestDto.getEmail());
+        Member savedMember = memberRepository.findByEmail(memberSignupDto.getEmail());
+        assertThat(savedMember.getEmail()).isEqualTo(memberSignupDto.getEmail());
         assertThat(passwordEncoder.matches("testPassword", savedMember.getPassword())).isTrue();
-        assertThat(savedMember.getUsername()).isEqualTo(memberRequestDto.getUsername());
-        assertThat(savedMember.getMbti()).isEqualTo(memberRequestDto.getMbti());
-        assertThat(savedMember.getStatusMessage()).isEqualTo(memberRequestDto.getStatusMessage());
+        assertThat(savedMember.getUsername()).isEqualTo(memberSignupDto.getUsername());
+        assertThat(savedMember.getMbti()).isEqualTo(memberSignupDto.getMbti());
+        assertThat(savedMember.getStatusMessage()).isEqualTo(memberSignupDto.getStatusMessage());
     }
 
     @Test
     @DisplayName("로그인 테스트 - 서비스")
     void login() {
         //given
-        memberService.signup(memberRequestDto);
+        memberService.signup(memberSignupDto);
 
         //when
-        memberRequestDto.encodePassword("testPassword");
-        TokenResponseDto tokenResponseDto = memberService.login(memberRequestDto);
+        memberSignupDto.encodePassword("testPassword");
+        TokenResponseDto tokenResponseDto = memberService.login(memberLoginDto);
 
         //then
         assertThat(jwtProvider.getEmailFromToken(tokenResponseDto.getAccessToken())).isEqualTo(
-            memberRequestDto.getEmail());
+            memberSignupDto.getEmail());
     }
 
     @Test
     @DisplayName("회원정보 수정 테스트 - 서비스")
     void updateMember() {
         //given
-        memberService.signup(memberRequestDto);
-        memberRequestDto.encodePassword("testPassword");
-        memberService.login(memberRequestDto);
+        memberService.signup(memberSignupDto);
+        memberSignupDto.encodePassword("testPassword");
+        memberService.login(memberLoginDto);
 
         //when
-        MemberRequestDto updateRequestDto = new MemberRequestDto("testEmail", "testPassword", "testUsername",
-            MBTI.ENTJ, "updateStatusMessage");
-        MemberResponseDto memberResponseDto = memberService.updateMember(memberRequestDto.getEmail(), updateRequestDto);
+        MemberRequestDto.update updateRequestDto = new update("testEmail@naver.com", "testPassword!123",
+            "testUsername",
+            MBTI.ENTJ, "testStatusMessage");
+        MemberResponseDto memberResponseDto = memberService.updateMember(memberSignupDto.getEmail(), updateRequestDto);
 
         //then
         assertThat(memberResponseDto.getStatusMessage()).isEqualTo(
@@ -98,16 +106,16 @@ class MemberServiceTest {
     @DisplayName("회원 삭제 테스트 - 서비스")
     void deleteMember() {
         //given
-        memberService.signup(memberRequestDto);
-        memberRequestDto.encodePassword("testPassword");
-        memberService.login(memberRequestDto);
+        memberService.signup(memberSignupDto);
+        memberSignupDto.encodePassword("testPassword!123");
+        memberService.login(memberLoginDto);
 
         //when
-        memberService.deleteMember(memberRequestDto.getEmail());
+        memberService.deleteMember(memberSignupDto.getEmail());
 
         //then
-        assertThat(memberRepository.existsByEmail(memberRequestDto.getEmail())).isFalse();
-        assertThat(refreshTokenRepository.findByKey(memberRequestDto.getEmail())).isEqualTo(
+        assertThat(memberRepository.existsByEmail(memberSignupDto.getEmail())).isFalse();
+        assertThat(refreshTokenRepository.findByKey(memberSignupDto.getEmail())).isEqualTo(
             Optional.empty());
     }
 
@@ -115,41 +123,41 @@ class MemberServiceTest {
     @DisplayName("회원 이메일 중복 확인 테스트 - 서비스")
     void checkEmailDuplicate() {
         //given
-        memberService.signup(memberRequestDto);
+        memberService.signup(memberSignupDto);
 
         //when
 
         //then
-        assertThat(memberService.checkEmailDuplicate(memberRequestDto.getEmail()).getStatus()).isTrue();
+        assertThat(memberService.checkEmailDuplicate(memberSignupDto.getEmail()).getStatus()).isTrue();
     }
 
     @Test
     @DisplayName("회원 유저네임 중복 확인 테스트 - 서비스 ")
     void checkUsernameDuplicate() {
         //given
-        memberService.signup(memberRequestDto);
+        memberService.signup(memberSignupDto);
 
         //when
 
         //then
-        assertThat(memberService.checkUsernameDuplicate(memberRequestDto.getUsername()).getStatus()).isTrue();
+        assertThat(memberService.checkUsernameDuplicate(memberSignupDto.getUsername()).getStatus()).isTrue();
     }
 
     @Test
     @DisplayName("회원 로그아웃 테스트 - 서비스")
     void logout() {
         //given
-        memberService.signup(memberRequestDto);
-        memberRequestDto.encodePassword("testPassword");
-        memberService.login(memberRequestDto);
+        memberService.signup(memberSignupDto);
+        memberSignupDto.encodePassword("testPassword!123");
+        memberService.login(memberLoginDto);
 
-        assertThat(refreshTokenRepository.findByKey(memberRequestDto.getEmail())).isNotEqualTo(Optional.empty());
+        assertThat(refreshTokenRepository.findByKey(memberSignupDto.getEmail())).isNotEqualTo(Optional.empty());
 
         //when
-        memberService.logout(memberRequestDto.getEmail());
+        memberService.logout(memberSignupDto.getEmail());
 
         //then
-        assertThat(refreshTokenRepository.findByKey(memberRequestDto.getEmail())).isEqualTo(
+        assertThat(refreshTokenRepository.findByKey(memberSignupDto.getEmail())).isEqualTo(
             Optional.empty());
     }
 

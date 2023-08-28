@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.HowBaChu.howbachu.domain.constants.MBTI;
 import com.HowBaChu.howbachu.domain.dto.jwt.TokenResponseDto;
 import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
+import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto.login;
 import com.HowBaChu.howbachu.repository.MemberRepository;
 import com.HowBaChu.howbachu.repository.RefreshTokenRepository;
 import com.HowBaChu.howbachu.service.MemberService;
@@ -40,21 +41,24 @@ class AuthControllerTest {
     @Autowired
     RefreshTokenRepository refreshTokenRepository;
 
-    MemberRequestDto memberRequestDto;
+    MemberRequestDto.signup memberSignupDto;
+    MemberRequestDto.login memberLoginDto;
     String content;
+    Gson gson = new Gson();
 
     @BeforeEach
     void init() {
-        memberRequestDto = new MemberRequestDto("testEmail", "testPassword", "testUsername",
+        memberSignupDto = new MemberRequestDto.signup("testEmail@naver.com", "testPassword!123", "testUsername",
             MBTI.ENTJ, "testStatusMessage");
-        Gson gson = new Gson();
-        content = gson.toJson(memberRequestDto);
+        memberLoginDto = new login("testEmail@naver.com", "testPassword!123");
+
     }
 
     @Test
     @DisplayName("회원가입 테스트 - 컨트롤러")
     void register() throws Exception {
         //given
+        content = gson.toJson(memberSignupDto);
 
         //when
         mockMvc.perform(
@@ -68,16 +72,16 @@ class AuthControllerTest {
             .andDo(print());
 
         //then
-        assertThat(memberRepository.existsByEmail(memberRequestDto.getEmail())).isTrue();
+        assertThat(memberRepository.existsByEmail(memberSignupDto.getEmail())).isTrue();
     }
 
     @Test
     @DisplayName("로그인 테스트 - 컨트롤러")
     void login() throws Exception {
         //given
-        memberRequestDto.encodePassword("testPassword");
-        memberService.signup(memberRequestDto);
-
+        memberSignupDto.encodePassword("testPassword!123");
+        memberService.signup(memberSignupDto);
+        content = gson.toJson(memberLoginDto);
         //when
         mockMvc.perform(
                 post("/api/v1/auth/login")
@@ -88,7 +92,7 @@ class AuthControllerTest {
             .andDo(print());
 
         //then
-        assertThat(refreshTokenRepository.findByKey(memberRequestDto.getEmail())).isNotEqualTo(
+        assertThat(refreshTokenRepository.findByKey(memberSignupDto.getEmail())).isNotEqualTo(
             Optional.empty());
     }
 
@@ -96,9 +100,9 @@ class AuthControllerTest {
     @DisplayName("로그아웃 테스트 - 컨트롤러")
     void logout() throws Exception {
         //given
-        memberService.signup(memberRequestDto);
-        memberRequestDto.encodePassword("testPassword");
-        TokenResponseDto tokenResponseDto = memberService.login(memberRequestDto);
+        memberService.signup(memberSignupDto);
+        memberSignupDto.encodePassword("testPassword!123");
+        TokenResponseDto tokenResponseDto = memberService.login(memberLoginDto);
 
         //when
         mockMvc.perform(
@@ -109,7 +113,7 @@ class AuthControllerTest {
             .andDo(print());
 
         //then
-        assertThat(refreshTokenRepository.findByKey(memberRequestDto.getEmail())).isEqualTo(
+        assertThat(refreshTokenRepository.findByKey(memberSignupDto.getEmail())).isEqualTo(
             Optional.empty());
     }
 }

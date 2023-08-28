@@ -6,6 +6,7 @@ import com.HowBaChu.howbachu.domain.dto.member.StatusResponseDto;
 import com.HowBaChu.howbachu.domain.dto.response.ResResult;
 import com.HowBaChu.howbachu.service.MemberService;
 import java.io.IOException;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -70,7 +71,7 @@ public class MemberController {
 
     @PostMapping("/password-verification")
     public ResponseEntity<ResResult> checkPasswordVerification(
-        @RequestBody MemberRequestDto requestDto,
+        @Valid @RequestBody MemberRequestDto.passwordVerification requestDto,
         @ApiIgnore Authentication authentication) {
         StatusResponseDto responseDto = memberService.checkPassword(requestDto.getPassword(),
             authentication.getName());

@@ -29,14 +29,14 @@ public class AuthController {
 
     /*회원가입*/
     @PostMapping("/signup")
-    public ResponseEntity<ResResult> register(@Valid @RequestBody MemberRequestDto requestDto) {
+    public ResponseEntity<ResResult> register(@Valid @RequestBody MemberRequestDto.signup requestDto) {
         ResponseCode responseCode = ResponseCode.MEMBER_SAVE;
         return responseCode.toResponse(memberService.signup(requestDto));
     }
 
     /*로그인*/
     @PostMapping("/login")
-    public ResponseEntity<ResResult> login(@Valid @RequestBody MemberRequestDto requestDto) {
+    public ResponseEntity<ResResult> login(@Valid @RequestBody MemberRequestDto.login requestDto) {
         ResponseCode responseCode = ResponseCode.MEMBER_LOGIN;
         return responseCode.toResponse(memberService.login(requestDto));
     }

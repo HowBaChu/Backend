@@ -112,6 +112,12 @@ public class MemberServiceImpl implements MemberService {
         member.uploadAvatar(null);
     }
 
+    @Override
+    public StatusResponseDto checkPassword(String password, String email) {
+        return new StatusResponseDto(
+            validatePassword(password,memberRepository.findByEmail(email).getPassword()));
+    }
+
     public boolean validatePassword(String input, String encoded) {
         return passwordEncoder.matches(input, encoded);
     }

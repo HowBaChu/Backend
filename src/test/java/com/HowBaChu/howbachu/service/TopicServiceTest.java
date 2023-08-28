@@ -1,11 +1,14 @@
 package com.HowBaChu.howbachu.service;
 
+import static org.mockito.BDDMockito.given;
+
 import com.HowBaChu.howbachu.domain.entity.Topic;
 import com.HowBaChu.howbachu.domain.entity.embedded.SubTitle;
 import com.HowBaChu.howbachu.domain.entity.embedded.VotingStatus;
 import com.HowBaChu.howbachu.repository.TopicRepository;
 import com.HowBaChu.howbachu.repository.custom.TopicRepositoryCustom;
 import com.HowBaChu.howbachu.service.impl.TopicServiceImpl;
+import java.time.LocalDate;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,13 +16,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
-
-import static org.mockito.BDDMockito.given;
-
 
 @ExtendWith(MockitoExtension.class)
 class TopicServiceTest {
+
+    static {
+        System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
+    }
 
     @Mock
     private TopicRepository topicRepository;

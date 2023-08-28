@@ -34,6 +34,8 @@ public enum ResponseCode {
     MEMBER_EXISTS(HttpStatus.OK,"200","회원존재 여부 조회 성공"),
     AVATAR_UPLOAD(HttpStatus.OK,"200","이미지 업로드 성공"),
     AVATAR_DELETE(HttpStatus.NO_CONTENT,"204","이미지 삭제 성공"),
+    PASSWORD_CORRECT(HttpStatus.OK, "200", "기존 비밀번호가 일치합니다."),
+    PASSWORD_DISCORD(HttpStatus.BAD_REQUEST, "400", "기존 비밀번호가 틀렸습니다."),
 
     /* VOTE */
     VOTING_SUCCESS(HttpStatus.CREATED, "201", "투표 성공"),

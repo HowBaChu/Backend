@@ -36,4 +36,6 @@ public interface MemberService {
     MemberResponseDto uploadAvatar(String email, MultipartFile image);
 
     void deleteAvatar(String email);
+
+    StatusResponseDto checkPassword(String password, String email);
 }

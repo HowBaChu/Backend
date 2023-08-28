@@ -2,6 +2,7 @@ package com.HowBaChu.howbachu.controller;
 
 import com.HowBaChu.howbachu.domain.constants.ResponseCode;
 import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
+import com.HowBaChu.howbachu.domain.dto.member.StatusResponseDto;
 import com.HowBaChu.howbachu.domain.dto.response.ResResult;
 import com.HowBaChu.howbachu.service.MemberService;
 import java.io.IOException;
@@ -65,6 +66,18 @@ public class MemberController {
     public ResponseEntity<ResResult> checkUsernameDuplicate(@PathVariable String username) {
         ResponseCode responseCode = ResponseCode.MEMBER_EXISTS;
         return responseCode.toResponse(memberService.checkUsernameDuplicate(username));
+    }
+
+    @PostMapping("/password-verification")
+    public ResponseEntity<ResResult> checkPasswordVerification(
+        @RequestBody MemberRequestDto requestDto,
+        @ApiIgnore Authentication authentication) {
+        StatusResponseDto responseDto = memberService.checkPassword(requestDto.getPassword(),
+            authentication.getName());
+        ResponseCode responseCode = responseDto.getStatus()
+            ? ResponseCode.PASSWORD_CORRECT
+            : ResponseCode.PASSWORD_DISCORD;
+        return responseCode.toResponse(responseDto);
     }
 
     /*프로필 사진 추가*/

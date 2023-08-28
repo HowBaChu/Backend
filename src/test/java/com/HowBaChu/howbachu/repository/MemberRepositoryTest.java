@@ -17,6 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 class MemberRepositoryTest {
 
+    static {
+        System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
+    }
+
     @Autowired
     MemberRepository memberRepository;
 

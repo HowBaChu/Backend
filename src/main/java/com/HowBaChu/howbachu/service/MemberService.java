@@ -11,16 +11,16 @@ import org.springframework.web.multipart.MultipartFile;
 public interface MemberService {
 
     /*회원가입*/
-    MemberResponseDto signup(MemberRequestDto requestDto);
+    MemberResponseDto signup(MemberRequestDto.signup requestDto);
 
     /*로그인*/
-    TokenResponseDto login(MemberRequestDto requestDto);
+    TokenResponseDto login(MemberRequestDto.login requestDto);
 
     /*회원 상세정보*/
     MemberResponseDto findMemberDetail(String email);
 
     /*회원정보 수정*/
-    MemberResponseDto updateMember(String email, MemberRequestDto requestDto);
+    MemberResponseDto updateMember(String email, MemberRequestDto.update requestDto);
 
     /*회원탈퇴*/
     void deleteMember(String email);

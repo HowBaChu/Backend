@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.HowBaChu.howbachu.domain.constants.MBTI;
 import com.HowBaChu.howbachu.domain.dto.jwt.TokenResponseDto;
 import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
+import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto.login;
 import com.HowBaChu.howbachu.exception.CustomException;
 import com.HowBaChu.howbachu.repository.MemberRepository;
 import com.HowBaChu.howbachu.service.MemberService;
@@ -44,18 +45,19 @@ class MemberControllerTest {
     @Autowired
     MemberRepository memberRepository;
 
-    MemberRequestDto memberRequestDto;
+    MemberRequestDto.signup memberSignupDto;
+    MemberRequestDto.login memberLoginDto;
     TokenResponseDto tokenResponseDto;
     String content;
 
     @BeforeEach
     void init() {
-        memberRequestDto = new MemberRequestDto("testEmail", "testPassword", "testUsername",
+        memberSignupDto = new MemberRequestDto.signup("testEmail@naver.com", "testPassword!123", "testUsername",
             MBTI.ENTJ, "testStatusMessage");
-
-        memberService.signup(memberRequestDto);
-        memberRequestDto.encodePassword("testPassword");
-        tokenResponseDto = memberService.login(memberRequestDto);
+        memberLoginDto = new login("testEmail@naver.com", "testPasswrod!123");
+        memberService.signup(memberSignupDto);
+        memberSignupDto.encodePassword("testPassword@naver.com");
+        tokenResponseDto = memberService.login(memberLoginDto);
 
     }
 
@@ -84,7 +86,7 @@ class MemberControllerTest {
     @DisplayName("회원 정보 수정 테스트 - 컨틀롤러")
     void updateMemberDetail() throws Exception {
         //given
-        MemberRequestDto updateRequestDto = new MemberRequestDto("testEmail", "testPassword", "testUsername22",
+        MemberRequestDto.update updateRequestDto = new MemberRequestDto.update("testEmail", "testPassword", "testUsername22",
             MBTI.ENTJ, "testStatusMessage");
         Gson gson = new Gson();
         content = gson.toJson(updateRequestDto);
@@ -103,7 +105,7 @@ class MemberControllerTest {
             .andDo(print());
 
         //then
-        assertThat(memberRepository.findByEmail(memberRequestDto.getEmail()).getUsername()).isEqualTo(
+        assertThat(memberRepository.findByEmail(memberSignupDto.getEmail()).getUsername()).isEqualTo(
             updateRequestDto.getUsername());
     }
 
@@ -123,7 +125,7 @@ class MemberControllerTest {
 
         //then
         assertThrows(CustomException.class, () -> {
-            memberRepository.findByEmail(memberRequestDto.getEmail());
+            memberRepository.findByEmail(memberSignupDto.getEmail());
         });
     }
 
@@ -134,7 +136,7 @@ class MemberControllerTest {
 
         //when
         mockMvc.perform(
-                get("/api/v1/member/email/{email}/exists",memberRequestDto.getEmail())
+                get("/api/v1/member/email/{email}/exists", memberSignupDto.getEmail())
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.data.status").value("true"))
@@ -150,7 +152,7 @@ class MemberControllerTest {
 
         //when
         mockMvc.perform(
-                get("/api/v1/member/username/{username}/exists",memberRequestDto.getUsername())
+                get("/api/v1/member/username/{username}/exists", memberSignupDto.getUsername())
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.data.status").value("true"))

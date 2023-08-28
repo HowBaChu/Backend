@@ -56,7 +56,7 @@ public class Member extends BaseEntity {
     @Column
     private String avatar;
 
-    public static Member toEntity(MemberRequestDto requestDto) {
+    public static Member toEntity(MemberRequestDto.signup requestDto) {
         return Member.builder()
             .email(requestDto.getEmail())
             .password(requestDto.getPassword())
@@ -67,7 +67,7 @@ public class Member extends BaseEntity {
             .build();
     }
 
-    public void update(MemberRequestDto requestDto) {
+    public void update(MemberRequestDto.update requestDto) {
         this.password = requestDto.getPassword();
         this.username = requestDto.getUsername();
         this.mbti = requestDto.getMbti();

@@ -34,13 +34,13 @@ public class MemberServiceImpl implements MemberService {
     private final AWSFileManager awsFileManager;
 
     @Override
-    public MemberResponseDto signup(MemberRequestDto requestDto) {
+    public MemberResponseDto signup(MemberRequestDto.signup requestDto) {
         requestDto.encodePassword(passwordEncoder.encode(requestDto.getPassword()));
         return MemberResponseDto.of(memberRepository.save(Member.toEntity(requestDto)));
     }
 
     @Override
-    public TokenResponseDto login(MemberRequestDto requestDto) {
+    public TokenResponseDto login(MemberRequestDto.login requestDto) {
 
         Member member = memberRepository.findByEmail(requestDto.getEmail());
 
@@ -64,7 +64,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberResponseDto updateMember(String email, MemberRequestDto requestDto) {
+    public MemberResponseDto updateMember(String email, MemberRequestDto.update requestDto) {
         Member member = memberRepository.findByEmail(email);
 
         if (!member.getEmail().equals(requestDto.getEmail())) {

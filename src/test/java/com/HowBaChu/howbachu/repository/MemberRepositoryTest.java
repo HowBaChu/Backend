@@ -29,7 +29,7 @@ class MemberRepositoryTest {
         for (int i = 0; i < 10; i++) {
             memberRepository.save(Member.builder()
                 .email("test@naver.com" + i)
-                .password("testPassword" + i)
+                .password("testPassword!123" + i)
                 .username("testUsername" + i)
                 .mbti(MBTI.ENTJ)
                 .statusMessage("testStatusMessage" + i)

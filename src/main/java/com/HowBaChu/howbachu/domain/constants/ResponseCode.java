@@ -42,6 +42,10 @@ public enum ResponseCode {
     VOTING_UPDATE(HttpStatus.NO_CONTENT, "204", "투표 수정 성공"),
     VOTING_DELETE(HttpStatus.NO_CONTENT, "204", "투표 취소 성공"),
 
+    /* REPORT */
+    REPORT_SAVE(HttpStatus.CREATED, "201", "신고 성공"),
+    REPORT_FIND(HttpStatus.OK, "200", "신고목록 조회 성공"),
+
     /* TOPIC */
     TOPIC_SUCCESS(HttpStatus.OK, "200", "토픽 조회 성공");
 

@@ -66,7 +66,7 @@ class MemberServiceTest {
         //then
         Member savedMember = memberRepository.findByEmail(memberSignupDto.getEmail());
         assertThat(savedMember.getEmail()).isEqualTo(memberSignupDto.getEmail());
-        assertThat(passwordEncoder.matches("testPassword", savedMember.getPassword())).isTrue();
+        assertThat(passwordEncoder.matches("testPassword!123", savedMember.getPassword())).isTrue();
         assertThat(savedMember.getUsername()).isEqualTo(memberSignupDto.getUsername());
         assertThat(savedMember.getMbti()).isEqualTo(memberSignupDto.getMbti());
         assertThat(savedMember.getStatusMessage()).isEqualTo(memberSignupDto.getStatusMessage());
@@ -79,7 +79,7 @@ class MemberServiceTest {
         memberService.signup(memberSignupDto);
 
         //when
-        memberSignupDto.encodePassword("testPassword");
+        memberSignupDto.encodePassword("testPassword!123");
         TokenResponseDto tokenResponseDto = memberService.login(memberLoginDto);
 
         //then
@@ -92,7 +92,7 @@ class MemberServiceTest {
     void updateMember() {
         //given
         memberService.signup(memberSignupDto);
-        memberSignupDto.encodePassword("testPassword");
+        memberSignupDto.encodePassword("testPassword!123");
         memberService.login(memberLoginDto);
 
         //when

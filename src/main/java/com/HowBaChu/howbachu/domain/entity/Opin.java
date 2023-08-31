@@ -77,4 +77,13 @@ public class Opin extends BaseEntity {
         this.content = content;
     }
 
+
+    public void addLikes() {
+        this.likeCnt++;
+    }
+
+    public void cancelLikes() {
+        if (likeCnt == 0) return;
+        this.likeCnt--;
+    }
 }

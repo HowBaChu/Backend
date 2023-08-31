@@ -47,7 +47,11 @@ public enum ResponseCode {
     REPORT_FIND(HttpStatus.OK, "200", "신고목록 조회 성공"),
 
     /* TOPIC */
-    TOPIC_SUCCESS(HttpStatus.OK, "200", "토픽 조회 성공");
+    TOPIC_SUCCESS(HttpStatus.OK, "200", "토픽 조회 성공"),
+
+    /* Likes */
+    LIKES_ADD(HttpStatus.CREATED, "201", "좋아요 추가 성공"),
+    LIKES_CANCEL(HttpStatus.NO_CONTENT, "204", "좋아요 취소 성공");
 
 
     private final HttpStatus httpStatus;

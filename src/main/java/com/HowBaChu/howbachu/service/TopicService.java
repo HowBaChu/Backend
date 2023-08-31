@@ -9,6 +9,6 @@ public interface TopicService {
     /**
      * 토픽 조회
      */
-    public Topic getTopic(LocalDate date);
+    Topic getTopic(LocalDate date);
 
 }

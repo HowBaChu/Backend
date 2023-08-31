@@ -58,23 +58,23 @@ public class OpinServiceImpl implements OpinService {
     @Override
     @Transactional
     public Long removeOpin(Long opinId, String email) {
-        opinRepository.delete(findOpinByIdAndEmail(opinId, email));
+        opinRepository.delete(getOpin(opinId, email));
         return opinId;
     }
 
     @Override
     @Transactional
     public Long updateOpin(OpinRequestDto requestDto, Long opinId, String email) {
-        Opin opin = findOpinByIdAndEmail(opinId, email);
+        Opin opin = getOpin(opinId, email);
         opin.updateContent(requestDto.getContent());
         return opinId;
     }
 
-    private Opin findOpinByIdAndEmail(Long opinId, String email) {
-        Opin opin = opinRepository.findByOpinIdAndEmail(opinId, email).orElseThrow(
+    @Override
+    public Opin getOpin(Long opinId, String email) {
+        return opinRepository.findByOpinIdAndEmail(opinId, email).orElseThrow(
             () -> new CustomException(ErrorCode.OPIN_MISS_MATCH)
         );
-        return opin;
     }
 
 }

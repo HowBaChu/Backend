@@ -34,7 +34,11 @@ public enum ErrorCode {
     OPIN_MISS_MATCH(HttpStatus.BAD_REQUEST, "해당 오핀과 정보가 일치하는 유저가 없습니다."),
 
     /* TOPIC */
-    TOPIC_NOT_FOUND(HttpStatus.NOT_FOUND, "토픽 정보가 존재하지 않습니다.");
+    TOPIC_NOT_FOUND(HttpStatus.NOT_FOUND, "토픽 정보가 존재하지 않습니다."),
+
+    /* LIKES*/
+    LIKES_NOT_FOUND(HttpStatus.NOT_FOUND, "좋아요 정보가 존재하지 않습니다."),
+    LIKES_ALREADY_EXISTS(HttpStatus.NOT_FOUND, "이미 좋아요 정보가 있습니다.");
 
     private final HttpStatus status;
     private final String message;

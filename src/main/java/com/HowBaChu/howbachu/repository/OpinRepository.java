@@ -20,10 +20,10 @@ public interface OpinRepository extends JpaRepository<Opin, Long> {
 
     @Query("SELECT new com.HowBaChu.howbachu.domain.dto.opin.OpinResponseDto" +
         "(o.id, v.selectSubTitle, m.username, o.content, o.likeCnt) " +
-        "FROM Opin o LEFT JOIN o.vote v LEFT JOIN v.member m ON o.parent.id =: parentId")
+        "FROM Opin o LEFT JOIN o.vote v LEFT JOIN v.member m WHERE o.parent.id = :parentId")
     List<OpinResponseDto> fetchOpinChildList(@Param("parentId") Long parentId);
 
-    @Query("SELECT o from Opin o JOIN FETCH o.vote v JOIN FETCH v.member m where o.id =: id and m.email =: email")
+    @Query("SELECT o from Opin o JOIN FETCH o.vote v JOIN FETCH v.member m WHERE o.id = :id AND m.email = :email")
     Optional<Opin> findByOpinIdAndEmail(@Param("id") Long opinId, @Param("email") String email);
 
 }

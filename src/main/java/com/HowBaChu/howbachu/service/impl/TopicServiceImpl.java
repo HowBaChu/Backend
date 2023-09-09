@@ -1,8 +1,10 @@
 package com.HowBaChu.howbachu.service.impl;
 
+import com.HowBaChu.howbachu.domain.dto.topic.TopicResponseDto;
 import com.HowBaChu.howbachu.domain.entity.Topic;
 import com.HowBaChu.howbachu.repository.TopicRepository;
 import com.HowBaChu.howbachu.service.TopicService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,4 +21,10 @@ public class TopicServiceImpl implements TopicService {
     public Topic getTopic(LocalDate date) {
         return topicRepository.getTopicByDate(date);
     }
+
+    @Override
+    public List<TopicResponseDto> findHonorTopics() {
+        return topicRepository.getHonorTopic();
+    }
+
 }

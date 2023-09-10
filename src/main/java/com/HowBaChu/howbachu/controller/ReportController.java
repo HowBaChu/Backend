@@ -18,7 +18,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/api/report")
+@RequestMapping("/api/v1/report")
 public class ReportController {
 
     private final ReportService reportService;

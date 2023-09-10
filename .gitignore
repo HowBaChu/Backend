@@ -41,4 +41,5 @@ out/
 /src/main/resources/application-dev.yml
 /src/main/resources/application-prod.yml
 /src/main/resources/application-test.yml
+/Dockerfile
 /src/main/resources/data.sql

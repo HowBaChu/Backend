@@ -24,7 +24,8 @@ public class TopicController {
 
     /*토픽 조회*/
     @GetMapping
-    public ResponseEntity<ResResult> getTopic(@RequestParam(value = "date", required = false) String date) {
+    public ResponseEntity<ResResult> getTopic(
+        @RequestParam(value = "date", required = false) String date) {
         ResponseCode responseCode = ResponseCode.TOPIC_SUCCESS;
         return new ResponseEntity<>(ResResult.builder()
             .responseCode(responseCode)
@@ -32,5 +33,11 @@ public class TopicController {
             .message(responseCode.getMessage())
             .data(topicService.getTopic(date != null ? LocalDate.parse(date) : null))
             .build(), HttpStatus.OK);
+    }
+
+    @GetMapping("/honor")
+    public ResponseEntity<ResResult> findHonorTopics() {
+        ResponseCode responseCode = ResponseCode.HONOR_TOPICS;
+        return responseCode.toResponse(topicService.findHonorTopics());
     }
 }

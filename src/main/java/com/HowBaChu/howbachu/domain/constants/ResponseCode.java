@@ -48,6 +48,7 @@ public enum ResponseCode {
 
     /* TOPIC */
     TOPIC_SUCCESS(HttpStatus.OK, "200", "토픽 조회 성공"),
+    HONOR_TOPICS(HttpStatus.OK, "200", "명예의 전당 조회 성공"),
 
     /* Likes */
     LIKES_ADD(HttpStatus.CREATED, "201", "좋아요 추가 성공"),

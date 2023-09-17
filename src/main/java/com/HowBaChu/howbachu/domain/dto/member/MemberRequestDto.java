@@ -64,12 +64,6 @@ public class MemberRequestDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class update {
-        @NotBlank(message = "이메일을 입력해 주세요.")
-        @Email(message = "이메일 형식이 아닙니다.")
-        @Size(min = 1, max = 30, message = "이메일은 (1~30)자 사이로 입력해 주세요.")
-        @Schema(description = "사용자 이메일", example = "test@naver.com")
-        private String email;
-
         @NotBlank(message = "비밀번호를 입력해주세요.")
         @Pattern(message = "비밀번호는 영어, 숫자, 특수 문자를 포함한 (8~24)자 이어야 합니다.", regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,24}$")
         @Schema(description = "비밀번호", example = "testPassword!123")

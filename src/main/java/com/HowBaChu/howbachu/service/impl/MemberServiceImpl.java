@@ -66,11 +66,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberResponseDto updateMember(String email, MemberRequestDto.update requestDto) {
         Member member = memberRepository.findByEmail(email);
-
-        if (!member.getEmail().equals(requestDto.getEmail())) {
-            throw new CustomException(ErrorCode.NOT_AUTHORIZED_CONTENT);
-        }
-        requestDto.encodePassword(requestDto.getPassword());
+        requestDto.encodePassword(passwordEncoder.encode(requestDto.getPassword()));
         member.update(requestDto);
         return MemberResponseDto.of(member);
     }

@@ -15,7 +15,6 @@ public class MemberResponseDto {
 
     private Long id;
     private String email;
-    private String password;
     private String username;
     private MBTI mbti;
     private String statusMessage;
@@ -25,7 +24,6 @@ public class MemberResponseDto {
         return MemberResponseDto.builder()
             .id(member.getId())
             .email(member.getEmail())
-            .password(member.getPassword())
             .username(member.getUsername())
             .mbti(member.getMbti())
             .statusMessage(member.getStatusMessage())
@@ -38,7 +36,6 @@ public class MemberResponseDto {
         return "MemberResponseDto{" +
             "id=" + id +
             ", email='" + email + '\'' +
-            ", password='" + password + '\'' +
             ", username='" + username + '\'' +
             ", mbti='" + mbti + '\'' +
             ", statusMessage='" + statusMessage + '\'' +

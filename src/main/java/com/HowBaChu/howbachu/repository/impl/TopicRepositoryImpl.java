@@ -9,12 +9,11 @@ import com.HowBaChu.howbachu.exception.constants.ErrorCode;
 import com.HowBaChu.howbachu.repository.Support.Querydsl4RepositorySupport;
 import com.HowBaChu.howbachu.repository.custom.TopicRepositoryCustom;
 import com.querydsl.core.types.dsl.BooleanExpression;
-
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.lang.Nullable;
-import java.time.LocalDate;
-import java.util.Optional;
 
 
 public class TopicRepositoryImpl extends Querydsl4RepositorySupport implements TopicRepositoryCustom {
@@ -38,7 +37,7 @@ public class TopicRepositoryImpl extends Querydsl4RepositorySupport implements T
             .orderBy((topic.votingStatus.A.add(topic.votingStatus.B).desc()))
             .limit(20)
             .fetch()
-            .stream().map(TopicResponseDto::of)
+            .stream().map(o -> TopicResponseDto.of(o, o.getVotingStatus()))
             .collect(Collectors.toList());
     }
 

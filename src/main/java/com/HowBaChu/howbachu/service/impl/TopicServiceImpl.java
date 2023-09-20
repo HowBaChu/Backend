@@ -22,7 +22,7 @@ public class TopicServiceImpl implements TopicService {
     private VotingStatus votingStatus = new VotingStatus();
 
     @Override
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 0 * * * ?")
     public void votingUpdate() {
         votingStatus = topicRepository.getTopicByDate(LocalDate.now()).getVotingStatus();
         log.info("votingStatus_Updated : {} / {}", votingStatus.getA(), votingStatus.getB());

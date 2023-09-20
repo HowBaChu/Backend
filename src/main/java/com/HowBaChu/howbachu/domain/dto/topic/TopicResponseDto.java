@@ -15,17 +15,18 @@ import lombok.Getter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TopicResponseDto {
 
+    private Long id;
     private String title;
     private LocalDate date;
     private SubTitle subTitle;
     private VotingStatus votingStatus;
 
-    public static TopicResponseDto of(Topic topic) {
+    public static TopicResponseDto of(Topic topic, VotingStatus votingStatus) {
         return TopicResponseDto.builder()
             .title(topic.getTitle())
             .date(topic.getDate())
             .subTitle(topic.getSubTitle())
-            .votingStatus(topic.getVotingStatus())
+            .votingStatus(votingStatus)
             .build();
     }
 }

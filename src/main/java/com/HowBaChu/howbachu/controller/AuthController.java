@@ -5,6 +5,8 @@ import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
 import com.HowBaChu.howbachu.domain.dto.response.ResResult;
 import com.HowBaChu.howbachu.service.MemberService;
 import com.HowBaChu.howbachu.service.impl.MailServiceImpl;
+import java.net.http.HttpResponse;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,9 +38,9 @@ public class AuthController {
 
     /*로그인*/
     @PostMapping("/login")
-    public ResponseEntity<ResResult> login(@Valid @RequestBody MemberRequestDto.login requestDto) {
+    public ResponseEntity<ResResult> login(@Valid @RequestBody MemberRequestDto.login requestDto, HttpServletResponse response) {
         ResponseCode responseCode = ResponseCode.MEMBER_LOGIN;
-        return responseCode.toResponse(memberService.login(requestDto));
+        return responseCode.toResponse(memberService.login(requestDto, response));
     }
 
     @PostMapping("/logout")

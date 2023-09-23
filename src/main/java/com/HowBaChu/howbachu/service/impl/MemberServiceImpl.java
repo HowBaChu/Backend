@@ -14,6 +14,7 @@ import com.HowBaChu.howbachu.jwt.JwtProvider;
 import com.HowBaChu.howbachu.repository.MemberRepository;
 import com.HowBaChu.howbachu.repository.RefreshTokenRepository;
 import com.HowBaChu.howbachu.service.MemberService;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,7 +41,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public TokenResponseDto login(MemberRequestDto.login requestDto) {
+    public TokenResponseDto login(MemberRequestDto.login requestDto, HttpServletResponse response) {
 
         Member member = memberRepository.findByEmail(requestDto.getEmail());
 
@@ -53,7 +54,11 @@ public class MemberServiceImpl implements MemberService {
         if (refreshTokenRepository.findById(member.getEmail()).isPresent()) {
             refreshTokenRepository.deleteById(member.getEmail());
         }
+
         refreshTokenRepository.save(new RefreshToken(member.getEmail(), tokenDto.getRefreshToken(), jwtProvider.getRefreshTokenExpiredTime()));
+        // cookie 설정
+        jwtProvider.setCookieAccessToken(response, tokenDto.getAccessToken());
+        jwtProvider.setCookieRefreshToken(response, tokenDto.getRefreshToken());
 
         return TokenResponseDto.builder()
             .accessToken(tokenDto.getAccessToken())

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * jwt secret key 관리 부분
  */
 @Configuration
-@PropertySource(value = {"classpath:secret.yml"}, factory = YamlLoadFactory.class)
+@PropertySource(value = {"classpath:secrets.yml"}, factory = YamlLoadFactory.class)
 @ConfigurationProperties(prefix = "jwt")
 @Getter
 @Setter

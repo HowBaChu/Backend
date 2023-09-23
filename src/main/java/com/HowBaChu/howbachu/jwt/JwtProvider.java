@@ -71,6 +71,10 @@ public class JwtProvider {
         response.setHeader("Authorization", accessToken);
     }
 
+    public void setHeaderRefreshToken(HttpServletResponse response, String refreshToken) {
+        response.setHeader("RefreshToken", refreshToken);
+    }
+
 
     /**
      * @param token Claims 부분을 가져올 token

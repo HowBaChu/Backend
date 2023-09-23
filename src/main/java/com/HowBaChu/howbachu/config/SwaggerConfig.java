@@ -24,7 +24,7 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.OAS_30)
             .securityContexts(Collections.singletonList(securityContext()))
-            .securitySchemes(List.of(apiKey()))
+            .securitySchemes(List.of(apiKey_AT(),apiKey_RT()))
             .select()
             .paths(PathSelectors.any())
             .build().apiInfo(apiInfo());
@@ -42,11 +42,14 @@ public class SwaggerConfig {
             "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
-        return List.of(new SecurityReference("Authorization", authorizationScopes));
+        return List.of(new SecurityReference("Access-Token", authorizationScopes), new SecurityReference("Refresh-Token", authorizationScopes));
     }
 
-    private ApiKey apiKey() {
-        return new ApiKey("Authorization", "Authorization", "header");
+    private ApiKey apiKey_RT() {
+        return new ApiKey("Refresh-Token", "Refresh-Token", "header");
+    }
+    private ApiKey apiKey_AT() {
+        return new ApiKey("Access-Token", "Access-Token", "header");
     }
 
     private ApiInfo apiInfo() {

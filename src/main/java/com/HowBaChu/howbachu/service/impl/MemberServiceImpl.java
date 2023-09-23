@@ -55,7 +55,7 @@ public class MemberServiceImpl implements MemberService {
         }
         refreshTokenRepository.save(new RefreshToken(member.getEmail(), tokenDto.getRefreshToken()));
 
-        return new TokenResponseDto(tokenDto.getAccessToken());
+        return new TokenResponseDto(tokenDto.getAccessToken(),tokenDto.getRefreshToken());
     }
 
     @Override

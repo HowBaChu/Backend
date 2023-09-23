@@ -53,8 +53,8 @@ public class JwtFilter extends OncePerRequestFilter {
                     if (jwtProvider.validateToken(refreshToken)) {
                         // 액세스 토큰 재발급
                         TokenDto tokenDto = jwtProvider.generateJwtToken(jwtProvider.getEmailFromToken(refreshToken));
-                        jwtProvider.setCookieAccessToken(response, tokenDto.getAccessToken());
-                        jwtProvider.setCookieRefreshToken(response, tokenDto.getRefreshToken());
+                        jwtProvider.setCookieAccessToken(response, tokenDto.getAccessToken(), jwtProvider.getAccessTokenExpiredTime());
+                        jwtProvider.setCookieRefreshToken(response, tokenDto.getRefreshToken(), jwtProvider.getRefreshTokenExpiredTime());
                         refreshTokenOld.updateValue(tokenDto.getRefreshToken());
                         setAuthentication(email, request);
                     }

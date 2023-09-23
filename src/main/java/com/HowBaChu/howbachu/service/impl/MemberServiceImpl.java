@@ -1,5 +1,6 @@
 package com.HowBaChu.howbachu.service.impl;
 
+import com.HowBaChu.howbachu.config.JwtConfig;
 import com.HowBaChu.howbachu.core.manager.AWSFileManager;
 import com.HowBaChu.howbachu.domain.dto.jwt.TokenDto;
 import com.HowBaChu.howbachu.domain.dto.jwt.TokenResponseDto;
@@ -33,6 +34,7 @@ public class MemberServiceImpl implements MemberService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtProvider jwtProvider;
     private final AWSFileManager awsFileManager;
+    private final JwtConfig jwtConfig;
 
     @Override
     public MemberResponseDto signup(MemberRequestDto.signup requestDto) {
@@ -57,8 +59,10 @@ public class MemberServiceImpl implements MemberService {
 
         refreshTokenRepository.save(new RefreshToken(member.getEmail(), tokenDto.getRefreshToken(), jwtProvider.getRefreshTokenExpiredTime()));
         // cookie 설정
-        jwtProvider.setCookieAccessToken(response, tokenDto.getAccessToken());
-        jwtProvider.setCookieRefreshToken(response, tokenDto.getRefreshToken());
+        jwtProvider.setCookieAccessToken(response, tokenDto.getAccessToken(),
+            jwtProvider.getAccessTokenExpiredTime());
+        jwtProvider.setCookieRefreshToken(response, tokenDto.getRefreshToken(),
+            jwtProvider.getRefreshTokenExpiredTime());
 
         return TokenResponseDto.builder()
             .accessToken(tokenDto.getAccessToken())
@@ -98,7 +102,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void logout(String email) {
+    public void logout(String email, HttpServletResponse response){
+        jwtProvider.setCookieAccessToken(response, "", 0);
+        jwtProvider.setCookieRefreshToken(response, "", 0);
         refreshTokenRepository.deleteById(email);
     }
 

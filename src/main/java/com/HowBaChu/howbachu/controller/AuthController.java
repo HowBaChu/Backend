@@ -5,7 +5,6 @@ import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
 import com.HowBaChu.howbachu.domain.dto.response.ResResult;
 import com.HowBaChu.howbachu.service.MemberService;
 import com.HowBaChu.howbachu.service.impl.MailServiceImpl;
-import java.net.http.HttpResponse;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -44,8 +43,8 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<ResResult> logout(@ApiIgnore Authentication authentication) {
-        memberService.logout(authentication.getName());
+    public ResponseEntity<ResResult> logout(@ApiIgnore Authentication authentication, HttpServletResponse response) {
+        memberService.logout(authentication.getName(),response);
         ResponseCode responseCode = ResponseCode.MEMBER_LOGOUT;
         return responseCode.toResponse(null);
     }

@@ -32,7 +32,7 @@ public interface MemberService {
     /*닉네임 중복검사*/
     StatusResponseDto checkUsernameDuplicate(String username);
 
-    void logout(String email);
+    void logout(String email, HttpServletResponse response);
 
     MemberResponseDto uploadAvatar(String email, MultipartFile image);
 

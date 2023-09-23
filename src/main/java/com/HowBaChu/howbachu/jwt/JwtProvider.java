@@ -60,19 +60,19 @@ public class JwtProvider {
             .compact();
     }
 
-    public void setCookieAccessToken(HttpServletResponse response, String accessToken) {
+    public void setCookieAccessToken(HttpServletResponse response, String accessToken, int expiredTime) {
         Cookie cookie = new Cookie("Access-Token", accessToken);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
-        cookie.setMaxAge(jwtConfig.getAccessExpirationTime());  // 30분
+        cookie.setMaxAge(expiredTime);  // 30분
         response.addCookie(cookie);
     }
 
-    public void setCookieRefreshToken(HttpServletResponse response, String refreshToken) {
+    public void setCookieRefreshToken(HttpServletResponse response, String refreshToken, int expiredTime) {
         Cookie cookie = new Cookie("Refresh-Token", refreshToken);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
-        cookie.setMaxAge(jwtConfig.getRefreshExpirationTime());  // 2주
+        cookie.setMaxAge(expiredTime);  // 2주
         response.addCookie(cookie);
     }
 

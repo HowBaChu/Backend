@@ -34,11 +34,11 @@ public class JwtFilter extends OncePerRequestFilter {
         // 토큰 꺼내기
         String accessToken = resolveTokenFromCookie(request, "Access-Token");
         String refreshToken = resolveTokenFromCookie(request, "Refresh-Token");
-        log.info(accessToken, refreshToken);
+        log.info(accessToken+" // " +refreshToken);
         // 액세스 토큰과 리프레시 토큰이 모두 존재한다면
         if (accessToken != null && refreshToken != null) {
             String email = jwtProvider.getEmailFromToken(accessToken);
-            RefreshToken refreshTokenOld = refreshTokenRepository.findByKey(email)
+            RefreshToken refreshTokenOld = refreshTokenRepository.findById(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_REFRESH_TOKEN));
             // RTR을 통과한다면
             if (refreshToken.equals(refreshTokenOld.getValue())) {

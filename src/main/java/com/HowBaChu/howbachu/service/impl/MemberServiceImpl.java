@@ -50,10 +50,10 @@ public class MemberServiceImpl implements MemberService {
 
         TokenDto tokenDto = jwtProvider.generateJwtToken(member.getEmail());
 
-        if (refreshTokenRepository.findByKey(member.getEmail()).isPresent()) {
-            refreshTokenRepository.deleteByKey(member.getEmail());
+        if (refreshTokenRepository.findById(member.getEmail()).isPresent()) {
+            refreshTokenRepository.deleteById(member.getEmail());
         }
-        refreshTokenRepository.save(new RefreshToken(member.getEmail(), tokenDto.getRefreshToken()));
+        refreshTokenRepository.save(new RefreshToken(member.getEmail(), tokenDto.getRefreshToken(), jwtProvider.getRefreshTokenExpiredTime()));
 
         return TokenResponseDto.builder()
             .accessToken(tokenDto.getAccessToken())
@@ -77,8 +77,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void deleteMember(String email) {
         memberRepository.deleteById(memberRepository.findByEmail(email).getId());
-        if (refreshTokenRepository.findByKey(email).isPresent()) {
-            refreshTokenRepository.deleteByKey(email);
+        if (refreshTokenRepository.findById(email).isPresent()) {
+            refreshTokenRepository.deleteById(email);
         }
     }
 
@@ -94,7 +94,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void logout(String email) {
-        refreshTokenRepository.deleteByKey(email);
+        refreshTokenRepository.deleteById(email);
     }
 
     @Override

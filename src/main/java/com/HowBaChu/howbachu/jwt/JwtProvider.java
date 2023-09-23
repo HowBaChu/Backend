@@ -113,4 +113,11 @@ public class JwtProvider {
         return true;
     }
 
+    public int getAccessTokenExpiredTime() {
+        return jwtConfig.getAccessExpirationTime();
+    }
+
+    public int getRefreshTokenExpiredTime() {
+        return jwtConfig.getRefreshExpirationTime();
+    }
 }

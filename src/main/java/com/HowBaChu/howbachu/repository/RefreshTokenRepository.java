@@ -1,14 +1,7 @@
 package com.HowBaChu.howbachu.repository;
 
 import com.HowBaChu.howbachu.domain.entity.RefreshToken;
+import org.springframework.data.repository.CrudRepository;
 
-import java.util.Optional;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
-public interface RefreshTokenRepository extends JpaRepository<RefreshToken, String> {
-
-    Optional<RefreshToken> findByKey(String email);
-
-    void deleteByKey(String email);
+public interface RefreshTokenRepository extends CrudRepository<RefreshToken, String> {
 }

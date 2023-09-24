@@ -11,11 +11,10 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
-
 import java.util.Base64;
 import java.util.Date;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -51,7 +50,6 @@ public class JwtProvider {
             .compact();
     }
 
-
     /**
      * @return 새로운 refreshToken 발급
      */
@@ -62,15 +60,21 @@ public class JwtProvider {
             .compact();
     }
 
-
-    /**
-     * @param response    클라이언트에 전달할 response
-     * @param accessToken 헤더에 저장할 액세스 토큰
-     */
-    public void setHeaderAccessToken(HttpServletResponse response, String accessToken) {
-        response.setHeader("Authorization", accessToken);
+    public void setCookieAccessToken(HttpServletResponse response, String accessToken, int expiredTime) {
+        Cookie cookie = new Cookie("Access-Token", accessToken);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(expiredTime);  // 30분
+        response.addCookie(cookie);
     }
 
+    public void setCookieRefreshToken(HttpServletResponse response, String refreshToken, int expiredTime) {
+        Cookie cookie = new Cookie("Refresh-Token", refreshToken);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(expiredTime);  // 2주
+        response.addCookie(cookie);
+    }
 
     /**
      * @param token Claims 부분을 가져올 token
@@ -109,4 +113,11 @@ public class JwtProvider {
         return true;
     }
 
+    public int getAccessTokenExpiredTime() {
+        return jwtConfig.getAccessExpirationTime();
+    }
+
+    public int getRefreshTokenExpiredTime() {
+        return jwtConfig.getRefreshExpirationTime();
+    }
 }

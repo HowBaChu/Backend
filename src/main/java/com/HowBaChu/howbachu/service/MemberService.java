@@ -4,6 +4,7 @@ import com.HowBaChu.howbachu.domain.dto.jwt.TokenResponseDto;
 import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
 import com.HowBaChu.howbachu.domain.dto.member.MemberResponseDto;
 import com.HowBaChu.howbachu.domain.dto.member.StatusResponseDto;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,7 +15,7 @@ public interface MemberService {
     MemberResponseDto signup(MemberRequestDto.signup requestDto);
 
     /*로그인*/
-    TokenResponseDto login(MemberRequestDto.login requestDto);
+    TokenResponseDto login(MemberRequestDto.login requestDto, HttpServletResponse response);
 
     /*회원 상세정보*/
     MemberResponseDto findMemberDetail(String email);
@@ -31,7 +32,7 @@ public interface MemberService {
     /*닉네임 중복검사*/
     StatusResponseDto checkUsernameDuplicate(String username);
 
-    void logout(String email);
+    void logout(String email, HttpServletResponse response);
 
     MemberResponseDto uploadAvatar(String email, MultipartFile image);
 

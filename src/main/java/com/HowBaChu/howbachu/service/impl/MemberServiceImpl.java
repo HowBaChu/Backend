@@ -1,5 +1,6 @@
 package com.HowBaChu.howbachu.service.impl;
 
+import com.HowBaChu.howbachu.config.JwtConfig;
 import com.HowBaChu.howbachu.core.manager.AWSFileManager;
 import com.HowBaChu.howbachu.domain.dto.jwt.TokenDto;
 import com.HowBaChu.howbachu.domain.dto.jwt.TokenResponseDto;
@@ -14,6 +15,7 @@ import com.HowBaChu.howbachu.jwt.JwtProvider;
 import com.HowBaChu.howbachu.repository.MemberRepository;
 import com.HowBaChu.howbachu.repository.RefreshTokenRepository;
 import com.HowBaChu.howbachu.service.MemberService;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,6 +34,7 @@ public class MemberServiceImpl implements MemberService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtProvider jwtProvider;
     private final AWSFileManager awsFileManager;
+    private final JwtConfig jwtConfig;
 
     @Override
     public MemberResponseDto signup(MemberRequestDto.signup requestDto) {
@@ -40,7 +43,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public TokenResponseDto login(MemberRequestDto.login requestDto) {
+    public TokenResponseDto login(MemberRequestDto.login requestDto, HttpServletResponse response) {
 
         Member member = memberRepository.findByEmail(requestDto.getEmail());
 
@@ -50,12 +53,21 @@ public class MemberServiceImpl implements MemberService {
 
         TokenDto tokenDto = jwtProvider.generateJwtToken(member.getEmail());
 
-        if (refreshTokenRepository.findByKey(member.getEmail()).isPresent()) {
-            refreshTokenRepository.deleteByKey(member.getEmail());
+        if (refreshTokenRepository.findById(member.getEmail()).isPresent()) {
+            refreshTokenRepository.deleteById(member.getEmail());
         }
-        refreshTokenRepository.save(new RefreshToken(member.getEmail(), tokenDto.getRefreshToken()));
 
-        return new TokenResponseDto(tokenDto.getAccessToken());
+        refreshTokenRepository.save(new RefreshToken(member.getEmail(), tokenDto.getRefreshToken(), jwtProvider.getRefreshTokenExpiredTime()));
+        // cookie 설정
+        jwtProvider.setCookieAccessToken(response, tokenDto.getAccessToken(),
+            jwtProvider.getAccessTokenExpiredTime());
+        jwtProvider.setCookieRefreshToken(response, tokenDto.getRefreshToken(),
+            jwtProvider.getRefreshTokenExpiredTime());
+
+        return TokenResponseDto.builder()
+            .accessToken(tokenDto.getAccessToken())
+            .refreshToken(tokenDto.getRefreshToken())
+            .build();
     }
 
     @Override
@@ -74,8 +86,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void deleteMember(String email) {
         memberRepository.deleteById(memberRepository.findByEmail(email).getId());
-        if (refreshTokenRepository.findByKey(email).isPresent()) {
-            refreshTokenRepository.deleteByKey(email);
+        if (refreshTokenRepository.findById(email).isPresent()) {
+            refreshTokenRepository.deleteById(email);
         }
     }
 
@@ -90,8 +102,10 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void logout(String email) {
-        refreshTokenRepository.deleteByKey(email);
+    public void logout(String email, HttpServletResponse response){
+        jwtProvider.setCookieAccessToken(response, "", 0);
+        jwtProvider.setCookieRefreshToken(response, "", 0);
+        refreshTokenRepository.deleteById(email);
     }
 
     @Override

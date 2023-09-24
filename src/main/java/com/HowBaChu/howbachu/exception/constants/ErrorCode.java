@@ -24,6 +24,7 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "등록되지 않은 회원입니다."),
     WRONG_LOGIN_REQUEST(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
     FILE_NOT_EXIST(HttpStatus.NOT_FOUND, "파일이 존재하지 않습니다."),
+    SEIZED_TOKEN_DETECTED(HttpStatus.FORBIDDEN, "토큰 정보가 잘못되었습니다."),
 
     /* VOTE */
     VOTE_ALREADY_DONE(HttpStatus.BAD_REQUEST, "이미 투표에 참가하셨습니다."),

@@ -3,15 +3,15 @@ package com.HowBaChu.howbachu.domain.entity;
 import com.HowBaChu.howbachu.domain.base.BaseEntity;
 import com.HowBaChu.howbachu.domain.constants.ReportType;
 import com.HowBaChu.howbachu.domain.dto.report.ReportRequestDto;
+import com.HowBaChu.howbachu.domain.entity.embedded.ReportPK;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,16 +25,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Report extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private ReportPK reportPK;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "reporter_id")
+    @MapsId("reporterId")
     private Member reporter;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "reported_id")
+    @MapsId("reportedId")
     private Member reported;
 
     @Enumerated(EnumType.STRING)
@@ -49,6 +50,7 @@ public class Report extends BaseEntity {
 
     public static Report toEntity(ReportRequestDto requestDto, Member reporter, Member reported, String opinContent) {
         return Report.builder()
+            .reportPK(new ReportPK(reporter.getId(), reported.getId()))
             .reporter(reporter)
             .reported(reported)
             .type(requestDto.getType())

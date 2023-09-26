@@ -48,17 +48,17 @@ public class Report extends BaseEntity {
     @Column
     private String reason;
 
-    public static Report toEntity(ReportRequestDto requestDto, Member reporter, Member reported, String opinContent) {
+    public static Report toEntity(ReportRequestDto requestDto, Member reporter, ReportPK reportPK, Opin opin) {
         return Report.builder()
-            .reportPK(new ReportPK(reporter.getId(), reported.getId()))
+            .reportPK(reportPK)
             .reporter(reporter)
-            .reported(reported)
+            .reported(opin.getVote().getMember())
             .type(requestDto.getType())
             .reason(
-                ! requestDto.getType().equals(ReportType.ETC)
-                ? requestDto.getType().getReason()
-                : requestDto.getReason())
-            .content(opinContent)
+                !requestDto.getType().equals(ReportType.ETC)
+                    ? requestDto.getType().getReason()
+                    : requestDto.getReason())
+            .content(opin.getContent())
             .build();
     }
 }

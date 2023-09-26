@@ -37,9 +37,12 @@ public enum ErrorCode {
     /* TOPIC */
     TOPIC_NOT_FOUND(HttpStatus.NOT_FOUND, "토픽 정보가 존재하지 않습니다."),
 
-    /* LIKES*/
+    /* LIKES */
     LIKES_NOT_FOUND(HttpStatus.NOT_FOUND, "좋아요 정보가 존재하지 않습니다."),
-    LIKES_ALREADY_EXISTS(HttpStatus.NOT_FOUND, "이미 좋아요 정보가 있습니다.");
+    LIKES_ALREADY_EXISTS(HttpStatus.NOT_FOUND, "이미 좋아요 정보가 있습니다."),
+
+    /* REPORT */
+    ALREADY_REPORTED(HttpStatus.BAD_REQUEST, "이미 신고한 사용자 입니다.");
 
     private final HttpStatus status;
     private final String message;

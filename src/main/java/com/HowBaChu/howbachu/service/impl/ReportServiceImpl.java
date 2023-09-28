@@ -2,8 +2,10 @@ package com.HowBaChu.howbachu.service.impl;
 
 import com.HowBaChu.howbachu.domain.dto.report.ReportRequestDto;
 import com.HowBaChu.howbachu.domain.dto.report.ReportResponseDto;
+import com.HowBaChu.howbachu.domain.entity.Member;
 import com.HowBaChu.howbachu.domain.entity.Opin;
 import com.HowBaChu.howbachu.domain.entity.Report;
+import com.HowBaChu.howbachu.domain.entity.embedded.ReportPK;
 import com.HowBaChu.howbachu.exception.CustomException;
 import com.HowBaChu.howbachu.exception.constants.ErrorCode;
 import com.HowBaChu.howbachu.repository.MemberRepository;
@@ -26,15 +28,17 @@ public class ReportServiceImpl implements ReportService {
     private final OpinRepository opinRepository;
 
     @Override
-    public void createReport(ReportRequestDto requestDto ,String reporterEmail) {
+    public void createReport(ReportRequestDto requestDto, String reporterEmail) {
+        Member reporter = memberRepository.findByEmail(reporterEmail);
         Opin opin = opinRepository.findById(requestDto.getReportedOpinId())
             .orElseThrow(() -> new CustomException(ErrorCode.OPIN_NOT_FOUND));
-        reportRepository.save(Report.toEntity(
-                requestDto,
-                memberRepository.findByEmail(reporterEmail),
-                opin.getVote().getMember(),
-                opin.getContent()
-        ));
+        ReportPK reportPK = new ReportPK(reporter.getId(), opin.getVote().getMember().getId());
+
+        if (reportRepository.existsById(reportPK)) {
+            throw new CustomException(ErrorCode.ALREADY_REPORTED);
+        }
+
+        reportRepository.save(Report.toEntity(requestDto, reporter, reportPK, opin));
     }
 
     @Override

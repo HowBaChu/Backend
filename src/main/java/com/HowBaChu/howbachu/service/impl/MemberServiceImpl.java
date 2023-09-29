@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
@@ -35,6 +35,7 @@ public class MemberServiceImpl implements MemberService {
     private final AWSFileManager awsFileManager;
 
     @Override
+    @Transactional
     public MemberResponseDto signup(MemberRequestDto.signup requestDto) {
         requestDto.encodePassword(passwordEncoder.encode(requestDto.getPassword()));
         checkMemberDuplicated("","",requestDto.getEmail(), requestDto.getUsername());
@@ -42,6 +43,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public TokenResponseDto login(MemberRequestDto.login requestDto, HttpServletResponse response) {
 
         Member member = memberRepository.findByEmail(requestDto.getEmail());
@@ -75,6 +77,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public MemberResponseDto updateMember(String email, MemberRequestDto.update requestDto) {
         Member member = memberRepository.findByEmail(email);
         checkMemberDuplicated(email, member.getUsername(), "", requestDto.getUsername());
@@ -84,6 +87,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public void deleteMember(String email) {
         memberRepository.deleteById(memberRepository.findByEmail(email).getId());
         if (refreshTokenRepository.findById(email).isPresent()) {
@@ -102,6 +106,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public void logout(String email, HttpServletResponse response){
         jwtProvider.setCookieAccessToken(response, "", 0);
         jwtProvider.setCookieRefreshToken(response, "", 0);
@@ -109,6 +114,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public MemberResponseDto uploadAvatar(String email, MultipartFile image){
         Member member = memberRepository.findByEmail(email);
         member.uploadAvatar(awsFileManager.upload("profile", image));
@@ -117,6 +123,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public void deleteAvatar(String email) {
         Member member = memberRepository.findByEmail(email);
         member.uploadAvatar(null);

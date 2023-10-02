@@ -8,13 +8,16 @@ import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
+@Transactional(readOnly = true)
 public class TopicServiceImpl implements TopicService {
 
     private final TopicRepository topicRepository;
@@ -29,9 +32,12 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
+    @Cacheable(value = "topics", key = "#date ?: 'today'")
     public TopicResponseDto getTopic(LocalDate date) {
-        return TopicResponseDto.of(topicRepository.getTopicByDate(date),votingStatus);
+        return TopicResponseDto.of(topicRepository.getTopicByDate(
+            (date != null) ? date : LocalDate.now()), votingStatus);
     }
+
 
     @Override
     public List<TopicResponseDto> findHonorTopics() {

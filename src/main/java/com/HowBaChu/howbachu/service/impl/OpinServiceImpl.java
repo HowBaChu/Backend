@@ -2,6 +2,7 @@ package com.HowBaChu.howbachu.service.impl;
 
 import com.HowBaChu.howbachu.domain.dto.opin.OpinRequestDto;
 import com.HowBaChu.howbachu.domain.dto.opin.OpinResponseDto;
+import com.HowBaChu.howbachu.domain.dto.opin.OpinThreadResponseDto;
 import com.HowBaChu.howbachu.domain.entity.Opin;
 import com.HowBaChu.howbachu.domain.entity.Vote;
 import com.HowBaChu.howbachu.exception.CustomException;
@@ -51,8 +52,10 @@ public class OpinServiceImpl implements OpinService {
     }
 
     @Override
-    public List<OpinResponseDto> getOpinChildList(Long parentId) {
-        return opinRepository.fetchOpinChildList(parentId);
+    public OpinThreadResponseDto getOpinThread(Long parentId) {
+        OpinResponseDto parentOpin = opinRepository.fetchParentOpin(parentId);
+        List<OpinResponseDto> childOpinList = opinRepository.fetchOpinChildList(parentId);
+        return new OpinThreadResponseDto(parentOpin, childOpinList);
     }
 
     @Override

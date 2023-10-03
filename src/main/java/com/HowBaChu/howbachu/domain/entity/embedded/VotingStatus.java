@@ -2,12 +2,14 @@ package com.HowBaChu.howbachu.domain.entity.embedded;
 
 
 import com.HowBaChu.howbachu.domain.constants.Selection;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 
-@Getter
+@Data
 @Embeddable
+@NoArgsConstructor
 public class VotingStatus {
 
     private int A = 0;

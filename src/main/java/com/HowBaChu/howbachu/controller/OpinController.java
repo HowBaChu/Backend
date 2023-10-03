@@ -48,7 +48,7 @@ public class OpinController {
             .responseCode(responseCode)
             .code(responseCode.getCode())
             .message(responseCode.getMessage())
-            .data(opinService.getOpinChildList(Long.parseLong(id)))
+            .data(opinService.getOpinThread(Long.parseLong(id)))
             .build(), responseCode.getHttpStatus());
     }
 

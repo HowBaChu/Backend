@@ -26,7 +26,6 @@ public enum ResponseCode {
     VERIFICATION_SUCCESS(HttpStatus.OK,"200","인증에 성공했습니다."),
     VERIFICATION_FAILED(HttpStatus.UNAUTHORIZED, "401", "인증에 실패했습니다."),
 
-
     /* MEMBER */
     MEMBER_DETAIL(HttpStatus.OK, "200", "회원정보 불러오기 성공"),
     MEMBER_UPDATE(HttpStatus.OK, "200", "회원정보 수정 성공"),
@@ -50,9 +49,12 @@ public enum ResponseCode {
     TOPIC_SUCCESS(HttpStatus.OK, "200", "토픽 조회 성공"),
     HONOR_TOPICS(HttpStatus.OK, "200", "명예의 전당 조회 성공"),
 
-    /* Likes */
+    /* LIKES */
     LIKES_ADD(HttpStatus.CREATED, "201", "좋아요 추가 성공"),
-    LIKES_CANCEL(HttpStatus.NO_CONTENT, "204", "좋아요 취소 성공");
+    LIKES_CANCEL(HttpStatus.NO_CONTENT, "204", "좋아요 취소 성공"),
+
+    /* SEARCH */
+    SEARCH_SUCCESS(HttpStatus.OK, "200", "검색 성공");
 
 
     private final HttpStatus httpStatus;

@@ -25,6 +25,8 @@ public enum ErrorCode {
     WRONG_LOGIN_REQUEST(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
     FILE_NOT_EXIST(HttpStatus.NOT_FOUND, "파일이 존재하지 않습니다."),
     SEIZED_TOKEN_DETECTED(HttpStatus.FORBIDDEN, "토큰 정보가 잘못되었습니다."),
+    EMAIL_DUPLICATION(HttpStatus.BAD_REQUEST, "이미 가입된 이메일 입니다."),
+    USERNAME_DUPLICATION(HttpStatus.BAD_REQUEST,"이미 존재하는 닉네임 입니다."),
 
     /* VOTE */
     VOTE_ALREADY_DONE(HttpStatus.BAD_REQUEST, "이미 투표에 참가하셨습니다."),
@@ -42,7 +44,7 @@ public enum ErrorCode {
     LIKES_ALREADY_EXISTS(HttpStatus.NOT_FOUND, "이미 좋아요 정보가 있습니다."),
 
     /* REPORT */
-    ALREADY_REPORTED(HttpStatus.BAD_REQUEST, "이미 신고한 사용자 입니다.");
+    ALREADY_REPORTED(HttpStatus.BAD_REQUEST, "이미 신고한 사용자 입니다."),;
 
     private final HttpStatus status;
     private final String message;

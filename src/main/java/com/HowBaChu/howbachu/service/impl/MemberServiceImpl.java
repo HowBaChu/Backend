@@ -1,6 +1,5 @@
 package com.HowBaChu.howbachu.service.impl;
 
-import com.HowBaChu.howbachu.config.JwtConfig;
 import com.HowBaChu.howbachu.core.manager.AWSFileManager;
 import com.HowBaChu.howbachu.domain.dto.jwt.TokenDto;
 import com.HowBaChu.howbachu.domain.dto.jwt.TokenResponseDto;
@@ -25,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
@@ -34,15 +33,17 @@ public class MemberServiceImpl implements MemberService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtProvider jwtProvider;
     private final AWSFileManager awsFileManager;
-    private final JwtConfig jwtConfig;
 
     @Override
+    @Transactional
     public MemberResponseDto signup(MemberRequestDto.signup requestDto) {
         requestDto.encodePassword(passwordEncoder.encode(requestDto.getPassword()));
+        checkMemberDuplicated("","",requestDto.getEmail(), requestDto.getUsername());
         return MemberResponseDto.of(memberRepository.save(Member.toEntity(requestDto)));
     }
 
     @Override
+    @Transactional
     public TokenResponseDto login(MemberRequestDto.login requestDto, HttpServletResponse response) {
 
         Member member = memberRepository.findByEmail(requestDto.getEmail());
@@ -76,14 +77,17 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public MemberResponseDto updateMember(String email, MemberRequestDto.update requestDto) {
         Member member = memberRepository.findByEmail(email);
+        checkMemberDuplicated(email, member.getUsername(), "", requestDto.getUsername());
         requestDto.encodePassword(passwordEncoder.encode(requestDto.getPassword()));
         member.update(requestDto);
         return MemberResponseDto.of(member);
     }
 
     @Override
+    @Transactional
     public void deleteMember(String email) {
         memberRepository.deleteById(memberRepository.findByEmail(email).getId());
         if (refreshTokenRepository.findById(email).isPresent()) {
@@ -102,6 +106,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public void logout(String email, HttpServletResponse response){
         jwtProvider.setCookieAccessToken(response, "", 0);
         jwtProvider.setCookieRefreshToken(response, "", 0);
@@ -109,6 +114,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public MemberResponseDto uploadAvatar(String email, MultipartFile image){
         Member member = memberRepository.findByEmail(email);
         member.uploadAvatar(awsFileManager.upload("profile", image));
@@ -117,6 +123,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public void deleteAvatar(String email) {
         Member member = memberRepository.findByEmail(email);
         member.uploadAvatar(null);
@@ -132,5 +139,13 @@ public class MemberServiceImpl implements MemberService {
         return passwordEncoder.matches(input, encoded);
     }
 
+    public void checkMemberDuplicated(String originEmail, String originMemberName, String email, String memberName) {
+        if (!originEmail.equals(email) &&memberRepository.existsByEmail(email)) {
+            throw new CustomException(ErrorCode.EMAIL_DUPLICATION);
+        }
+        if (!originMemberName.equals(memberName) && memberRepository.existsByUsername(memberName)) {
+            throw new CustomException(ErrorCode.USERNAME_DUPLICATION);
+        }
+    }
 
 }

@@ -140,7 +140,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     public void checkMemberDuplicated(String originEmail, String originMemberName, String email, String memberName) {
-        if (!originEmail.equals(email) &&memberRepository.existsByEmail(email)) {
+        if (!originEmail.equals(email) && memberRepository.existsByEmail(email)) {
             throw new CustomException(ErrorCode.EMAIL_DUPLICATION);
         }
         if (!originMemberName.equals(memberName) && memberRepository.existsByUsername(memberName)) {

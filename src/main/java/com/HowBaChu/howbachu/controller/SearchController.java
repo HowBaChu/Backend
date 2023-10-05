@@ -17,7 +17,7 @@ public class SearchController {
     private final SearchService searchService;
 
     @GetMapping
-    public ResponseEntity<ResResult> search(@Nullable @RequestParam("cond") String cond) {
+    public ResponseEntity<?> search(@Nullable @RequestParam("cond") String cond) {
         ResponseCode responseCode = ResponseCode.SEARCH_SUCCESS;
         return new ResponseEntity<>(ResResult.builder()
             .responseCode(responseCode)
@@ -28,7 +28,7 @@ public class SearchController {
     }
 
     @GetMapping(value = "/parent-opin/")
-    public ResponseEntity<ResResult> searchMoreParentOpin(@Nullable @RequestParam("cond") String cond, Pageable pageable) {
+    public ResponseEntity<?> searchMoreParentOpin(@Nullable @RequestParam("cond") String cond, Pageable pageable) {
         ResponseCode responseCode = ResponseCode.SEARCH_SUCCESS;
         return new ResponseEntity<>(ResResult.builder()
             .responseCode(responseCode)
@@ -39,7 +39,7 @@ public class SearchController {
     }
 
     @GetMapping(value = "/child-opin/")
-    public ResponseEntity<ResResult> searchMoreChildOpin(@Nullable @RequestParam("cond") String cond, Pageable pageable) {
+    public ResponseEntity<?> searchMoreChildOpin(@Nullable @RequestParam("cond") String cond, Pageable pageable) {
         ResponseCode responseCode = ResponseCode.SEARCH_SUCCESS;
         return new ResponseEntity<>(ResResult.builder()
             .responseCode(responseCode)
@@ -50,7 +50,7 @@ public class SearchController {
     }
 
     @GetMapping(value = "/topic/")
-    public ResponseEntity<ResResult> searchMoreTopic(@Nullable @RequestParam("cond") String cond, Pageable pageable) {
+    public ResponseEntity<?> searchMoreTopic(@Nullable @RequestParam("cond") String cond, Pageable pageable) {
         ResponseCode responseCode = ResponseCode.SEARCH_SUCCESS;
         return new ResponseEntity<>(ResResult.builder()
             .responseCode(responseCode)

@@ -18,7 +18,7 @@ public class OpinController {
     private final OpinService opinService;
 
     @PostMapping
-    public ResponseEntity<ResResult> postOpin(@RequestBody OpinRequestDto requestDto,
+    public ResponseEntity<?> postOpin(@RequestBody OpinRequestDto requestDto,
                                               @ApiIgnore Authentication authentication) {
 
         ResponseCode responseCode = ResponseCode.OPIN_SAVE;
@@ -31,7 +31,7 @@ public class OpinController {
     }
 
     @GetMapping
-    public ResponseEntity<ResResult> listOpin() {
+    public ResponseEntity<?> listOpin() {
         ResponseCode responseCode = ResponseCode.OPIN_LIST;
         return new ResponseEntity<>(ResResult.builder()
             .responseCode(responseCode)
@@ -42,7 +42,7 @@ public class OpinController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<ResResult> listOpin(@PathVariable("id") String id) {
+    public ResponseEntity<?> listOpin(@PathVariable("id") String id) {
         ResponseCode responseCode = ResponseCode.OPIN_LIST;
         return new ResponseEntity<>(ResResult.builder()
             .responseCode(responseCode)
@@ -53,7 +53,7 @@ public class OpinController {
     }
 
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<ResResult> updateOpin(@PathVariable("id") String id,
+    public ResponseEntity<?> updateOpin(@PathVariable("id") String id,
                                                 @RequestBody OpinRequestDto requestDto,
                                                 @ApiIgnore Authentication authentication) {
 
@@ -67,7 +67,7 @@ public class OpinController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<ResResult> deleteOpin(@PathVariable("id") String id,
+    public ResponseEntity<?> deleteOpin(@PathVariable("id") String id,
                                                 @ApiIgnore Authentication authentication) {
 
         ResponseCode responseCode = ResponseCode.OPIN_DELETE;

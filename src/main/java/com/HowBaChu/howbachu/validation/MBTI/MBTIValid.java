@@ -1,23 +1,21 @@
-package com.HowBaChu.howbachu.validation;
+package com.HowBaChu.howbachu.validation.MBTI;
 
 import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import java.lang.annotation.Documented;
+import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
 
-@Documented
-@Target({ METHOD, FIELD, PARAMETER })
+@ExternalDocumentation(description = "Enum에 있는 값인지 검사합니다.",url = "https://howbachu.shop/swagger-ui.html#/User")
+@Target(FIELD)
 @Retention(RUNTIME)
-@Constraint(validatedBy = {EnumValidator.class})
-public @interface EnumValid {
-    String message() default "Enum에 없는 값입니다.";
+@Constraint(validatedBy = {MBTIValidator.class})
+public @interface MBTIValid {
+    String message() default "존재하지 않는 MBTI 입니다.";
 
     Class<?>[] groups() default { };
 
@@ -25,5 +23,4 @@ public @interface EnumValid {
 
     Class<? extends java.lang.Enum<?>> enumClass();
 
-    boolean ignoreCase() default false;
 }

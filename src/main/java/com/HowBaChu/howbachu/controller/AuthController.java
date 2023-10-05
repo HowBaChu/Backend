@@ -2,7 +2,6 @@ package com.HowBaChu.howbachu.controller;
 
 import com.HowBaChu.howbachu.domain.constants.ResponseCode;
 import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
-import com.HowBaChu.howbachu.domain.dto.response.ResResult;
 import com.HowBaChu.howbachu.service.MemberService;
 import com.HowBaChu.howbachu.service.impl.MailServiceImpl;
 import javax.servlet.http.HttpServletResponse;
@@ -30,34 +29,34 @@ public class AuthController {
 
     /*회원가입*/
     @PostMapping("/signup")
-    public ResponseEntity<ResResult> register(@Valid @RequestBody MemberRequestDto.signup requestDto) {
+    public ResponseEntity<?> register(@Valid @RequestBody MemberRequestDto.signup requestDto) {
         ResponseCode responseCode = ResponseCode.MEMBER_SAVE;
         return responseCode.toResponse(memberService.signup(requestDto));
     }
 
     /*로그인*/
     @PostMapping("/login")
-    public ResponseEntity<ResResult> login(@Valid @RequestBody MemberRequestDto.login requestDto, HttpServletResponse response) {
+    public ResponseEntity<?> login(@Valid @RequestBody MemberRequestDto.login requestDto, HttpServletResponse response) {
         ResponseCode responseCode = ResponseCode.MEMBER_LOGIN;
         return responseCode.toResponse(memberService.login(requestDto, response));
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<ResResult> logout(@ApiIgnore Authentication authentication, HttpServletResponse response) {
+    public ResponseEntity<?> logout(@ApiIgnore Authentication authentication, HttpServletResponse response) {
         memberService.logout(authentication.getName(),response);
         ResponseCode responseCode = ResponseCode.MEMBER_LOGOUT;
         return responseCode.toResponse(null);
     }
 
     @PostMapping("/mail-verification")
-    public ResponseEntity<ResResult> mailSend(@RequestParam String email){
+    public ResponseEntity<?> mailSend(@RequestParam String email){
         mailService.sendMessage(email);
         ResponseCode responseCode = ResponseCode.VERIFICATION_SEND;
         return responseCode.toResponse(null);
     }
 
     @GetMapping("/mail-verification")
-    public ResponseEntity<ResResult> certificate(@RequestParam String email,
+    public ResponseEntity<?> certificate(@RequestParam String email,
         @RequestParam String inputCode) {
         ResponseCode responseCode = mailService.certificate(email, inputCode)
             ? ResponseCode.VERIFICATION_SUCCESS

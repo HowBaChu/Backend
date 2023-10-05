@@ -26,11 +26,6 @@ public class UsernameValidator implements ConstraintValidator<UsernameValid, Str
             context.buildConstraintViolationWithTemplate(lengthMessage).addConstraintViolation();
             return false;
         }
-        if (memberRepository.existsByUsername(value)) {
-            context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(duplicateMessage).addConstraintViolation();
-            return false;
-        }
         return true;
     }
 }

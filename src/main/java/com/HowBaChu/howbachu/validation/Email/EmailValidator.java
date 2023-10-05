@@ -37,12 +37,6 @@ public class EmailValidator implements ConstraintValidator<EmailValid,String> {
             return false;
         }
 
-        if (memberRepository.existsByEmail(value)) {
-            context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(duplicateMessaga).addConstraintViolation();
-            return false;
-        }
-
         return true;
     }
 }

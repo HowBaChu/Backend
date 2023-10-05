@@ -38,6 +38,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public MemberResponseDto signup(MemberRequestDto.signup requestDto) {
         requestDto.encodePassword(passwordEncoder.encode(requestDto.getPassword()));
+        checkMemberDuplicated("","",requestDto.getEmail(), requestDto.getUsername());
         return MemberResponseDto.of(memberRepository.save(Member.toEntity(requestDto)));
     }
 
@@ -79,6 +80,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public MemberResponseDto updateMember(String email, MemberRequestDto.update requestDto) {
         Member member = memberRepository.findByEmail(email);
+        checkMemberDuplicated(email, member.getUsername(), "", requestDto.getUsername());
         requestDto.encodePassword(passwordEncoder.encode(requestDto.getPassword()));
         member.update(requestDto);
         return MemberResponseDto.of(member);
@@ -136,4 +138,14 @@ public class MemberServiceImpl implements MemberService {
     public boolean validatePassword(String input, String encoded) {
         return passwordEncoder.matches(input, encoded);
     }
+
+    public void checkMemberDuplicated(String originEmail, String originMemberName, String email, String memberName) {
+        if (!originEmail.equals(email) && memberRepository.existsByEmail(email)) {
+            throw new CustomException(ErrorCode.EMAIL_DUPLICATION);
+        }
+        if (!originMemberName.equals(memberName) && memberRepository.existsByUsername(memberName)) {
+            throw new CustomException(ErrorCode.USERNAME_DUPLICATION);
+        }
+    }
+
 }

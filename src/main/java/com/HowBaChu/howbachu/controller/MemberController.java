@@ -3,7 +3,6 @@ package com.HowBaChu.howbachu.controller;
 import com.HowBaChu.howbachu.domain.constants.ResponseCode;
 import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
 import com.HowBaChu.howbachu.domain.dto.member.StatusResponseDto;
-import com.HowBaChu.howbachu.domain.dto.response.ResResult;
 import com.HowBaChu.howbachu.service.MemberService;
 import java.io.IOException;
 import javax.validation.Valid;
@@ -33,14 +32,14 @@ public class MemberController {
 
     /*회원 상세정보*/
     @GetMapping
-    public ResponseEntity<ResResult> findMemberDetail(@ApiIgnore Authentication authentication) {
+    public ResponseEntity<?> findMemberDetail(@ApiIgnore Authentication authentication) {
         ResponseCode responseCode = ResponseCode.MEMBER_DETAIL;
         return responseCode.toResponse(memberService.findMemberDetail(authentication.getName()));
     }
 
     /*회원정보 수정*/
     @PatchMapping
-    public ResponseEntity<ResResult> updateMemberDetail(@ApiIgnore Authentication authentication,
+    public ResponseEntity<?> updateMemberDetail(@ApiIgnore Authentication authentication,
         @Valid @RequestBody MemberRequestDto.update requestDto) {
         ResponseCode responseCode = ResponseCode.MEMBER_UPDATE;
         return responseCode.toResponse(
@@ -49,7 +48,7 @@ public class MemberController {
 
     /*회원탈퇴*/
     @DeleteMapping
-    public ResponseEntity<ResResult> deleteMember(@ApiIgnore Authentication authentication) {
+    public ResponseEntity<?> deleteMember(@ApiIgnore Authentication authentication) {
         ResponseCode responseCode = ResponseCode.MEMBER_DELETE;
         memberService.deleteMember(authentication.getName());
         return responseCode.toResponse(null);
@@ -57,20 +56,20 @@ public class MemberController {
 
     /*이메일 중복 검사*/
     @GetMapping("/email/{email}/exists")
-    public ResponseEntity<ResResult> checkEmailDuplicate(@PathVariable String email) {
+    public ResponseEntity<?> checkEmailDuplicate(@PathVariable String email) {
         ResponseCode responseCode = ResponseCode.MEMBER_EXISTS;
         return responseCode.toResponse(memberService.checkEmailDuplicate(email));
     }
 
     /*닉네임 중복 검사*/
     @GetMapping("/username/{username}/exists")
-    public ResponseEntity<ResResult> checkUsernameDuplicate(@PathVariable String username) {
+    public ResponseEntity<?> checkUsernameDuplicate(@PathVariable String username) {
         ResponseCode responseCode = ResponseCode.MEMBER_EXISTS;
         return responseCode.toResponse(memberService.checkUsernameDuplicate(username));
     }
 
     @PostMapping("/password-verification")
-    public ResponseEntity<ResResult> checkPasswordVerification(
+    public ResponseEntity<?> checkPasswordVerification(
         @Valid @RequestBody MemberRequestDto.passwordVerification requestDto,
         @ApiIgnore Authentication authentication) {
         StatusResponseDto responseDto = memberService.checkPassword(requestDto.getPassword(),
@@ -83,7 +82,7 @@ public class MemberController {
 
     /*프로필 사진 추가*/
     @PostMapping("/avatar")
-    public ResponseEntity<ResResult> uploadAvatar(
+    public ResponseEntity<?> uploadAvatar(
         @ApiIgnore Authentication authentication,
         @RequestPart(value = "file")
         MultipartFile image) throws IOException {
@@ -93,7 +92,7 @@ public class MemberController {
 
     /*프로필 사진 삭제*/
     @DeleteMapping("/avatar")
-    public ResponseEntity<ResResult> deleteAvatar(
+    public ResponseEntity<?> deleteAvatar(
         @ApiIgnore Authentication authentication
     ) {
         memberService.deleteAvatar(authentication.getName());

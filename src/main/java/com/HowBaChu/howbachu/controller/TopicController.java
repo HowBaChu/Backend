@@ -24,7 +24,7 @@ public class TopicController {
 
     /*토픽 조회*/
     @GetMapping
-    public ResponseEntity<ResResult> getTopic(
+    public ResponseEntity<?> getTopic(
         @RequestParam(value = "date", required = false) String date) {
         ResponseCode responseCode = ResponseCode.TOPIC_SUCCESS;
         return new ResponseEntity<>(ResResult.builder()
@@ -36,7 +36,7 @@ public class TopicController {
     }
 
     @GetMapping("/honor")
-    public ResponseEntity<ResResult> findHonorTopics() {
+    public ResponseEntity<?> findHonorTopics() {
         ResponseCode responseCode = ResponseCode.HONOR_TOPICS;
         return responseCode.toResponse(topicService.findHonorTopics());
     }

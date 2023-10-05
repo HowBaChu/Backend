@@ -1,5 +1,6 @@
 package com.HowBaChu.howbachu.exception;
 
+import com.HowBaChu.howbachu.domain.constants.ResponseCode;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             }
         );
         log.error("Validation Exception: "+ validExceptions);
-        return ResponseEntity.badRequest().body(validExceptions);
+        return ResponseCode.INVALID_REQUEST.toResponse(validExceptions);
     }
 
     @ExceptionHandler(Exception.class)

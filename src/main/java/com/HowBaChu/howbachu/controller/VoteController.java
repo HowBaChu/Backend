@@ -20,7 +20,7 @@ public class VoteController {
     private final VoteService voteService;
 
     @PostMapping
-    public ResponseEntity<ResResult> voting(@ApiIgnore Authentication authentication,
+    public ResponseEntity<?> voting(@ApiIgnore Authentication authentication,
                                             @RequestBody VoteRequestDto requestDto) {
 
         ResponseCode responseCode = ResponseCode.VOTING_SUCCESS;

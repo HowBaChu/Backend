@@ -54,7 +54,10 @@ public enum ResponseCode {
     LIKES_CANCEL(HttpStatus.NO_CONTENT, "204", "좋아요 취소 성공"),
 
     /* SEARCH */
-    SEARCH_SUCCESS(HttpStatus.OK, "200", "검색 성공");
+    SEARCH_SUCCESS(HttpStatus.OK, "200", "검색 성공"),
+
+    /* COMMON */
+    INVALID_REQUEST(HttpStatus.BAD_REQUEST, "400", "잘못된 입력값 입니다.");
 
 
     private final HttpStatus httpStatus;
@@ -67,7 +70,7 @@ public enum ResponseCode {
         this.message = message;
     }
 
-    public <T> ResponseEntity<ResResult> toResponse(@Nullable T data) {
+    public <T> ResponseEntity<Object> toResponse(@Nullable T data) {
         return new ResponseEntity<>(ResResult.builder()
             .responseCode(this)
             .code(this.getCode())

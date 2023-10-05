@@ -2,6 +2,8 @@ package com.HowBaChu.howbachu.domain.entity;
 
 import com.HowBaChu.howbachu.domain.base.BaseEntity;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,6 +14,8 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE opin SET isDeleted = true WHERE opin_id = ?")
+@Where(clause = "is_deleted != true")
 public class Opin extends BaseEntity {
 
     @Id
@@ -34,6 +38,9 @@ public class Opin extends BaseEntity {
     private String content;
 
     private int likeCnt;
+
+    @Column
+    private Boolean isDeleted;
 
 
     /**

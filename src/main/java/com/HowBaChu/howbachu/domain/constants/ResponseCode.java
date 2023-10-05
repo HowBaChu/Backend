@@ -22,17 +22,17 @@ public enum ResponseCode {
     MEMBER_SAVE(HttpStatus.CREATED, "201", "회원가입 성공"),
     MEMBER_LOGIN(HttpStatus.OK, "200", "로그인 성공"),
     MEMBER_LOGOUT(HttpStatus.NO_CONTENT, "204", "로그아웃 성공"),
-    VERIFICATION_SEND(HttpStatus.OK,"200","인증메일을 전송하였습니다."),
-    VERIFICATION_SUCCESS(HttpStatus.OK,"200","인증에 성공했습니다."),
+    VERIFICATION_SEND(HttpStatus.OK, "200", "인증메일을 전송하였습니다."),
+    VERIFICATION_SUCCESS(HttpStatus.OK, "200", "인증에 성공했습니다."),
     VERIFICATION_FAILED(HttpStatus.UNAUTHORIZED, "401", "인증에 실패했습니다."),
 
     /* MEMBER */
     MEMBER_DETAIL(HttpStatus.OK, "200", "회원정보 불러오기 성공"),
     MEMBER_UPDATE(HttpStatus.OK, "200", "회원정보 수정 성공"),
     MEMBER_DELETE(HttpStatus.NO_CONTENT, "204", "회원정보 삭제 성공"),
-    MEMBER_EXISTS(HttpStatus.OK,"200","회원존재 여부 조회 성공"),
-    AVATAR_UPLOAD(HttpStatus.OK,"200","이미지 업로드 성공"),
-    AVATAR_DELETE(HttpStatus.NO_CONTENT,"204","이미지 삭제 성공"),
+    MEMBER_EXISTS(HttpStatus.OK, "200", "회원존재 여부 조회 성공"),
+    AVATAR_UPLOAD(HttpStatus.OK, "200", "이미지 업로드 성공"),
+    AVATAR_DELETE(HttpStatus.NO_CONTENT, "204", "이미지 삭제 성공"),
     PASSWORD_CORRECT(HttpStatus.OK, "200", "기존 비밀번호가 일치합니다."),
     PASSWORD_DISCORD(HttpStatus.BAD_REQUEST, "400", "기존 비밀번호가 틀렸습니다."),
 
@@ -54,11 +54,7 @@ public enum ResponseCode {
     LIKES_CANCEL(HttpStatus.NO_CONTENT, "204", "좋아요 취소 성공"),
 
     /* SEARCH */
-    SEARCH_SUCCESS(HttpStatus.OK, "200", "검색 성공"),
-
-    /* COMMON */
-    INVALID_REQUEST(HttpStatus.BAD_REQUEST, "400", "잘못된 입력값 입니다.");
-
+    SEARCH_SUCCESS(HttpStatus.OK, "200", "검색 성공");
 
     private final HttpStatus httpStatus;
     private final String code;

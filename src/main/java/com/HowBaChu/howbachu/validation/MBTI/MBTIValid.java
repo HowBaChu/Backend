@@ -15,7 +15,7 @@ import javax.validation.Payload;
 @Retention(RUNTIME)
 @Constraint(validatedBy = {MBTIValidator.class})
 public @interface MBTIValid {
-    String message() default "Enum에 없는 값입니다.";
+    String message() default "존재하지 않는 MBTI 입니다.";
 
     Class<?>[] groups() default { };
 

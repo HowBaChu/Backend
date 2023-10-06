@@ -8,12 +8,16 @@ import com.HowBaChu.howbachu.domain.dto.member.MemberResponseDto;
 import com.HowBaChu.howbachu.domain.dto.member.StatusResponseDto;
 import com.HowBaChu.howbachu.domain.entity.Member;
 import com.HowBaChu.howbachu.domain.entity.RefreshToken;
+import com.HowBaChu.howbachu.domain.entity.Vote;
 import com.HowBaChu.howbachu.exception.CustomException;
 import com.HowBaChu.howbachu.exception.constants.ErrorCode;
 import com.HowBaChu.howbachu.jwt.JwtProvider;
 import com.HowBaChu.howbachu.repository.MemberRepository;
 import com.HowBaChu.howbachu.repository.RefreshTokenRepository;
+import com.HowBaChu.howbachu.repository.VoteRepository;
 import com.HowBaChu.howbachu.service.MemberService;
+import com.HowBaChu.howbachu.utils.CookieUtil;
+import java.util.Optional;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +37,8 @@ public class MemberServiceImpl implements MemberService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtProvider jwtProvider;
     private final AWSFileManager awsFileManager;
+    private final VoteRepository voteRepository;
+    private final CookieUtil cookieUtil;
 
     @Override
     @Transactional
@@ -59,11 +65,12 @@ public class MemberServiceImpl implements MemberService {
         }
 
         refreshTokenRepository.save(new RefreshToken(member.getEmail(), tokenDto.getRefreshToken(), jwtProvider.getRefreshTokenExpiredTime()));
+
         // cookie 설정
-        jwtProvider.setCookieAccessToken(response, tokenDto.getAccessToken(),
-            jwtProvider.getAccessTokenExpiredTime());
-        jwtProvider.setCookieRefreshToken(response, tokenDto.getRefreshToken(),
-            jwtProvider.getRefreshTokenExpiredTime());
+        cookieUtil.setCookie(response, "Access-Token",tokenDto.getAccessToken(), jwtProvider.getAccessTokenExpiredTime());
+        cookieUtil.setCookie(response, "Refresh-Token",tokenDto.getRefreshToken(), jwtProvider.getRefreshTokenExpiredTime());
+        Optional<Vote> vote = voteRepository.findVoteByEmail(member.getEmail());
+        vote.ifPresent(value -> cookieUtil.setCookie(response, "Vote", value.getSelection().toString(), cookieUtil.getRemainTime()));
 
         return TokenResponseDto.builder()
             .accessToken(tokenDto.getAccessToken())
@@ -108,8 +115,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public void logout(String email, HttpServletResponse response){
-        jwtProvider.setCookieAccessToken(response, "", 0);
-        jwtProvider.setCookieRefreshToken(response, "", 0);
+        cookieUtil.setCookie(response, "Access-Token", "", 0);
+        cookieUtil.setCookie(response, "Refresh-Token", "", 0);
+        cookieUtil.setCookie(response, "Vote", "", 0);
         refreshTokenRepository.deleteById(email);
     }
 

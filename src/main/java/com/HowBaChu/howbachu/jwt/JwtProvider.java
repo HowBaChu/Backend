@@ -13,8 +13,6 @@ import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import java.util.Base64;
 import java.util.Date;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -58,22 +56,6 @@ public class JwtProvider {
             .setExpiration(new Date(System.currentTimeMillis() + jwtConfig.getRefreshExpirationTime()))
             .signWith(SignatureAlgorithm.HS256, Base64.getEncoder().encode(jwtConfig.getSecretKey().getBytes()))
             .compact();
-    }
-
-    public void setCookieAccessToken(HttpServletResponse response, String accessToken, int expiredTime) {
-        Cookie cookie = new Cookie("Access-Token", accessToken);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(expiredTime);  // 30분
-        response.addCookie(cookie);
-    }
-
-    public void setCookieRefreshToken(HttpServletResponse response, String refreshToken, int expiredTime) {
-        Cookie cookie = new Cookie("Refresh-Token", refreshToken);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(expiredTime);  // 2주
-        response.addCookie(cookie);
     }
 
     /**

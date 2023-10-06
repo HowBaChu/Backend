@@ -4,6 +4,7 @@ import com.HowBaChu.howbachu.exception.ExceptionHandleFilter;
 import com.HowBaChu.howbachu.jwt.JwtFilter;
 import com.HowBaChu.howbachu.jwt.JwtProvider;
 import com.HowBaChu.howbachu.repository.RefreshTokenRepository;
+import com.HowBaChu.howbachu.utils.CookieUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,7 @@ public class SecurityConfig {
 
     private final JwtProvider jwtProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final CookieUtil cookieUtil;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -67,7 +69,7 @@ public class SecurityConfig {
         security
             .addFilterBefore(new ExceptionHandleFilter(),
                 UsernamePasswordAuthenticationFilter.class)
-            .addFilterBefore(new JwtFilter(jwtProvider, refreshTokenRepository),
+            .addFilterBefore(new JwtFilter(jwtProvider, cookieUtil, refreshTokenRepository),
                 UsernamePasswordAuthenticationFilter.class);
 
 

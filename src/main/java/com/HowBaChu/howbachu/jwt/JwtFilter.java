@@ -5,6 +5,7 @@ import com.HowBaChu.howbachu.domain.entity.RefreshToken;
 import com.HowBaChu.howbachu.exception.CustomException;
 import com.HowBaChu.howbachu.exception.constants.ErrorCode;
 import com.HowBaChu.howbachu.repository.RefreshTokenRepository;
+import com.HowBaChu.howbachu.utils.CookieUtil;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.FilterChain;
@@ -27,6 +28,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
+    private final CookieUtil cookieUtil;
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Override
@@ -53,8 +55,8 @@ public class JwtFilter extends OncePerRequestFilter {
                     if (jwtProvider.validateToken(refreshToken)) {
                         // 액세스 토큰 재발급
                         TokenDto tokenDto = jwtProvider.generateJwtToken(jwtProvider.getEmailFromToken(refreshToken));
-                        jwtProvider.setCookieAccessToken(response, tokenDto.getAccessToken(), jwtProvider.getAccessTokenExpiredTime());
-                        jwtProvider.setCookieRefreshToken(response, tokenDto.getRefreshToken(), jwtProvider.getRefreshTokenExpiredTime());
+                        cookieUtil.setCookie(response, "Access-Token",tokenDto.getAccessToken(), jwtProvider.getAccessTokenExpiredTime());
+                        cookieUtil.setCookie(response, "Refresh-Token",tokenDto.getRefreshToken(), jwtProvider.getRefreshTokenExpiredTime());
                         refreshTokenOld.updateValue(tokenDto.getRefreshToken());
                         setAuthentication(email, request);
                     }

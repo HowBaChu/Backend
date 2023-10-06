@@ -10,11 +10,12 @@ import com.HowBaChu.howbachu.repository.MemberRepository;
 import com.HowBaChu.howbachu.repository.TopicRepository;
 import com.HowBaChu.howbachu.repository.VoteRepository;
 import com.HowBaChu.howbachu.service.VoteService;
+import com.HowBaChu.howbachu.utils.CookieUtil;
+import java.time.LocalDate;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
 
 @Service
 @Transactional
@@ -24,15 +25,18 @@ public class VoteServiceImpl implements VoteService {
     private final TopicRepository topicRepository;
     private final MemberRepository memberRepository;
     private final VoteRepository voteRepository;
+    private final CookieUtil cookieUtil;
 
     @Override
-    public Long voting(VoteRequestDto requestDto, String email) {
+    public Long voting(VoteRequestDto requestDto, String email, HttpServletResponse response) {
         Topic topic = topicRepository.getTopicByDate(LocalDate.now());
         Member member = memberRepository.findByEmail(email);
 
         if (hasAlreadyVoted(topic.getId(), member.getId())) {
             throw new CustomException(ErrorCode.VOTE_ALREADY_DONE);
         }
+
+        cookieUtil.setCookie(response, "Vote", requestDto.getSelection().toString(), cookieUtil.getRemainTime());
 
         return voteRepository.save(Vote.of(requestDto, topic, member)).getId();
     }

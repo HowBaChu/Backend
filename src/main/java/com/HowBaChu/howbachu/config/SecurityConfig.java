@@ -23,6 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtProvider jwtProvider;
+
     private final RefreshTokenRepository refreshTokenRepository;
     private final CookieUtil cookieUtil;
 
@@ -44,8 +45,9 @@ public class SecurityConfig {
 
         security
             .httpBasic().disable()
-            .csrf().disable()
-            .cors();
+            .csrf().disable();
+
+        security.cors();
 
         // 세션 비활성화
         security
@@ -71,7 +73,6 @@ public class SecurityConfig {
                 UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(new JwtFilter(jwtProvider, cookieUtil, refreshTokenRepository),
                 UsernamePasswordAuthenticationFilter.class);
-
 
         return security.build();
     }

@@ -20,7 +20,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(CustomException.class)
     protected ResponseEntity<?> handlerCustomException(CustomException e) {
         log.error("CustomException: " + e.getErrorCode().getMessage());
-        return e.getErrorCode().toResponse(e.getErrorCode());
+        return e.getErrorCode().toResponse(null);
     }
 
     @Override

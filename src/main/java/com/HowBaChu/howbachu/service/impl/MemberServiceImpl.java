@@ -51,7 +51,6 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public TokenResponseDto login(MemberRequestDto.login requestDto, HttpServletResponse response) {
-
         Member member = memberRepository.findByEmail(requestDto.getEmail());
 
         if (!validatePassword(requestDto.getPassword(), member.getPassword())) {
@@ -59,12 +58,10 @@ public class MemberServiceImpl implements MemberService {
         }
 
         TokenDto tokenDto = jwtProvider.generateJwtToken(member.getEmail());
+        Optional<RefreshToken> refreshTokenOrigin = refreshTokenRepository.findByValue(member.getEmail());
+        refreshTokenOrigin.ifPresent(refreshTokenRepository::delete);
 
-        if (refreshTokenRepository.findById(member.getEmail()).isPresent()) {
-            refreshTokenRepository.deleteById(member.getEmail());
-        }
-
-        refreshTokenRepository.save(new RefreshToken(member.getEmail(), tokenDto.getRefreshToken(), jwtProvider.getRefreshTokenExpiredTime()));
+        refreshTokenRepository.save(new RefreshToken(tokenDto.getRefreshToken(),member.getEmail(), jwtProvider.getRefreshTokenExpiredTime()));
 
         // cookie 설정
         cookieUtil.setCookie(response, "Access-Token",tokenDto.getAccessToken(), jwtProvider.getAccessTokenExpiredTime());

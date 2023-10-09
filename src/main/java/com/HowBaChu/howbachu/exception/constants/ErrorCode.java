@@ -22,6 +22,7 @@ public enum ErrorCode {
     INVALID_TOKEN_STRUCTURE(HttpStatus.UNAUTHORIZED, "401","로그인 정보가 올바르지 않습니다."),
     MODIFIED_TOKEN_DETECTED(HttpStatus.UNAUTHORIZED, "401","로그인 정보가 변경되었습니다."),
     EMAIL_VERIFICATION_FAILED(HttpStatus.FORBIDDEN, "403","인증에 실패하였습니다."),
+    EXPIRED_REFESH_TOKEN(HttpStatus.UNAUTHORIZED, "403", "토큰 정보가 만료되었습니다. 로그인이 필요합니다."),
 
     /* MEMBER */
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "404","등록되지 않은 회원입니다."),
@@ -54,6 +55,7 @@ public enum ErrorCode {
 
     /* UNEXPECTED */
     UNEXPECTED_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "500", "예상치 못한 에러가 발생하였습니다.");
+
 
     private final HttpStatus status;
     private final String code;

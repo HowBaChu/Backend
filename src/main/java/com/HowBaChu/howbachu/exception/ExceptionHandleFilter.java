@@ -1,51 +1,44 @@
 package com.HowBaChu.howbachu.exception;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.HowBaChu.howbachu.exception.constants.ErrorCode;
+import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-
-@Slf4j
 @Component
 public class ExceptionHandleFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, java.io.IOException {
+        HttpServletResponse response,
+        FilterChain filterChain) throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
         } catch (CustomException e) {
-            handleCustomException(response, e);
+            ResponseEntity<String> errorResponse = handleCustomException(e);
+            response.setStatus(errorResponse.getStatusCodeValue());
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(errorResponse.getBody());
         }
     }
 
-    private void handleCustomException(HttpServletResponse response, CustomException e) {
-
+    private ResponseEntity<String> handleCustomException(CustomException e) {
         // 에러 메시지 출력
-        log.error("Filter Exception Caught");
-        log.error("CustomException: " + e.getErrorCode().getMessage());
+        String errorMessage = e.getErrorCode().getMessage();
+        ErrorCode errorCode = e.getErrorCode();
+        HttpStatus httpStatus = e.getErrorCode().getStatus();
 
-        // HTTP Response 의 상태 코드와 컨텐츠 타입 설정
-        response.setStatus(e.getErrorCode().getStatus().value());
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-
-        try {
-            // 에러 메시지를 JSON 형태로 변환 후 응답 본문 추가
-            response.getWriter().write(new ObjectMapper().writeValueAsString(e.getErrorCode().toString()));
-        } catch (IOException exception) {
-            // JSON 변환 중 에러 발생 시, 에러 메시지 출력
-            log.error("Error while processing response json", exception);
-        }
+        // ResponseEntity를 사용하여 응답 생성
+        return ResponseEntity.status(httpStatus)
+            .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+            .body("{\"errorCode\":\""+errorCode.name()+"\",\"code\":\""+errorCode.getCode()+"\",\"message\":\""+errorMessage+"\"}");
     }
 }

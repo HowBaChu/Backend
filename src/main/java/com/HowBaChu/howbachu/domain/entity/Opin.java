@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE opin SET isDeleted = true WHERE opin_id = ?")
+@SQLDelete(sql = "UPDATE opin SET is_deleted = true WHERE opin_id = ?")
 @Where(clause = "is_deleted != true")
 public class Opin extends BaseEntity {
 
@@ -39,7 +39,7 @@ public class Opin extends BaseEntity {
 
     private int likeCnt;
 
-    @Column
+    @Column(columnDefinition = "FALSE")
     private Boolean isDeleted;
 
 

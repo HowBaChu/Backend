@@ -9,11 +9,15 @@ import javax.persistence.Embeddable;
 
 @Data
 @Embeddable
-@NoArgsConstructor
 public class VotingStatus {
 
-    private int A = 0;
-    private int B = 0;
+    private int A;
+    private int B;
+
+    public VotingStatus() {
+        A = 1;
+        B = 1;
+    }
 
     public void updateVotingStatus(Selection selection) {
         if (selection == Selection.A) A++;

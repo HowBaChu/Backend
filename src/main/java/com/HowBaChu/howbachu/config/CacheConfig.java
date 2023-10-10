@@ -25,8 +25,8 @@ public class CacheConfig extends CachingConfigurerSupport {
             .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
             // value -> JSON 직렬화.
             .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
-            // TTL(Time To Live) : 30분 설정.
-            .entryTtl(Duration.ofMinutes(30L));
+            // TTL(Time To Live) : 60분 설정.
+            .entryTtl(Duration.ofMinutes(60L));
 
         return RedisCacheManager
             .RedisCacheManagerBuilder

@@ -110,6 +110,7 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
             .leftJoin(opin.vote, vote)
             .leftJoin(vote.member, member)
             .where(opin.parent.id.eq(parentId))
+            .orderBy(opin.createdAt.desc())
             .fetch();
     }
 

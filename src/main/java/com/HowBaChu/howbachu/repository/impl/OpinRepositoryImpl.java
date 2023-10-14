@@ -7,6 +7,7 @@ import com.HowBaChu.howbachu.repository.Support.Querydsl4RepositorySupport;
 import com.HowBaChu.howbachu.repository.custom.OpinRepositoryCustom;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.QBean;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.data.domain.*;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -23,7 +24,7 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
         super(Opin.class);
     }
 
-    private final Pageable defaultPage = PageRequest.of(0, 5);
+    private final Pageable defaultSearchOpinPageRequest = PageRequest.of(0, 5);
 
     @Override
     public List<SearchResultResponseDto.ParentsOpinSearchResponseDto> fetchParentOpinSearch(String condition) {
@@ -31,9 +32,9 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
             .from(opin)
             .leftJoin(opin.vote, vote)
             .leftJoin(vote.member, member)
-            .where(opin.content.contains(condition), opin.parent.isNull())
-            .offset(defaultPage.getOffset())
-            .limit(defaultPage.getPageSize())
+            .where(opin.content.contains(condition), parentOpin())
+            .offset(defaultSearchOpinPageRequest.getOffset())
+            .limit(defaultSearchOpinPageRequest.getPageSize())
             .orderBy(opin.modifiedAt.desc())
             .fetch();
     }
@@ -44,22 +45,21 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
             .from(opin)
             .leftJoin(opin.vote, vote)
             .leftJoin(vote.member, member)
-            .where(opin.content.contains(condition), opin.parent.isNotNull())
-            .offset(defaultPage.getOffset())
-            .limit(defaultPage.getPageSize())
+            .where(opin.content.contains(condition), childOpin())
+            .offset(defaultSearchOpinPageRequest.getOffset())
+            .limit(defaultSearchOpinPageRequest.getPageSize())
             .orderBy(opin.modifiedAt.desc())
             .fetch();
     }
 
     @Override
     public Page<SearchResultResponseDto.ParentsOpinSearchResponseDto> fetchParentOpinSearch(String condition, Pageable pageable) {
-
         List<SearchResultResponseDto.ParentsOpinSearchResponseDto> content =
             select(mapToParentsOpinSearchResponseDtoAddParent())
                 .from(opin)
                 .leftJoin(opin.vote, vote)
                 .leftJoin(vote.member, member)
-                .where(opin.content.contains(condition), opin.parent.isNull())
+                .where(opin.content.contains(condition), parentOpin())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(opin.modifiedAt.desc())
@@ -67,30 +67,40 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
 
         JPAQuery<Long> countQuery = select(opin.count())
             .from(opin)
-            .where(opin.content.contains(condition), opin.parent.isNull());
+            .where(opin.content.contains(condition), parentOpin());
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
     }
 
     @Override
     public Page<SearchResultResponseDto.ChildOpinSearchResponseDto> fetchChildOpinSearch(String condition, Pageable pageable) {
-
         List<SearchResultResponseDto.ChildOpinSearchResponseDto> content =
             select(mapToChildOpinSearchResponseDto())
                 .from(opin)
                 .leftJoin(opin.vote, vote)
                 .leftJoin(vote.member, member)
-                .where(opin.content.contains(condition), opin.parent.isNotNull())
-                .offset(defaultPage.getOffset())
-                .limit(defaultPage.getPageSize())
+                .where(opin.content.contains(condition), childOpin())
+                .offset(defaultSearchOpinPageRequest.getOffset())
+                .limit(defaultSearchOpinPageRequest.getPageSize())
                 .orderBy(opin.modifiedAt.desc())
                 .fetch();
 
-        JPAQuery<Long> countQuery = select(opin.count())
-            .from(opin)
-            .where(opin.content.contains(condition), opin.parent.isNotNull());
+        JPAQuery<Long> countQuery =
+            select(opin.count())
+                .from(opin)
+                .where(opin.content.contains(condition), childOpin());
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
+    }
+
+    @Override
+    public OpinResponseDto fetchParentOpin(Long opinId) {
+        return select(mapToOpinResponseDto())
+            .from(opin)
+            .leftJoin(opin.vote, vote)
+            .leftJoin(vote.member, member)
+            .where(parentOpin(), opin.id.eq(opinId))
+            .fetchOne();
     }
 
     @Override
@@ -104,13 +114,25 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
     }
 
     @Override
-    public OpinResponseDto fetchParentOpin(Long opinId) {
-        return select(mapToOpinResponseDto())
-            .from(opin)
-            .leftJoin(opin.vote, vote)
-            .leftJoin(vote.member, member)
-            .where(opin.id.eq(opinId))
-            .fetchOne();
+    public Page<OpinResponseDto> fetchParentOpinList(int page) {
+        PageRequest pageRequest = PageRequest.of(page, 20);
+        List<OpinResponseDto> content =
+            select(mapToOpinResponseDto())
+                .from(opin)
+                .leftJoin(opin.vote, vote)
+                .leftJoin(vote.member, member)
+                .where(parentOpin())
+                .offset(pageRequest.getOffset())
+                .limit(pageRequest.getPageSize())
+                .orderBy(opin.modifiedAt.desc())
+                .fetch();
+
+        JPAQuery<Long> countQuery =
+            select(opin.count())
+                .from(opin)
+                .where(parentOpin());
+
+        return PageableExecutionUtils.getPage(content, pageRequest, countQuery::fetchCount);
     }
 
     private static QBean<OpinResponseDto> mapToOpinResponseDto() {
@@ -154,5 +176,13 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
             vote.selectSubTitle.as("topicSubtitle"),
             opin.parent.as("parentOpinId")
         );
+    }
+
+    private static BooleanExpression parentOpin() {
+        return opin.parent.isNull();
+    }
+
+    private static BooleanExpression childOpin() {
+        return opin.parent.isNotNull();
     }
 }

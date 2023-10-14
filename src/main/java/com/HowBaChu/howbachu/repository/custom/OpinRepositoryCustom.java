@@ -21,4 +21,6 @@ public interface OpinRepositoryCustom {
     List<OpinResponseDto> fetchOpinChildList(Long parentId);
     /* 부모 댓글 단건 조회 */
     OpinResponseDto fetchParentOpin(Long opinId);
+    /* 댓글 조회 */
+    Page<OpinResponseDto> fetchParentOpinList(int page);
 }

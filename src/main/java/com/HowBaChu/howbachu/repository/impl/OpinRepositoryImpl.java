@@ -138,6 +138,7 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
     private static QBean<OpinResponseDto> mapToOpinResponseDto() {
         return Projections.fields(OpinResponseDto.class,
             opin.id.as("id"),
+            member.id.as("memberId"),
             vote.selectSubTitle.as("topicSubTitle"),
             vote.selection.as("selection"),
             member.username.as("nickname"),

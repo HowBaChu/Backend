@@ -11,6 +11,7 @@ import com.HowBaChu.howbachu.repository.OpinRepository;
 import com.HowBaChu.howbachu.repository.VoteRepository;
 import com.HowBaChu.howbachu.service.OpinService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,8 +48,8 @@ public class OpinServiceImpl implements OpinService {
     }
 
     @Override
-    public List<OpinResponseDto> getOpinList() {
-        return opinRepository.fetchOpinList();
+    public Page<OpinResponseDto> getOpinList(int page) {
+        return opinRepository.fetchParentOpinList(page);
     }
 
     @Override

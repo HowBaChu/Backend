@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 public class OpinResponseDto {
 
     private Long id;
+    private Long memberId;
     private String topicSubTitle;
     private Selection selection;
     private String nickname;

@@ -3,6 +3,10 @@ package com.HowBaChu.howbachu.domain.entity;
 import com.HowBaChu.howbachu.domain.entity.embedded.SubTitle;
 import com.HowBaChu.howbachu.domain.entity.embedded.VotingStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,6 +30,8 @@ public class Topic {
     private String title;
 
     @Column(unique = true)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate date;
 
     @Embedded

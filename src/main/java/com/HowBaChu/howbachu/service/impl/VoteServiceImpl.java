@@ -7,7 +7,6 @@ import com.HowBaChu.howbachu.domain.entity.Vote;
 import com.HowBaChu.howbachu.exception.CustomException;
 import com.HowBaChu.howbachu.exception.constants.ErrorCode;
 import com.HowBaChu.howbachu.repository.MemberRepository;
-import com.HowBaChu.howbachu.repository.TopicRepository;
 import com.HowBaChu.howbachu.repository.VoteRepository;
 import com.HowBaChu.howbachu.service.VoteService;
 import com.HowBaChu.howbachu.utils.CookieUtil;
@@ -22,14 +21,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class VoteServiceImpl implements VoteService {
 
-    private final TopicRepository topicRepository;
     private final MemberRepository memberRepository;
     private final VoteRepository voteRepository;
+    private final TopicServiceImpl topicService;
     private final CookieUtil cookieUtil;
 
     @Override
     public Long voting(VoteRequestDto requestDto, String email, HttpServletResponse response) {
-        Topic topic = topicRepository.getTopicByDate(LocalDate.now());
+        Topic topic = topicService.getTopic(LocalDate.now());
         Member member = memberRepository.findByEmail(email);
 
         if (hasAlreadyVoted(topic.getId(), member.getId())) {
@@ -37,7 +36,6 @@ public class VoteServiceImpl implements VoteService {
         }
 
         cookieUtil.setCookie(response, "Vote", requestDto.getSelection().toString(), cookieUtil.getRemainTime());
-
         return voteRepository.save(Vote.of(requestDto, topic, member)).getId();
     }
 

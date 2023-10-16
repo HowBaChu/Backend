@@ -19,7 +19,7 @@ public class OpinController {
 
     @PostMapping
     public ResponseEntity<?> postOpin(@RequestBody OpinRequestDto requestDto,
-                                              @ApiIgnore Authentication authentication) {
+                                      @ApiIgnore Authentication authentication) {
 
         ResponseCode responseCode = ResponseCode.OPIN_SAVE;
         return new ResponseEntity<>(ResResult.builder()
@@ -31,13 +31,13 @@ public class OpinController {
     }
 
     @GetMapping
-    public ResponseEntity<?> listOpin() {
+    public ResponseEntity<?> listOpin(@RequestParam(name = "page", defaultValue = "0") int page) {
         ResponseCode responseCode = ResponseCode.OPIN_LIST;
         return new ResponseEntity<>(ResResult.builder()
             .responseCode(responseCode)
             .code(responseCode.getCode())
             .message(responseCode.getMessage())
-            .data(opinService.getOpinList())
+            .data(opinService.getOpinList(page))
             .build(), responseCode.getHttpStatus());
     }
 
@@ -54,8 +54,8 @@ public class OpinController {
 
     @PatchMapping(value = "/{id}")
     public ResponseEntity<?> updateOpin(@PathVariable("id") String id,
-                                                @RequestBody OpinRequestDto requestDto,
-                                                @ApiIgnore Authentication authentication) {
+                                        @RequestBody OpinRequestDto requestDto,
+                                        @ApiIgnore Authentication authentication) {
 
         ResponseCode responseCode = ResponseCode.OPIN_UPDATE;
         return new ResponseEntity<>(ResResult.builder()
@@ -68,7 +68,7 @@ public class OpinController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteOpin(@PathVariable("id") String id,
-                                                @ApiIgnore Authentication authentication) {
+                                        @ApiIgnore Authentication authentication) {
 
         ResponseCode responseCode = ResponseCode.OPIN_DELETE;
         return new ResponseEntity<>(ResResult.builder()

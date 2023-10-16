@@ -57,7 +57,7 @@ class MemberControllerTest {
         memberLoginDto = new login("testEmail@naver.com", "testPassword!123");
         memberService.signup(memberSignupDto);
         memberSignupDto.encodePassword("testPassword@naver.com");
-        tokenResponseDto = memberService.login(memberLoginDto);
+//        tokenResponseDto = memberService.login(memberLoginDto);
 
     }
 

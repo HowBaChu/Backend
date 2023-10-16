@@ -45,7 +45,7 @@ public class TopicControllerTest {
 
         // given
         Topic topic = sample();
-        given(topicService.getTopic(null)).willReturn(topic);
+        given(topicService.getTopicDto(null)).willReturn(topic);
 
         // when & then
         mockMvc.perform(get("/api/v1/topic")
@@ -66,7 +66,7 @@ public class TopicControllerTest {
         // given
         LocalDate today = LocalDate.of(2023, 8, 12);
         Topic topic = sample();
-        given(topicService.getTopic(today)).willReturn(topic);
+        given(topicService.getTopicDto(today)).willReturn(topic);
 
         // when & then
         mockMvc.perform(get("/api/v1/topic")

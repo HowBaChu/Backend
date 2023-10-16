@@ -39,8 +39,8 @@ public class Opin extends BaseEntity {
 
     private int likeCnt;
 
-    @Column(columnDefinition = "FALSE")
-    private Boolean isDeleted;
+    @Column(name = "is_deleted")
+    private boolean isDeleted;
 
 
     /**

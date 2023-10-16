@@ -5,13 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface TopicService {
-
-    /**
-     * 토픽 조회
-     */
-    TopicResponseDto getTopic(LocalDate date);
-
+    TopicResponseDto getTopicDto(LocalDate date);
     List<TopicResponseDto> findHonorTopics();
-
     void votingUpdate();
 }

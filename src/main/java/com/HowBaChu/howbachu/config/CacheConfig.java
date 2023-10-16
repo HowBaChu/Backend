@@ -19,7 +19,7 @@ import java.time.Duration;
 public class CacheConfig extends CachingConfigurerSupport {
 
     @Bean
-    public CacheManager hbcCacheManager(RedisConnectionFactory cf) {
+    public CacheManager cacheManager(RedisConnectionFactory cf) {
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
             // key -> String 직렬화.
             .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))

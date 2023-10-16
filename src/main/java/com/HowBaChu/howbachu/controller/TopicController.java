@@ -31,7 +31,7 @@ public class TopicController {
             .responseCode(responseCode)
             .code(responseCode.getCode())
             .message(responseCode.getMessage())
-            .data(topicService.getTopic(date != null ? LocalDate.parse(date) : null))
+            .data(topicService.getTopicDto(date != null ? LocalDate.parse(date) : null))
             .build(), HttpStatus.OK);
     }
 

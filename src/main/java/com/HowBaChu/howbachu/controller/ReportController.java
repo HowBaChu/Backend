@@ -24,10 +24,7 @@ public class ReportController {
 
     // 신고하기
     @PostMapping("")
-    public ResponseEntity<?> reportOpin(
-        @ApiIgnore Authentication authentication,
-        @RequestBody ReportRequestDto requestDto
-    ) {
+    public ResponseEntity<?> reportOpin(@ApiIgnore Authentication authentication, @RequestBody ReportRequestDto requestDto) {
         reportService.createReport(requestDto, authentication.getName());
         return ResponseCode.REPORT_SAVE.toResponse(null);
     }

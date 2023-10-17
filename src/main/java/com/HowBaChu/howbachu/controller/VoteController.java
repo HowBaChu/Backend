@@ -1,7 +1,6 @@
 package com.HowBaChu.howbachu.controller;
 
 import com.HowBaChu.howbachu.domain.constants.ResponseCode;
-import com.HowBaChu.howbachu.domain.dto.response.ResResult;
 import com.HowBaChu.howbachu.domain.dto.vote.VoteRequestDto;
 import com.HowBaChu.howbachu.service.VoteService;
 import javax.servlet.http.HttpServletResponse;
@@ -9,7 +8,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 @Slf4j
@@ -21,16 +23,8 @@ public class VoteController {
     private final VoteService voteService;
 
     @PostMapping
-    public ResponseEntity<?> voting(@ApiIgnore Authentication authentication,
-        @RequestBody VoteRequestDto requestDto, HttpServletResponse response) {
-
-        ResponseCode responseCode = ResponseCode.VOTING_SUCCESS;
-        return new ResponseEntity<>(ResResult.builder()
-            .responseCode(responseCode)
-            .code(responseCode.getCode())
-            .message(responseCode.getMessage())
-            .data(voteService.voting(requestDto, authentication.getName(), response))
-            .build(), responseCode.getHttpStatus());
+    public ResponseEntity<?> voting(@ApiIgnore Authentication authentication, @RequestBody VoteRequestDto requestDto, HttpServletResponse response) {
+        return ResponseCode.VOTING_SUCCESS.toResponse(voteService.voting(requestDto, authentication.getName(), response));
     }
 
 }

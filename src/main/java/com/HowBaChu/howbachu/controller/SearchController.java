@@ -1,13 +1,15 @@
 package com.HowBaChu.howbachu.controller;
 
 import com.HowBaChu.howbachu.domain.constants.ResponseCode;
-import com.HowBaChu.howbachu.domain.dto.response.ResResult;
 import com.HowBaChu.howbachu.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,48 +20,22 @@ public class SearchController {
 
     @GetMapping
     public ResponseEntity<?> search(@Nullable @RequestParam("cond") String cond) {
-        ResponseCode responseCode = ResponseCode.SEARCH_SUCCESS;
-        return new ResponseEntity<>(ResResult.builder()
-            .responseCode(responseCode)
-            .code(responseCode.getCode())
-            .message(responseCode.getMessage())
-            .data(searchService.fetchSearchResult(cond))
-            .build(), responseCode.getHttpStatus());
+        return ResponseCode.SEARCH_SUCCESS.toResponse(searchService.fetchSearchResult(cond));
     }
 
     @GetMapping(value = "/parent-opin/")
     public ResponseEntity<?> searchMoreParentOpin(@Nullable @RequestParam("cond") String cond, Pageable pageable) {
-        ResponseCode responseCode = ResponseCode.SEARCH_SUCCESS;
-        return new ResponseEntity<>(ResResult.builder()
-            .responseCode(responseCode)
-            .code(responseCode.getCode())
-            .message(responseCode.getMessage())
-            .data(searchService.fetchMoreParentOpins(cond, pageable))
-            .build(), responseCode.getHttpStatus());
+        return ResponseCode.SEARCH_SUCCESS.toResponse(searchService.fetchMoreParentOpins(cond, pageable));
     }
 
     @GetMapping(value = "/child-opin/")
     public ResponseEntity<?> searchMoreChildOpin(@Nullable @RequestParam("cond") String cond, Pageable pageable) {
-        ResponseCode responseCode = ResponseCode.SEARCH_SUCCESS;
-        return new ResponseEntity<>(ResResult.builder()
-            .responseCode(responseCode)
-            .code(responseCode.getCode())
-            .message(responseCode.getMessage())
-            .data(searchService.fetchMoreChildOpins(cond, pageable))
-            .build(), responseCode.getHttpStatus());
+        return ResponseCode.SEARCH_SUCCESS.toResponse(searchService.fetchMoreChildOpins(cond, pageable));
     }
 
     @GetMapping(value = "/topic/")
     public ResponseEntity<?> searchMoreTopic(@Nullable @RequestParam("cond") String cond, Pageable pageable) {
-        ResponseCode responseCode = ResponseCode.SEARCH_SUCCESS;
-        return new ResponseEntity<>(ResResult.builder()
-            .responseCode(responseCode)
-            .code(responseCode.getCode())
-            .message(responseCode.getMessage())
-            .data(searchService.fetchMoreTopics(cond, pageable))
-            .build(), responseCode.getHttpStatus());
+        return ResponseCode.SEARCH_SUCCESS.toResponse(searchService.fetchMoreTopics(cond, pageable));
     }
-
-
 
 }

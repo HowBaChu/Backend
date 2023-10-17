@@ -2,7 +2,6 @@ package com.HowBaChu.howbachu.controller;
 
 import com.HowBaChu.howbachu.domain.constants.ResponseCode;
 import com.HowBaChu.howbachu.domain.dto.likes.LikesRequestDto;
-import com.HowBaChu.howbachu.domain.dto.response.ResResult;
 import com.HowBaChu.howbachu.service.LikesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,28 +21,12 @@ public class LikesController {
     private final LikesService likesService;
 
     @PostMapping
-    public ResponseEntity<?> addLikes(@RequestBody LikesRequestDto requestDto,
-                                              @ApiIgnore Authentication authentication) {
-
-        ResponseCode responseCode = ResponseCode.LIKES_ADD;
-        return new ResponseEntity<>(ResResult.builder()
-            .responseCode(responseCode)
-            .code(responseCode.getCode())
-            .message(responseCode.getMessage())
-            .data(likesService.addLikes(authentication.getName(), requestDto.getOpinId()))
-            .build(), responseCode.getHttpStatus());
+    public ResponseEntity<?> addLikes(@RequestBody LikesRequestDto requestDto, @ApiIgnore Authentication authentication) {
+        return ResponseCode.LIKES_ADD.toResponse(likesService.addLikes(authentication.getName(), requestDto.getOpinId()));
     }
 
     @DeleteMapping
-    public ResponseEntity<?> cancelLikes(@RequestBody LikesRequestDto requestDto,
-                                              @ApiIgnore Authentication authentication) {
-
-        ResponseCode responseCode = ResponseCode.LIKES_CANCEL;
-        return new ResponseEntity<>(ResResult.builder()
-            .responseCode(responseCode)
-            .code(responseCode.getCode())
-            .message(responseCode.getMessage())
-            .data(likesService.cancelLikes(authentication.getName(), requestDto.getOpinId()))
-            .build(), responseCode.getHttpStatus());
+    public ResponseEntity<?> cancelLikes(@RequestBody LikesRequestDto requestDto, @ApiIgnore Authentication authentication) {
+        return ResponseCode.LIKES_CANCEL.toResponse(likesService.cancelLikes(authentication.getName(), requestDto.getOpinId()));
     }
 }

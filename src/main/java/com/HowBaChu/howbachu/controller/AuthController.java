@@ -30,37 +30,32 @@ public class AuthController {
     /*회원가입*/
     @PostMapping("/signup")
     public ResponseEntity<?> register(@Valid @RequestBody MemberRequestDto.signup requestDto) {
-        ResponseCode responseCode = ResponseCode.MEMBER_SAVE;
-        return responseCode.toResponse(memberService.signup(requestDto));
+        return ResponseCode.MEMBER_SAVE.toResponse(memberService.signup(requestDto));
     }
 
     /*로그인*/
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody MemberRequestDto.login requestDto, HttpServletResponse response) {
-        ResponseCode responseCode = ResponseCode.MEMBER_LOGIN;
-        return responseCode.toResponse(memberService.login(requestDto, response));
+        return ResponseCode.MEMBER_LOGIN.toResponse(memberService.login(requestDto, response));
     }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@ApiIgnore Authentication authentication, HttpServletResponse response) {
         memberService.logout(authentication.getName(),response);
-        ResponseCode responseCode = ResponseCode.MEMBER_LOGOUT;
-        return responseCode.toResponse(null);
+        return ResponseCode.MEMBER_LOGOUT.toResponse(null);
     }
 
     @PostMapping("/mail-verification")
     public ResponseEntity<?> mailSend(@RequestParam String email){
         mailService.sendMessage(email);
-        ResponseCode responseCode = ResponseCode.VERIFICATION_SEND;
-        return responseCode.toResponse(null);
+        return ResponseCode.VERIFICATION_SEND.toResponse(null);
     }
 
     @GetMapping("/mail-verification")
-    public ResponseEntity<?> certificate(@RequestParam String email,
-        @RequestParam String inputCode) {
-        ResponseCode responseCode = mailService.certificate(email, inputCode)
+    public ResponseEntity<?> certificate(@RequestParam String email, @RequestParam String inputCode) {
+        return (mailService.certificate(email, inputCode)
             ? ResponseCode.VERIFICATION_SUCCESS
-            : ResponseCode.VERIFICATION_FAILED;
-        return responseCode.toResponse(null);
+            : ResponseCode.VERIFICATION_FAILED)
+            .toResponse(null);
     }
 }

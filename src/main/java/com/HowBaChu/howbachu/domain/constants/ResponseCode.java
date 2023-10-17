@@ -72,7 +72,7 @@ public enum ResponseCode {
             .code(this.getCode())
             .message(this.getMessage())
             .data(data)
-            .build(), HttpStatus.OK);
+            .build(), this.getHttpStatus());
     }
 
 }

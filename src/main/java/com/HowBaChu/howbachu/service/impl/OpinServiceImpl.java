@@ -34,13 +34,13 @@ public class OpinServiceImpl implements OpinService {
         );
 
         Opin opin;
-
         if (parentId == null) {
             opin = Opin.of(requestDto.getContent(), vote);
         } else {
             Opin parentOpin = opinRepository.findById(parentId).orElseThrow(
                 () -> new CustomException(ErrorCode.OPIN_NOT_FOUND)
             );
+
             opin = Opin.of(requestDto.getContent(), vote, parentOpin);
         }
 
@@ -79,6 +79,11 @@ public class OpinServiceImpl implements OpinService {
         return opinRepository.findByOpinIdAndEmail(opinId, email).orElseThrow(
             () -> new CustomException(ErrorCode.OPIN_MISS_MATCH)
         );
+    }
+
+    @Override
+    public Page<OpinResponseDto> getOpinListForMember(Long memberId, int page) {
+        return opinRepository.fetchOpinListByMemberId(memberId, page);
     }
 
 }

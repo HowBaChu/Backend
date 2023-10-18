@@ -13,4 +13,5 @@ public interface OpinService {
     Long removeOpin(Long opinId, String email);
     Long updateOpin(OpinRequestDto requestDto, Long opinId, String email);
     Opin getOpin(Long opinId, String email);
+    Page<OpinResponseDto> getOpinListForMember(Long memberId, int page);
 }

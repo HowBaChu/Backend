@@ -44,7 +44,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public MemberResponseDto signup(MemberRequestDto.signup requestDto) {
         requestDto.encodePassword(passwordEncoder.encode(requestDto.getPassword()));
-        checkMemberDuplicated("","",requestDto.getEmail(), requestDto.getUsername());
+        checkMemberDuplicated("", "", requestDto.getEmail(), requestDto.getUsername());
         return MemberResponseDto.of(memberRepository.save(Member.toEntity(requestDto)));
     }
 
@@ -61,14 +61,15 @@ public class MemberServiceImpl implements MemberService {
         Optional<RefreshToken> refreshTokenOrigin = refreshTokenRepository.findByValue(member.getEmail());
         refreshTokenOrigin.ifPresent(refreshTokenRepository::delete);
 
-        refreshTokenRepository.save(new RefreshToken(tokenDto.getRefreshToken(),member.getEmail(), jwtProvider.getRefreshTokenExpiredTime()));
+        refreshTokenRepository.save(new RefreshToken(tokenDto.getRefreshToken(), member.getEmail(), jwtProvider.getRefreshTokenExpiredTime()));
 
         // cookie 설정
-        cookieUtil.setCookie(response, "Access-Token",tokenDto.getAccessToken(), jwtProvider.getAccessTokenExpiredTime());
-        cookieUtil.setCookie(response, "Refresh-Token",tokenDto.getRefreshToken(), jwtProvider.getRefreshTokenExpiredTime());
-        cookieUtil.setCookie(response, "member-Id", String.valueOf(member.getId()), cookieUtil.getRemainTime());
+        // 리프레쉬 토큰 외에는 세션 토큰.
+        cookieUtil.setCookie(response, "Refresh-Token", tokenDto.getRefreshToken(), jwtProvider.getRefreshTokenExpiredTime());
+        cookieUtil.setCookie(response, "Access-Token", tokenDto.getAccessToken());
+        cookieUtil.setCookie(response, "Member-Id", String.valueOf(member.getId()));
         voteRepository.findVoteByEmail(member.getEmail())
-            .ifPresent(value -> cookieUtil.setCookie(response, "Vote", value.getSelection().toString(), cookieUtil.getRemainTime()));
+            .ifPresent(value -> cookieUtil.setCookie(response, "Vote", value.getSelection().toString()));
 
         return TokenResponseDto.builder()
             .accessToken(tokenDto.getAccessToken())
@@ -112,11 +113,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public void logout(String email, HttpServletResponse response){
+    public void logout(String email, HttpServletResponse response) {
         cookieUtil.setCookie(response, "Access-Token", "", 0);
         cookieUtil.setCookie(response, "Refresh-Token", "", 0);
+        cookieUtil.setCookie(response, "Member-Id", "", 0);
         cookieUtil.setCookie(response, "Vote", "", 0);
-        cookieUtil.setCookie(response, "member-Id", "", 0);
         refreshTokenRepository.deleteById(email);
     }
 
@@ -139,7 +140,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public StatusResponseDto checkPassword(String password, String email) {
         return new StatusResponseDto(
-            validatePassword(password,memberRepository.findByEmail(email).getPassword()));
+            validatePassword(password, memberRepository.findByEmail(email).getPassword()));
     }
 
     public boolean validatePassword(String input, String encoded) {

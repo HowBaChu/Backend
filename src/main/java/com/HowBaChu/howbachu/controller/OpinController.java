@@ -49,4 +49,9 @@ public class OpinController {
         return ResponseCode.OPIN_DELETE.toResponse(opinService.removeOpin(Long.parseLong(id), authentication.getName()));
     }
 
+    @GetMapping(value = "/member")
+    public ResponseEntity<?> listMyOpin(@RequestParam(name = "id") Long memberId, @RequestParam(name = "page", defaultValue = "0") int page) {
+        return ResponseCode.OPIN_LIST.toResponse(opinService.getOpinListForMember(memberId, page));
+    }
+
 }

@@ -35,7 +35,7 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
             .where(opin.content.contains(condition), parentOpin())
             .offset(defaultSearchOpinPageRequest.getOffset())
             .limit(defaultSearchOpinPageRequest.getPageSize())
-            .orderBy(opin.modifiedAt.desc())
+            .orderBy(opin.createdAt.desc())
             .fetch();
     }
 
@@ -48,7 +48,7 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
             .where(opin.content.contains(condition), childOpin())
             .offset(defaultSearchOpinPageRequest.getOffset())
             .limit(defaultSearchOpinPageRequest.getPageSize())
-            .orderBy(opin.modifiedAt.desc())
+            .orderBy(opin.createdAt.desc())
             .fetch();
     }
 
@@ -62,7 +62,7 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
                 .where(opin.content.contains(condition), parentOpin())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(opin.modifiedAt.desc())
+                .orderBy(opin.createdAt.desc())
                 .fetch();
 
         JPAQuery<Long> countQuery = select(opin.count())
@@ -82,7 +82,7 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
                 .where(opin.content.contains(condition), childOpin())
                 .offset(defaultSearchOpinPageRequest.getOffset())
                 .limit(defaultSearchOpinPageRequest.getPageSize())
-                .orderBy(opin.modifiedAt.desc())
+                .orderBy(opin.createdAt.desc())
                 .fetch();
 
         JPAQuery<Long> countQuery =
@@ -125,13 +125,33 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
                 .where(parentOpin())
                 .offset(pageRequest.getOffset())
                 .limit(pageRequest.getPageSize())
-                .orderBy(opin.modifiedAt.desc())
+                .orderBy(opin.createdAt.desc())
                 .fetch();
 
         JPAQuery<Long> countQuery =
             select(opin.count())
                 .from(opin)
                 .where(parentOpin());
+
+        return PageableExecutionUtils.getPage(content, pageRequest, countQuery::fetchCount);
+    }
+
+    @Override
+    public Page<OpinResponseDto> fetchOpinListByMemberId(Long memberId, int page) {
+        PageRequest pageRequest = PageRequest.of(page, 20);
+        List<OpinResponseDto> content = select(mapToOpinResponseDto())
+            .from(opin)
+            .leftJoin(opin.vote, vote)
+            .leftJoin(vote.member, member)
+            .where(member.id.eq(memberId))
+            .orderBy(opin.createdAt.desc())
+            .offset(pageRequest.getOffset())
+            .limit(pageRequest.getPageSize())
+            .fetch();
+
+        JPAQuery<Long> countQuery = select(opin.count())
+                .from(opin)
+                .where(member.id.eq(memberId));
 
         return PageableExecutionUtils.getPage(content, pageRequest, countQuery::fetchCount);
     }
@@ -165,7 +185,7 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
             opin.content.as("content"),
             opin.likeCnt.as("likeCnt"),
             vote.selectSubTitle.as("topicSubtitle"),
-            opin.parent.as("parentOpinId")
+            opin.parent.id.as("parentOpinId")
         );
     }
 
@@ -176,7 +196,7 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
             opin.content.as("content"),
             opin.likeCnt.as("likeCnt"),
             vote.selectSubTitle.as("topicSubtitle"),
-            opin.parent.as("parentOpinId")
+            opin.parent.id.as("parentOpinId")
         );
     }
 

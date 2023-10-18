@@ -81,4 +81,9 @@ public class OpinServiceImpl implements OpinService {
         );
     }
 
+    @Override
+    public Page<OpinResponseDto> getOpinListForMember(Long memberId, int page) {
+        return opinRepository.fetchOpinListByMemberId(memberId, page);
+    }
+
 }

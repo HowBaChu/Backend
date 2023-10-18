@@ -136,6 +136,26 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
         return PageableExecutionUtils.getPage(content, pageRequest, countQuery::fetchCount);
     }
 
+    @Override
+    public Page<OpinResponseDto> fetchOpinListByMemberId(Long memberId, int page) {
+        PageRequest pageRequest = PageRequest.of(page, 20);
+        List<OpinResponseDto> content = select(mapToOpinResponseDto())
+            .from(opin)
+            .leftJoin(opin.vote, vote)
+            .leftJoin(vote.member, member)
+            .where(member.id.eq(memberId))
+            .orderBy(opin.createdAt.desc())
+            .offset(pageRequest.getOffset())
+            .limit(pageRequest.getPageSize())
+            .fetch();
+
+        JPAQuery<Long> countQuery = select(opin.count())
+                .from(opin)
+                .where(member.id.eq(memberId));
+
+        return PageableExecutionUtils.getPage(content, pageRequest, countQuery::fetchCount);
+    }
+
     private static QBean<OpinResponseDto> mapToOpinResponseDto() {
         return Projections.fields(OpinResponseDto.class,
             opin.id.as("id"),

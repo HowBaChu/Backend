@@ -23,4 +23,6 @@ public interface OpinRepositoryCustom {
     OpinResponseDto fetchParentOpin(Long opinId);
     /* 댓글 조회 */
     Page<OpinResponseDto> fetchParentOpinList(int page);
+    /* 특정 회원이 쓴 댓글 조회 -> 내가 쓴 댓글 포함 */
+    Page<OpinResponseDto> fetchOpinListByMemberId(Long memberId, int page);
 }

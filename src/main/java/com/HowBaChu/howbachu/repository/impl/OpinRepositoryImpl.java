@@ -35,7 +35,7 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
             .where(opin.content.contains(condition), parentOpin())
             .offset(defaultSearchOpinPageRequest.getOffset())
             .limit(defaultSearchOpinPageRequest.getPageSize())
-            .orderBy(opin.modifiedAt.desc())
+            .orderBy(opin.createdAt.desc())
             .fetch();
     }
 
@@ -48,7 +48,7 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
             .where(opin.content.contains(condition), childOpin())
             .offset(defaultSearchOpinPageRequest.getOffset())
             .limit(defaultSearchOpinPageRequest.getPageSize())
-            .orderBy(opin.modifiedAt.desc())
+            .orderBy(opin.createdAt.desc())
             .fetch();
     }
 
@@ -62,7 +62,7 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
                 .where(opin.content.contains(condition), parentOpin())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(opin.modifiedAt.desc())
+                .orderBy(opin.createdAt.desc())
                 .fetch();
 
         JPAQuery<Long> countQuery = select(opin.count())
@@ -82,7 +82,7 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
                 .where(opin.content.contains(condition), childOpin())
                 .offset(defaultSearchOpinPageRequest.getOffset())
                 .limit(defaultSearchOpinPageRequest.getPageSize())
-                .orderBy(opin.modifiedAt.desc())
+                .orderBy(opin.createdAt.desc())
                 .fetch();
 
         JPAQuery<Long> countQuery =
@@ -125,7 +125,7 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
                 .where(parentOpin())
                 .offset(pageRequest.getOffset())
                 .limit(pageRequest.getPageSize())
-                .orderBy(opin.modifiedAt.desc())
+                .orderBy(opin.createdAt.desc())
                 .fetch();
 
         JPAQuery<Long> countQuery =

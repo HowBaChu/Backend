@@ -39,8 +39,8 @@ public class Opin extends BaseEntity {
 
     private int likeCnt;
 
-    @Column(name = "is_deleted")
-    private boolean isDeleted;
+    @Column
+    private Boolean isDeleted;
 
 
     /**
@@ -52,6 +52,7 @@ public class Opin extends BaseEntity {
         return Opin.builder()
             .content(content)
             .vote(vote)
+            .isDeleted(false)
             .build();
     }
 
@@ -66,6 +67,7 @@ public class Opin extends BaseEntity {
             .content(content)
             .vote(vote)
             .parent(parentOpin)
+            .isDeleted(false)
             .build();
         parentOpin.addChildOpin(childOpin);
         return childOpin;

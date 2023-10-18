@@ -35,7 +35,7 @@ public class VoteServiceImpl implements VoteService {
             throw new CustomException(ErrorCode.VOTE_ALREADY_DONE);
         }
 
-        cookieUtil.setCookie(response, "Vote", requestDto.getSelection().toString(), cookieUtil.getRemainTime());
+        cookieUtil.setCookie(response, "Vote", requestDto.getSelection().toString());
         return voteRepository.save(Vote.of(requestDto, topic, member)).getId();
     }
 

@@ -14,6 +14,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class CookieUtil {
 
+    public void setCookie(HttpServletResponse response, String key, String value) {
+        Cookie cookie = new Cookie(key, value);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+    }
+
     public void setCookie(HttpServletResponse response, String key, String value, int expiredTime) {
         Cookie cookie = new Cookie(key, value);
         cookie.setHttpOnly(true);

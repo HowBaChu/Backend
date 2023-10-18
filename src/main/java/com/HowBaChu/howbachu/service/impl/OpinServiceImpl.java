@@ -34,13 +34,13 @@ public class OpinServiceImpl implements OpinService {
         );
 
         Opin opin;
-
         if (parentId == null) {
             opin = Opin.of(requestDto.getContent(), vote);
         } else {
             Opin parentOpin = opinRepository.findById(parentId).orElseThrow(
                 () -> new CustomException(ErrorCode.OPIN_NOT_FOUND)
             );
+
             opin = Opin.of(requestDto.getContent(), vote, parentOpin);
         }
 

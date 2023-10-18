@@ -165,7 +165,7 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
             opin.content.as("content"),
             opin.likeCnt.as("likeCnt"),
             vote.selectSubTitle.as("topicSubtitle"),
-            opin.parent.as("parentOpinId")
+            opin.parent.id.as("parentOpinId")
         );
     }
 
@@ -176,7 +176,7 @@ public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements Op
             opin.content.as("content"),
             opin.likeCnt.as("likeCnt"),
             vote.selectSubTitle.as("topicSubtitle"),
-            opin.parent.as("parentOpinId")
+            opin.parent.id.as("parentOpinId")
         );
     }
 

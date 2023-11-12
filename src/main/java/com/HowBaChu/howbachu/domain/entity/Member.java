@@ -3,7 +3,6 @@ package com.HowBaChu.howbachu.domain.entity;
 import com.HowBaChu.howbachu.domain.base.BaseEntity;
 import com.HowBaChu.howbachu.domain.constants.MBTI;
 import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,7 +10,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +23,7 @@ import org.hibernate.annotations.Where;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE member SET is_deleted = true WHERE member_id = ?")
+@SQLDelete(sql = "UPDATE member SET is_deleted = true WHERE member_id = ? OR report_cnt >= ReportCriteria.MEMBER_SUSPENSION_COUNT.getCount()")
 @Where(clause = "is_deleted != true")
 public class Member extends BaseEntity {
 
@@ -56,6 +54,9 @@ public class Member extends BaseEntity {
     @Column
     private String avatar;
 
+    @Column
+    private int reportCnt = 0;
+
     public static Member toEntity(MemberRequestDto.signup requestDto) {
         return Member.builder()
             .email(requestDto.getEmail())
@@ -76,5 +77,9 @@ public class Member extends BaseEntity {
 
     public void uploadAvatar(String url) {
         this.avatar = url;
+    }
+
+    public void addReportCnt() {
+        this.reportCnt++;
     }
 }

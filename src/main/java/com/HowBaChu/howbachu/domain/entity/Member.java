@@ -82,4 +82,11 @@ public class Member extends BaseEntity {
     public void addReportCnt() {
         this.reportCnt++;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Member )) return false;
+        return id != null && id.equals(((Member) o).getId());
+    }
 }

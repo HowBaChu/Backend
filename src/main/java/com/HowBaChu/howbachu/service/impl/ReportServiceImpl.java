@@ -51,6 +51,9 @@ public class ReportServiceImpl implements ReportService {
         if (reportRepository.findByReporterAndReported(reporter, opin).isPresent()) {
             throw new CustomException(ErrorCode.ALREADY_REPORTED);
         }
+        if (reporter.equals(opin.getMember())) {
+            throw new CustomException(ErrorCode.CANNOT_REPORT_OWN_OPIN);
+        }
         return opin;
     }
 

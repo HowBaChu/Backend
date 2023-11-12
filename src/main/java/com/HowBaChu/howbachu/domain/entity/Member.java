@@ -62,7 +62,6 @@ public class Member extends BaseEntity {
             .password(requestDto.getPassword())
             .username(requestDto.getUsername())
             .mbti(requestDto.getMbti())
-            .statusMessage(requestDto.getStatusMessage())
             .isDeleted(false)
             .build();
     }

@@ -33,10 +33,6 @@ public class MemberRequestDto {
         @MBTIValid(enumClass = MBTI.class)
         private MBTI mbti;
 
-        @Schema(description = "상태메세지", example = "testStatusMessage")
-        @StatusMessageValid
-        private String statusMessage;
-
         public void encodePassword(String encoded) {
             this.password = encoded;
         }

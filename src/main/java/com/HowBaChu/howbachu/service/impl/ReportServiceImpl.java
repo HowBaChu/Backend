@@ -5,7 +5,6 @@ import com.HowBaChu.howbachu.domain.dto.report.ReportResponseDto;
 import com.HowBaChu.howbachu.domain.entity.Member;
 import com.HowBaChu.howbachu.domain.entity.Opin;
 import com.HowBaChu.howbachu.domain.entity.Report;
-import com.HowBaChu.howbachu.domain.entity.embedded.ReportPK;
 import com.HowBaChu.howbachu.exception.CustomException;
 import com.HowBaChu.howbachu.exception.constants.ErrorCode;
 import com.HowBaChu.howbachu.repository.MemberRepository;
@@ -30,21 +29,32 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public void createReport(ReportRequestDto requestDto, String reporterEmail) {
         Member reporter = memberRepository.findByEmail(reporterEmail);
-        Opin opin = opinRepository.findById(requestDto.getReportedOpinId())
-            .orElseThrow(() -> new CustomException(ErrorCode.OPIN_NOT_FOUND));
-        ReportPK reportPK = new ReportPK(reporter.getId(), opin.getVote().getMember().getId());
-
-        if (reportRepository.existsById(reportPK)) {
-            throw new CustomException(ErrorCode.ALREADY_REPORTED);
-        }
-
-        reportRepository.save(Report.toEntity(requestDto, reporter, reportPK, opin));
+        Opin reportedOpin = validateAlreadyReported(findOpin(requestDto.getReportedOpinId()),
+            reporter);
+        reportedOpin.addReport();
+        reportRepository.save(Report.toEntity(requestDto, reporter, reportedOpin));
     }
 
     @Override
     public List<ReportResponseDto> findReports(String memberEmail) {
-        return reportRepository.findByReported(memberRepository.findByEmail(memberEmail))
-            .stream().map(ReportResponseDto::of).collect(Collectors.toList());
+        return reportRepository.findAll().stream()
+            .filter(report -> report.getReporter().getEmail().equals(memberEmail))
+            .map(ReportResponseDto::of).collect(Collectors.toList());
+    }
+
+    private Opin findOpin(Long opinId) {
+        return opinRepository.findById(opinId)
+            .orElseThrow(() -> new CustomException(ErrorCode.OPIN_NOT_FOUND));
+    }
+
+    private Opin validateAlreadyReported(Opin opin, Member reporter) {
+        if (reportRepository.findByReporterAndReported(reporter, opin).isPresent()) {
+            throw new CustomException(ErrorCode.ALREADY_REPORTED);
+        }
+        if (reporter.equals(opin.getMember())) {
+            throw new CustomException(ErrorCode.CANNOT_REPORT_OWN_OPIN);
+        }
+        return opin;
     }
 
 }

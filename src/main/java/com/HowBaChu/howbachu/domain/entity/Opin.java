@@ -1,20 +1,31 @@
 package com.HowBaChu.howbachu.domain.entity;
 
 import com.HowBaChu.howbachu.domain.base.BaseEntity;
-import lombok.*;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
-
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE opin SET is_deleted = true WHERE opin_id = ?")
+@SQLDelete(sql = "UPDATE opin SET is_deleted = true WHERE opin_id = ? OR report_cnt >= ReportCriteria.OPIN_SUSPENSION_COUNT.getCount()")
 @Where(clause = "is_deleted != true")
 public class Opin extends BaseEntity {
 
@@ -42,6 +53,8 @@ public class Opin extends BaseEntity {
     @Column
     private Boolean isDeleted;
 
+    @Column
+    private int reportCnt = 0;
 
     /**
      * Root Opin
@@ -94,5 +107,18 @@ public class Opin extends BaseEntity {
     public void cancelLikes() {
         if (likeCnt == 0) return;
         this.likeCnt--;
+    }
+
+    public void addReport() {
+        this.reportCnt++;
+        addReportedMemberCnt();
+    }
+
+    public Member getMember() {
+        return this.vote.getMember();
+    }
+
+    public void addReportedMemberCnt() {
+        this.getMember().addReportCnt();
     }
 }

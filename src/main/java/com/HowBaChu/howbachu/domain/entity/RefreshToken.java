@@ -1,5 +1,7 @@
 package com.HowBaChu.howbachu.domain.entity;
 
+import com.HowBaChu.howbachu.exception.CustomException;
+import com.HowBaChu.howbachu.exception.constants.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,8 +26,11 @@ public class RefreshToken {
     @TimeToLive
     private int expiration;
 
-    public void delete() {
-        this.expiration = 0;
+    public void validateRefreshTokenRotate(String refreshToken) {
+        if (!this.value.equals(refreshToken)) {
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+        }
     }
+
 }
 

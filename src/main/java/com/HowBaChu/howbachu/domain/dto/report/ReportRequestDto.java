@@ -8,6 +8,7 @@ import lombok.Getter;
 public class ReportRequestDto {
 
     private Long reportedOpinId;
+
     @Schema(example = "ETC")
     private ReportType type;
 

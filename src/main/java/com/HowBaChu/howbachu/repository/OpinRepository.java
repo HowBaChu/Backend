@@ -1,14 +1,11 @@
 package com.HowBaChu.howbachu.repository;
 
-import com.HowBaChu.howbachu.domain.dto.opin.OpinResponseDto;
 import com.HowBaChu.howbachu.domain.entity.Opin;
 import com.HowBaChu.howbachu.repository.custom.OpinRepositoryCustom;
-import org.springframework.data.domain.Page;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import java.util.Optional;
 
 public interface OpinRepository extends JpaRepository<Opin, Long>, OpinRepositoryCustom {
 

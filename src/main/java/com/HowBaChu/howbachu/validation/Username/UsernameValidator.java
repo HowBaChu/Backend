@@ -13,7 +13,7 @@ public class UsernameValidator implements ConstraintValidator<UsernameValid, Str
     private final int minLength = LimitBound.userNameMinLength;
     private final int maxLength = LimitBound.userNameMaxLength;
     private final String lengthMessage = "닉네임은 "+minLength+"자 이상 "+maxLength+"자 이하로 입력해 주세요.";
-    private final String duplicateMessage = "이미 존재하는 닉네임 입니다.";
+
     @Override
     public void initialize(UsernameValid constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);

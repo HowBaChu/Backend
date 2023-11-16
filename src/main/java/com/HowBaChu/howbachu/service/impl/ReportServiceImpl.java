@@ -29,8 +29,8 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public void createReport(ReportRequestDto requestDto, String reporterEmail) {
         Member reporter = memberRepository.findByEmail(reporterEmail);
-        Opin reportedOpin = validateAlreadyReported(findOpin(requestDto.getReportedOpinId()),
-            reporter);
+        Opin reportedOpin = validateAlreadyReported(
+            findOpin(requestDto.getReportedOpinId()), reporter);
         reportedOpin.addReport();
         reportRepository.save(Report.toEntity(requestDto, reporter, reportedOpin));
     }

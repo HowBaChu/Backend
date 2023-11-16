@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,6 +19,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Component
 @Slf4j
 public class LoggingAspect {
+
     private static final Logger logger = LogManager.getLogger(LoggingAspect.class);
 
     @Pointcut("within(com.HowBaChu.howbachu.*controller..*)")
@@ -36,7 +36,8 @@ public class LoggingAspect {
             return joinPoint.proceed(joinPoint.getArgs());
         } finally {
             long end = System.currentTimeMillis();
-            logger.info("Request: {} {}: {} ({}ms)", request.getMethod(), request.getRequestURL(), paramMapToString(request.getParameterMap()), end - start);
+            logger.info("Request: {} {}: {} ({}ms)", request.getMethod(), request.getRequestURL(),
+                paramMapToString(request.getParameterMap()), end - start);
         }
     }
 
@@ -44,6 +45,6 @@ public class LoggingAspect {
         return paraStringMap.entrySet().stream()
             .map(entry -> String.format("%s : %s",
                 entry.getKey(), Arrays.toString(entry.getValue())))
-            .collect(Collectors.joining(", "));
+            .collect(Collectors.joining("\n"));
     }
 }

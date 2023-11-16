@@ -1,9 +1,19 @@
 package com.HowBaChu.howbachu.domain.entity;
 
 import com.HowBaChu.howbachu.domain.base.BaseEntity;
-import lombok.*;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -30,6 +40,10 @@ public class Likes extends BaseEntity {
             .member(member)
             .opin(opin)
             .build();
+    }
+
+    public void cancelLikes() {
+        this.opin.cancelLikes();
     }
 
 }

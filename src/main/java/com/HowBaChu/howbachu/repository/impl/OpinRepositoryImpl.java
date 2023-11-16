@@ -1,5 +1,9 @@
 package com.HowBaChu.howbachu.repository.impl;
 
+import static com.HowBaChu.howbachu.domain.entity.QMember.member;
+import static com.HowBaChu.howbachu.domain.entity.QOpin.opin;
+import static com.HowBaChu.howbachu.domain.entity.QVote.vote;
+
 import com.HowBaChu.howbachu.domain.dto.opin.OpinResponseDto;
 import com.HowBaChu.howbachu.domain.dto.search.SearchResultResponseDto;
 import com.HowBaChu.howbachu.domain.entity.Opin;
@@ -9,14 +13,11 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.QBean;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
-import org.springframework.data.domain.*;
-import org.springframework.data.support.PageableExecutionUtils;
-
 import java.util.List;
-
-import static com.HowBaChu.howbachu.domain.entity.QMember.member;
-import static com.HowBaChu.howbachu.domain.entity.QOpin.opin;
-import static com.HowBaChu.howbachu.domain.entity.QVote.vote;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 
 public class OpinRepositoryImpl extends Querydsl4RepositorySupport implements OpinRepositoryCustom {
 

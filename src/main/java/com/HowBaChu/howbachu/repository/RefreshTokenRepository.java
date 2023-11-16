@@ -8,5 +8,4 @@ public interface RefreshTokenRepository extends CrudRepository<RefreshToken, Str
 
     Optional<RefreshToken> findByValue(String email);
 
-    void deleteByValue(String email);
 }

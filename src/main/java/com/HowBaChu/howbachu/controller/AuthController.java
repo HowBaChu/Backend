@@ -35,27 +35,27 @@ public class AuthController {
 
     /*로그인*/
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody MemberRequestDto.login requestDto, HttpServletResponse response) {
+    public ResponseEntity<?> login(@Valid @RequestBody MemberRequestDto.login requestDto,
+        HttpServletResponse response) {
         return ResponseCode.MEMBER_LOGIN.toResponse(memberService.login(requestDto, response));
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@ApiIgnore Authentication authentication, HttpServletResponse response) {
-        memberService.logout(authentication.getName(),response);
+    public ResponseEntity<?> logout(@ApiIgnore Authentication authentication,
+        HttpServletResponse response) {
+        memberService.logout(authentication.getName(), response);
         return ResponseCode.MEMBER_LOGOUT.toResponse(null);
     }
 
     @PostMapping("/mail-verification")
-    public ResponseEntity<?> mailSend(@RequestParam String email){
+    public ResponseEntity<?> mailSend(@RequestParam String email) {
         mailService.sendMessage(email);
         return ResponseCode.VERIFICATION_SEND.toResponse(null);
     }
 
     @GetMapping("/mail-verification")
-    public ResponseEntity<?> certificate(@RequestParam String email, @RequestParam String inputCode) {
-        return (mailService.certificate(email, inputCode)
-            ? ResponseCode.VERIFICATION_SUCCESS
-            : ResponseCode.VERIFICATION_FAILED)
-            .toResponse(null);
+    public ResponseEntity<?> certificate(@RequestParam String email,
+        @RequestParam String inputCode) {
+        return mailService.certificate(email, inputCode).toResponse(null);
     }
 }

@@ -22,7 +22,8 @@ public class TopicController {
     /*토픽 조회*/
     @GetMapping
     public ResponseEntity<?> getTopic(@RequestParam(value = "date", required = false) String date) {
-        return ResponseCode.TOPIC_SUCCESS.toResponse(topicService.getTopicDto(date != null ? LocalDate.parse(date) : null));
+        return ResponseCode.TOPIC_SUCCESS.toResponse(
+            topicService.getTopicDto(date != null ? LocalDate.parse(date) : null));
     }
 
     @GetMapping("/honor")

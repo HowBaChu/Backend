@@ -1,5 +1,7 @@
 package com.HowBaChu.howbachu.domain.constants;
 
+import com.HowBaChu.howbachu.exception.CustomException;
+import com.HowBaChu.howbachu.exception.constants.ErrorCode;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.stream.Stream;
 
@@ -11,7 +13,7 @@ public enum MBTI {
     public static MBTI findByCode(String code) {
         return Stream.of(MBTI.values())
             .filter(c -> c.name().equals(code))
-            .findFirst()
-            .orElse(null);
+            .findAny()
+            .orElseThrow(() -> new CustomException(ErrorCode.NONE_MATCHED_MBTI));
     }
 }

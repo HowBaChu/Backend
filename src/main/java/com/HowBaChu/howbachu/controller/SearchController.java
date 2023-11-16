@@ -24,18 +24,24 @@ public class SearchController {
     }
 
     @GetMapping(value = "/parent-opin/")
-    public ResponseEntity<?> searchMoreParentOpin(@Nullable @RequestParam("cond") String cond, Pageable pageable) {
-        return ResponseCode.SEARCH_SUCCESS.toResponse(searchService.fetchMoreParentOpins(cond, pageable));
+    public ResponseEntity<?> searchMoreParentOpin(@Nullable @RequestParam("cond") String cond,
+        Pageable pageable) {
+        return ResponseCode.SEARCH_SUCCESS.toResponse(
+            searchService.fetchMoreParentOpins(cond, pageable));
     }
 
     @GetMapping(value = "/child-opin/")
-    public ResponseEntity<?> searchMoreChildOpin(@Nullable @RequestParam("cond") String cond, Pageable pageable) {
-        return ResponseCode.SEARCH_SUCCESS.toResponse(searchService.fetchMoreChildOpins(cond, pageable));
+    public ResponseEntity<?> searchMoreChildOpin(@Nullable @RequestParam("cond") String cond,
+        Pageable pageable) {
+        return ResponseCode.SEARCH_SUCCESS.toResponse(
+            searchService.fetchMoreChildOpins(cond, pageable));
     }
 
     @GetMapping(value = "/topic/")
-    public ResponseEntity<?> searchMoreTopic(@Nullable @RequestParam("cond") String cond, Pageable pageable) {
-        return ResponseCode.SEARCH_SUCCESS.toResponse(searchService.fetchMoreTopics(cond, pageable));
+    public ResponseEntity<?> searchMoreTopic(@Nullable @RequestParam("cond") String cond,
+        Pageable pageable) {
+        return ResponseCode.SEARCH_SUCCESS.toResponse(
+            searchService.fetchMoreTopics(cond, pageable));
     }
 
 }

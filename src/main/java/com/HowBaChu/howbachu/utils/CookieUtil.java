@@ -27,13 +27,24 @@ public class CookieUtil {
         cookie.setPath("/");
         cookie.setMaxAge(expiredTime);  // 2주
         response.addCookie(cookie);
-        log.info("만료 기한: "+ expiredTime);
+        log.info("만료 기한: " + expiredTime);
+    }
+
+    public void deleteCookie(HttpServletResponse response, String... keys) {
+        for (String key : keys) {
+            Cookie cookie = new Cookie(key, null);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+        }
+
     }
 
     public int getRemainTime() {
         LocalDateTime now = LocalDateTime.now();
         LocalTime endOfDay = LocalTime.of(23, 59, 59);
         Duration duration = Duration.between(now.toLocalTime(), endOfDay);
-        return Integer.parseInt(duration.getSeconds()+"");
+        return Integer.parseInt(duration.getSeconds() + "");
     }
 }

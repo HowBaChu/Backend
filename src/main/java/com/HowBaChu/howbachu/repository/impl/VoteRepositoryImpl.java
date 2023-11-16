@@ -1,12 +1,11 @@
 package com.HowBaChu.howbachu.repository.impl;
 
+import static com.HowBaChu.howbachu.domain.entity.QVote.vote;
+
 import com.HowBaChu.howbachu.domain.entity.Vote;
 import com.HowBaChu.howbachu.repository.Support.Querydsl4RepositorySupport;
 import com.HowBaChu.howbachu.repository.custom.VoteRepositoryCustom;
-
 import java.util.Optional;
-
-import static com.HowBaChu.howbachu.domain.entity.QVote.vote;
 
 public class VoteRepositoryImpl extends Querydsl4RepositorySupport implements VoteRepositoryCustom {
 

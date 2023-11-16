@@ -2,10 +2,8 @@ package com.HowBaChu.howbachu.domain.entity.embedded;
 
 
 import com.HowBaChu.howbachu.domain.constants.Selection;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.Embeddable;
+import lombok.Data;
 
 @Data
 @Embeddable

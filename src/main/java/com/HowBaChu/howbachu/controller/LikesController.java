@@ -6,11 +6,7 @@ import com.HowBaChu.howbachu.service.LikesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
@@ -21,15 +17,15 @@ public class LikesController {
     private final LikesService likesService;
 
     @PostMapping
-    public ResponseEntity<?> addLikes(@RequestBody LikesRequestDto requestDto,
-        @ApiIgnore Authentication authentication) {
+    public ResponseEntity<?> addLikes(@RequestParam("opinId") Long opinId,
+                                      @ApiIgnore Authentication authentication) {
         return ResponseCode.LIKES_ADD.toResponse(
-            likesService.addLikes(authentication.getName(), requestDto.getOpinId()));
+            likesService.addLikes(authentication.getName(), opinId));
     }
 
     @DeleteMapping
     public ResponseEntity<?> cancelLikes(@RequestBody LikesRequestDto requestDto,
-        @ApiIgnore Authentication authentication) {
+                                         @ApiIgnore Authentication authentication) {
         return ResponseCode.LIKES_CANCEL.toResponse(
             likesService.cancelLikes(authentication.getName(), requestDto.getOpinId()));
     }

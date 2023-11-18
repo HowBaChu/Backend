@@ -24,7 +24,8 @@ public class ReportController {
 
     // 신고하기
     @PostMapping("")
-    public ResponseEntity<?> reportOpin(@ApiIgnore Authentication authentication, @RequestBody ReportRequestDto requestDto) {
+    public ResponseEntity<?> reportOpin(@ApiIgnore Authentication authentication,
+        @RequestBody ReportRequestDto requestDto) {
         reportService.createReport(requestDto, authentication.getName());
         return ResponseCode.REPORT_SAVE.toResponse(null);
     }
@@ -32,7 +33,8 @@ public class ReportController {
     // 신고당한 내역 확인
     @GetMapping("")
     public ResponseEntity<?> findReport(@ApiIgnore Authentication authentication) {
-        return ResponseCode.REPORT_FIND.toResponse(reportService.findReports(authentication.getName()));
+        return ResponseCode.REPORT_FIND.toResponse(
+            reportService.findReports(authentication.getName()));
     }
 
 }

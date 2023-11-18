@@ -23,8 +23,10 @@ public class VoteController {
     private final VoteService voteService;
 
     @PostMapping
-    public ResponseEntity<?> voting(@ApiIgnore Authentication authentication, @RequestBody VoteRequestDto requestDto, HttpServletResponse response) {
-        return ResponseCode.VOTING_SUCCESS.toResponse(voteService.voting(requestDto, authentication.getName(), response));
+    public ResponseEntity<?> voting(@ApiIgnore Authentication authentication,
+        @RequestBody VoteRequestDto requestDto, HttpServletResponse response) {
+        return ResponseCode.VOTING_SUCCESS.toResponse(
+            voteService.voting(requestDto, authentication.getName(), response));
     }
 
 }

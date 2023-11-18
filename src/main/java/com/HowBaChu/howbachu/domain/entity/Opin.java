@@ -58,6 +58,7 @@ public class Opin extends BaseEntity {
 
     /**
      * Root Opin
+     *
      * @param content
      * @param vote
      */
@@ -71,6 +72,7 @@ public class Opin extends BaseEntity {
 
     /**
      * Reply Opin
+     *
      * @param content
      * @param vote
      * @param parentOpin
@@ -105,8 +107,7 @@ public class Opin extends BaseEntity {
     }
 
     public void cancelLikes() {
-        if (likeCnt == 0) return;
-        this.likeCnt--;
+        this.likeCnt = Math.max(0, this.likeCnt - 1);
     }
 
     public void addReport() {

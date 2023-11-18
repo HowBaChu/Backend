@@ -16,6 +16,8 @@ import com.HowBaChu.howbachu.repository.RefreshTokenRepository;
 import com.HowBaChu.howbachu.repository.VoteRepository;
 import com.HowBaChu.howbachu.service.MemberService;
 import com.HowBaChu.howbachu.utils.CookieUtil;
+import java.util.Optional;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,14 +25,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
-import java.util.Optional;
-
 @Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
+
+    private final String ACCESS_TOKEN = "Access-Token";
+    private final String REFRESH_TOKEN = "Refresh-Token";
+    private final String MEMBER_ID = "Member-Id";
+    private final String VOTE = "Vote";
+    private final String PROFILE_URL = "profile";
 
     private final VoteRepository voteRepository;
     private final MemberRepository memberRepository;
@@ -44,14 +49,14 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public MemberResponseDto signup(MemberRequestDto.signup requestDto) {
         requestDto.encodePassword(passwordEncoder.encode(requestDto.getPassword()));
-        checkMemberDuplicated("", "", requestDto.getEmail(), requestDto.getUsername());
+        checkMemberDuplicateByEmail(requestDto.getEmail());
         return MemberResponseDto.of(memberRepository.save(Member.toEntity(requestDto)));
     }
 
     @Override
     @Transactional
     public TokenResponseDto login(MemberRequestDto.login requestDto, HttpServletResponse response) {
-        Member member = memberRepository.findByEmail(requestDto.getEmail());
+        Member member = findMemberByEmail(requestDto.getEmail());
 
         if (!validatePassword(requestDto.getPassword(), member.getPassword())) {
             throw new CustomException(ErrorCode.WRONG_LOGIN_REQUEST);
@@ -65,11 +70,11 @@ public class MemberServiceImpl implements MemberService {
 
         // cookie 설정
         // 리프레쉬 토큰 외에는 세션 토큰.
-        cookieUtil.setCookie(response, "Refresh-Token", tokenDto.getRefreshToken(), jwtProvider.getRefreshTokenExpiredTime());
-        cookieUtil.setCookie(response, "Access-Token", tokenDto.getAccessToken());
-        cookieUtil.setCookie(response, "Member-Id", String.valueOf(member.getId()));
+        cookieUtil.setCookie(response, REFRESH_TOKEN, tokenDto.getRefreshToken(), jwtProvider.getRefreshTokenExpiredTime());
+        cookieUtil.setCookie(response, ACCESS_TOKEN, tokenDto.getAccessToken());
+        cookieUtil.setCookie(response, MEMBER_ID, String.valueOf(member.getId()));
         voteRepository.findVoteByEmail(member.getEmail())
-            .ifPresent(value -> cookieUtil.setCookie(response, "Vote", value.getSelection().toString()));
+            .ifPresent(value -> cookieUtil.setCookie(response, VOTE, value.getSelection().toString()));
 
         return TokenResponseDto.builder()
             .accessToken(tokenDto.getAccessToken())
@@ -79,14 +84,14 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberResponseDto findMemberDetail(String email) {
-        return MemberResponseDto.of(memberRepository.findByEmail(email));
+        return MemberResponseDto.of(findMemberByEmail(email));
     }
 
     @Override
     @Transactional
     public MemberResponseDto updateMember(String email, MemberRequestDto.update requestDto) {
-        Member member = memberRepository.findByEmail(email);
-        checkMemberDuplicated(email, member.getUsername(), "", requestDto.getUsername());
+        Member member = findMemberByEmail(email);
+        checkMemberDuplicateByMemberName(member.getUsername(), requestDto.getUsername());
         requestDto.encodePassword(passwordEncoder.encode(requestDto.getPassword()));
         member.update(requestDto);
         return MemberResponseDto.of(member);
@@ -95,7 +100,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public void deleteMember(String email) {
-        memberRepository.deleteById(memberRepository.findByEmail(email).getId());
+        memberRepository.deleteById(findMemberByEmail(email).getId());
         if (refreshTokenRepository.findById(email).isPresent()) {
             refreshTokenRepository.deleteById(email);
         }
@@ -114,18 +119,15 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public void logout(String email, HttpServletResponse response) {
-        cookieUtil.setCookie(response, "Access-Token", "", 0);
-        cookieUtil.setCookie(response, "Refresh-Token", "", 0);
-        cookieUtil.setCookie(response, "Member-Id", "", 0);
-        cookieUtil.setCookie(response, "Vote", "", 0);
+        cookieUtil.deleteCookie(response, ACCESS_TOKEN, REFRESH_TOKEN, MEMBER_ID, VOTE);
         refreshTokenRepository.deleteById(email);
     }
 
     @Override
     @Transactional
     public MemberResponseDto uploadAvatar(String email, MultipartFile image){
-        Member member = memberRepository.findByEmail(email);
-        member.uploadAvatar(awsFileManager.upload("profile", image));
+        Member member = findMemberByEmail(email);
+        member.uploadAvatar(awsFileManager.upload(PROFILE_URL, image));
 
         return MemberResponseDto.of(member);
     }
@@ -133,27 +135,34 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public void deleteAvatar(String email) {
-        Member member = memberRepository.findByEmail(email);
+        Member member = findMemberByEmail(email);
         member.uploadAvatar(null);
     }
 
     @Override
     public StatusResponseDto checkPassword(String password, String email) {
         return new StatusResponseDto(
-            validatePassword(password, memberRepository.findByEmail(email).getPassword()));
+            validatePassword(password, findMemberByEmail(email).getPassword()));
     }
 
-    public boolean validatePassword(String input, String encoded) {
+    private boolean validatePassword(String input, String encoded) {
         return passwordEncoder.matches(input, encoded);
     }
 
-    public void checkMemberDuplicated(String originEmail, String originMemberName, String email, String memberName) {
-        if (!originEmail.equals(email) && memberRepository.existsByEmail(email)) {
+    private void checkMemberDuplicateByEmail(String email) {
+        if (memberRepository.existsByEmail(email)) {
             throw new CustomException(ErrorCode.EMAIL_DUPLICATION);
         }
+    }
+
+    private void checkMemberDuplicateByMemberName(String originMemberName, String memberName) {
         if (!originMemberName.equals(memberName) && memberRepository.existsByUsername(memberName)) {
             throw new CustomException(ErrorCode.USERNAME_DUPLICATION);
         }
+    }
+
+    private Member findMemberByEmail(String email) {
+        return memberRepository.findByEmail(email);
     }
 
 }

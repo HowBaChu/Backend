@@ -82,17 +82,16 @@ public class JwtProvider {
      * @param token 만료검증할 토큰
      * @return 만료되지 않았다면 1, 만료되었다면 0, 그 외의 예외는 익센셥 처리
      */
-    public Boolean validateToken(String token) {
+    public void validateToken(String token) {
         try {
             parseClaims(token);
         } catch (ExpiredJwtException e) {
-            return false;
+            throw new CustomException(ErrorCode.EXPIRED_TOKEN);
         } catch (UnsupportedJwtException | MalformedJwtException e) {
             throw new CustomException(ErrorCode.INVALID_TOKEN_TYPE);
         } catch (SignatureException e) {
             throw new CustomException(ErrorCode.MODIFIED_TOKEN_DETECTED);
         }
-        return true;
     }
 
     public int getAccessTokenExpiredTime() {

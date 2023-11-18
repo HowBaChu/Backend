@@ -41,20 +41,19 @@ public class LikesServiceImpl implements LikesService {
     @Transactional
     public Long cancelLikes(String email, Long opineId) {
         Likes likes = fetchLikes(email, opineId);
-        likes.getOpin().cancelLikes();
+        likes.cancelLikes();
         likesRepository.delete(likes);
         return opineId;
     }
 
 
-    public Likes fetchLikes(String email, Long opineId) {
-        Likes likes = likesRepository.findLikesByMember_EmailAndOpin_Id(email, opineId).orElseThrow(
+    private Likes fetchLikes(String email, Long opineId) {
+        return likesRepository.findLikesByMember_EmailAndOpin_Id(email, opineId).orElseThrow(
             () -> new CustomException(ErrorCode.LIKES_NOT_FOUND)
         );
-        return likes;
     }
 
-    public Member fetchMember(String email) {
+    private Member fetchMember(String email) {
         return memberRepository.findByEmail(email);
     }
 

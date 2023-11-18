@@ -7,7 +7,6 @@ import com.HowBaChu.howbachu.exception.CustomException;
 import com.HowBaChu.howbachu.exception.constants.ErrorCode;
 import com.HowBaChu.howbachu.repository.Support.Querydsl4RepositorySupport;
 import com.HowBaChu.howbachu.repository.custom.MemberRepositoryCustom;
-
 import java.util.Optional;
 
 public class MemberRepositoryImpl extends Querydsl4RepositorySupport implements MemberRepositoryCustom {

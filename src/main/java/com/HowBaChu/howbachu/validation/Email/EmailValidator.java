@@ -14,7 +14,6 @@ public class EmailValidator implements ConstraintValidator<EmailValid,String> {
     private final int minLength = LimitBound.emailMinLength;
     private final String lengthMessage = "이메일은 "+minLength+"자 이상 "+maxLength+"자 이하로 입력해 주세요.";
     private final String formatMessage = "이메일 형식이 올바르지 않습니다.";
-    private final String duplicateMessaga = "이미 가입된 이메일입니다.";
     private final String regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
 
@@ -26,7 +25,7 @@ public class EmailValidator implements ConstraintValidator<EmailValid,String> {
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
 
-        if (value.length() > maxLength || value.length() < minLength) {
+        if (value.length() > maxLength || value.isEmpty()) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(lengthMessage).addConstraintViolation();
             return false;

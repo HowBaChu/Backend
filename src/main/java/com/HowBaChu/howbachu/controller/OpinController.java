@@ -25,8 +25,10 @@ public class OpinController {
     private final OpinService opinService;
 
     @PostMapping
-    public ResponseEntity<?> postOpin(@RequestBody OpinRequestDto requestDto, @ApiIgnore Authentication authentication) {
-        return ResponseCode.OPIN_SAVE.toResponse(opinService.createOpin(requestDto, authentication.getName(), requestDto.getParentId()));
+    public ResponseEntity<?> postOpin(@RequestBody OpinRequestDto requestDto,
+        @ApiIgnore Authentication authentication) {
+        return ResponseCode.OPIN_SAVE.toResponse(
+            opinService.createOpin(requestDto, authentication.getName(), requestDto.getParentId()));
     }
 
     @GetMapping
@@ -40,17 +42,22 @@ public class OpinController {
     }
 
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<?> updateOpin(@PathVariable("id") String id, @RequestBody OpinRequestDto requestDto, @ApiIgnore Authentication authentication) {
-        return ResponseCode.OPIN_UPDATE.toResponse(opinService.updateOpin(requestDto, Long.parseLong(id), authentication.getName()));
+    public ResponseEntity<?> updateOpin(@PathVariable("id") String id,
+        @RequestBody OpinRequestDto requestDto, @ApiIgnore Authentication authentication) {
+        return ResponseCode.OPIN_UPDATE.toResponse(
+            opinService.updateOpin(requestDto, Long.parseLong(id), authentication.getName()));
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> deleteOpin(@PathVariable("id") String id, @ApiIgnore Authentication authentication) {
-        return ResponseCode.OPIN_DELETE.toResponse(opinService.removeOpin(Long.parseLong(id), authentication.getName()));
+    public ResponseEntity<?> deleteOpin(@PathVariable("id") String id,
+        @ApiIgnore Authentication authentication) {
+        return ResponseCode.OPIN_DELETE.toResponse(
+            opinService.removeOpin(Long.parseLong(id), authentication.getName()));
     }
 
     @GetMapping(value = "/member")
-    public ResponseEntity<?> listMyOpin(@RequestParam(name = "id") Long memberId, @RequestParam(name = "page", defaultValue = "0") int page) {
+    public ResponseEntity<?> listMyOpin(@RequestParam(name = "id") Long memberId,
+        @RequestParam(name = "page", defaultValue = "0") int page) {
         return ResponseCode.OPIN_LIST.toResponse(opinService.getOpinListForMember(memberId, page));
     }
 

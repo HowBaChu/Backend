@@ -32,14 +32,16 @@ public class MemberController {
     /*회원 상세정보*/
     @GetMapping
     public ResponseEntity<?> findMemberDetail(@ApiIgnore Authentication authentication) {
-        return ResponseCode.MEMBER_DETAIL.toResponse(memberService.findMemberDetail(authentication.getName()));
+        return ResponseCode.MEMBER_DETAIL.toResponse(
+            memberService.findMemberDetail(authentication.getName()));
     }
 
     /*회원정보 수정*/
     @PatchMapping
     public ResponseEntity<?> updateMemberDetail(@ApiIgnore Authentication authentication,
         @Valid @RequestBody MemberRequestDto.update requestDto) {
-        return ResponseCode.MEMBER_UPDATE.toResponse(memberService.updateMember(authentication.getName(), requestDto));
+        return ResponseCode.MEMBER_UPDATE.toResponse(
+            memberService.updateMember(authentication.getName(), requestDto));
     }
 
     /*회원탈퇴*/
@@ -58,22 +60,25 @@ public class MemberController {
     /*닉네임 중복 검사*/
     @GetMapping("/username/{username}/exists")
     public ResponseEntity<?> checkUsernameDuplicate(@PathVariable String username) {
-        return ResponseCode.MEMBER_EXISTS.toResponse(memberService.checkUsernameDuplicate(username));
+        return ResponseCode.MEMBER_EXISTS.toResponse(
+            memberService.checkUsernameDuplicate(username));
     }
 
     @PostMapping("/password-verification")
-    public ResponseEntity<?> checkPasswordVerification(@Valid @RequestBody MemberRequestDto.passwordVerification requestDto, @ApiIgnore Authentication authentication) {
-        StatusResponseDto responseDto = memberService.checkPassword(requestDto.getPassword(), authentication.getName());
-        return (responseDto.getStatus()
-            ? ResponseCode.PASSWORD_CORRECT
-            : ResponseCode.PASSWORD_DISCORD)
-            .toResponse(responseDto);
+    public ResponseEntity<?> checkPasswordVerification(
+        @Valid @RequestBody MemberRequestDto.passwordVerification requestDto,
+        @ApiIgnore Authentication authentication) {
+        StatusResponseDto responseDto = memberService.checkPassword(requestDto.getPassword(),
+            authentication.getName());
+        return responseDto.passwordCheck().toResponse(responseDto);
     }
 
     /*프로필 사진 추가*/
     @PostMapping("/avatar")
-    public ResponseEntity<?> uploadAvatar(@ApiIgnore Authentication authentication, @RequestPart(value = "file") MultipartFile image){
-        return ResponseCode.AVATAR_UPLOAD.toResponse(memberService.uploadAvatar(authentication.getName(), image));
+    public ResponseEntity<?> uploadAvatar(@ApiIgnore Authentication authentication,
+        @RequestPart(value = "file") MultipartFile image) {
+        return ResponseCode.AVATAR_UPLOAD.toResponse(
+            memberService.uploadAvatar(authentication.getName(), image));
     }
 
     /*프로필 사진 삭제*/

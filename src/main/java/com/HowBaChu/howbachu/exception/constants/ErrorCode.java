@@ -22,7 +22,8 @@ public enum ErrorCode {
     INVALID_TOKEN_STRUCTURE(HttpStatus.UNAUTHORIZED, "401", "로그인 정보가 올바르지 않습니다."),
     MODIFIED_TOKEN_DETECTED(HttpStatus.UNAUTHORIZED, "401", "로그인 정보가 변경되었습니다."),
     EMAIL_VERIFICATION_FAILED(HttpStatus.FORBIDDEN, "403", "인증에 실패하였습니다."),
-    EXPIRED_REFESH_TOKEN(HttpStatus.UNAUTHORIZED, "403", "토큰 정보가 만료되었습니다. 로그인이 필요합니다."),
+    EXPIRED_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "403", "토큰 정보가 만료되었습니다. 로그인이 필요합니다."),
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "401", "토큰이 존재하지 않습니다."),
 
     /* MEMBER */
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "404", "등록되지 않은 회원입니다."),
@@ -31,6 +32,7 @@ public enum ErrorCode {
     SEIZED_TOKEN_DETECTED(HttpStatus.FORBIDDEN, "403", "토큰 정보가 잘못되었습니다."),
     EMAIL_DUPLICATION(HttpStatus.BAD_REQUEST, "400", "이미 가입된 이메일 입니다."),
     USERNAME_DUPLICATION(HttpStatus.BAD_REQUEST, "400", "이미 존재하는 닉네임 입니다."),
+    NONE_MATCHED_MBTI(HttpStatus.BAD_REQUEST, "400", "유효하지 않은 MBTI 입니다."),
 
     /* VOTE */
     VOTE_ALREADY_DONE(HttpStatus.BAD_REQUEST, "400", "이미 투표에 참가하셨습니다."),

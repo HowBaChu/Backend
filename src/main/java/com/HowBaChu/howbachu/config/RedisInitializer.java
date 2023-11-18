@@ -12,15 +12,16 @@ public class RedisInitializer implements CommandLineRunner {
 
     private final RedisTemplate<String, String> redisTemplate;
 
-    public void clearRedisData() {
+    @Override
+    public void run(String... args) {
+        clearRedisData();
+    }
+
+    private void clearRedisData() {
         redisTemplate.execute((RedisCallback<Object>) connection -> {
             connection.flushAll();
             return null;
         });
     }
 
-    @Override
-    public void run(String... args) throws Exception {
-        clearRedisData();
-    }
 }

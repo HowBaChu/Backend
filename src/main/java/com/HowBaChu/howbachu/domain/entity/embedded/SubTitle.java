@@ -1,10 +1,9 @@
 package com.HowBaChu.howbachu.domain.entity.embedded;
 
+import javax.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Embeddable;
 
 @Getter
 @Embeddable

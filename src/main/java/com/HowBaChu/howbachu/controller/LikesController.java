@@ -21,12 +21,16 @@ public class LikesController {
     private final LikesService likesService;
 
     @PostMapping
-    public ResponseEntity<?> addLikes(@RequestBody LikesRequestDto requestDto, @ApiIgnore Authentication authentication) {
-        return ResponseCode.LIKES_ADD.toResponse(likesService.addLikes(authentication.getName(), requestDto.getOpinId()));
+    public ResponseEntity<?> addLikes(@RequestBody LikesRequestDto requestDto,
+        @ApiIgnore Authentication authentication) {
+        return ResponseCode.LIKES_ADD.toResponse(
+            likesService.addLikes(authentication.getName(), requestDto.getOpinId()));
     }
 
     @DeleteMapping
-    public ResponseEntity<?> cancelLikes(@RequestBody LikesRequestDto requestDto, @ApiIgnore Authentication authentication) {
-        return ResponseCode.LIKES_CANCEL.toResponse(likesService.cancelLikes(authentication.getName(), requestDto.getOpinId()));
+    public ResponseEntity<?> cancelLikes(@RequestBody LikesRequestDto requestDto,
+        @ApiIgnore Authentication authentication) {
+        return ResponseCode.LIKES_CANCEL.toResponse(
+            likesService.cancelLikes(authentication.getName(), requestDto.getOpinId()));
     }
 }

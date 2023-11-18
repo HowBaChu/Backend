@@ -5,10 +5,8 @@ import com.HowBaChu.howbachu.domain.entity.Topic;
 import com.HowBaChu.howbachu.domain.entity.embedded.VotingStatus;
 import com.HowBaChu.howbachu.repository.TopicRepository;
 import com.HowBaChu.howbachu.service.TopicService;
-
 import java.time.LocalDate;
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;

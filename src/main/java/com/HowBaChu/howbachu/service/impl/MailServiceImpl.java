@@ -1,5 +1,6 @@
 package com.HowBaChu.howbachu.service.impl;
 
+import com.HowBaChu.howbachu.domain.constants.ResponseCode;
 import com.HowBaChu.howbachu.exception.CustomException;
 import com.HowBaChu.howbachu.exception.constants.ErrorCode;
 import com.HowBaChu.howbachu.service.MailService;
@@ -22,7 +23,6 @@ public class MailServiceImpl implements MailService {
 
     private final JavaMailSender javaMailSender;
     private final RedisUtil redisUtil;
-
     private final String verificationCode = createKey();
 
     @Value("${spring.mail.username}")
@@ -34,19 +34,20 @@ public class MailServiceImpl implements MailService {
     @Override
     public void sendMessage(String to) {
         MimeMessage message = createMessage(to);
-        redisUtil.setDataExpire(verificationCode,to,expired);
+        redisUtil.setDataExpire(verificationCode, to, expired);
         javaMailSender.send(message);
     }
 
     @Override
-    public boolean certificate(String email, String inputCode) {
+    public ResponseCode certificate(String email, String inputCode) {
         String storedCode = redisUtil.getData(inputCode);
-        return storedCode.equals(email);
+        return storedCode.equals(email)
+            ? ResponseCode.VERIFICATION_SUCCESS
+            : ResponseCode.VERIFICATION_FAILED;
     }
 
-    public MimeMessage createMessage(String to) {
-        log.info("보내는 대상 : " + to);
-        log.info("인증 번호 : " + verificationCode);
+    private MimeMessage createMessage(String to) {
+        log.info("이메일 인증 시작" + "\n" + "보내는 대상: " + to + "\n" + "인증 번호: " + verificationCode);
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
             message.addRecipients(MimeMessage.RecipientType.TO, to); // to 보내는 대상
@@ -59,14 +60,16 @@ public class MailServiceImpl implements MailService {
         return message;
     }
 
-    public static String createKey() {
-        StringBuffer key = new StringBuffer();
+    private String createKey() {
+        StringBuilder key = new StringBuilder();
         Random rnd = new Random();
-        for (int i = 0; i < 6; i++) { key.append((rnd.nextInt(10))); }
+        for (int i = 0; i < 6; i++) {
+            key.append((rnd.nextInt(10)));
+        }
         return key.toString();
     }
 
-    public String emailContent() {
+    private String emailContent() {
         StringBuffer sb = new StringBuffer();
         sb.append(
             "<h1 style=\"font-size: 30px; padding-right: 30px; padding-left: 30px;\">[이메일 주소 확인]</h1>");
@@ -80,7 +83,6 @@ public class MailServiceImpl implements MailService {
         sb.append("</td></tr></tbody></table></div>");
         return sb.toString();
     }
-
 
 
 }

@@ -27,6 +27,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import javax.servlet.http.HttpServletResponse;
+
 
 @ActiveProfiles("test")
 @MockBean(JpaMetamodelMappingContext.class)
@@ -49,6 +51,9 @@ class VoteControllerTest {
     @MockBean
     MemberService memberService;
 
+    @MockBean
+    HttpServletResponse response;
+
     private String token;
 
     @MockBean
@@ -57,7 +62,7 @@ class VoteControllerTest {
     @BeforeEach
     void init() {
         token = "Bearer fake.jwt.token.here";
-        given(jwtTokenProvider.validateToken(anyString())).willReturn(true);
+//        given(jwtTokenProvider.validateToken(anyString()))
         given(jwtTokenProvider.getEmailFromToken(anyString())).willReturn("testUser");
     }
 
@@ -67,7 +72,7 @@ class VoteControllerTest {
 
         // given
         VoteRequestDto requestDto = new VoteRequestDto(Selection.A);
-        given(voteService.voting(requestDto, authentication.getName()))
+        given(voteService.voting(requestDto, authentication.getName(), response))
             .willReturn(1L);
 
         // when
@@ -84,7 +89,7 @@ class VoteControllerTest {
             .andExpect(jsonPath("$.data").exists())
             .andDo(print());
 
-        verify(voteService).voting(requestDto, authentication.getName());
+        verify(voteService).voting(requestDto, authentication.getName(), response);
     }
 
 }

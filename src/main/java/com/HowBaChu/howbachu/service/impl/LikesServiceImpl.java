@@ -7,8 +7,8 @@ import com.HowBaChu.howbachu.exception.CustomException;
 import com.HowBaChu.howbachu.exception.constants.ErrorCode;
 import com.HowBaChu.howbachu.repository.LikesRepository;
 import com.HowBaChu.howbachu.repository.MemberRepository;
+import com.HowBaChu.howbachu.repository.OpinRepository;
 import com.HowBaChu.howbachu.service.LikesService;
-import com.HowBaChu.howbachu.service.OpinService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class LikesServiceImpl implements LikesService {
 
-    private final OpinService opinService;
+    private final OpinRepository opinRepository;
     private final LikesRepository likesRepository;
     private final MemberRepository memberRepository;
 
@@ -26,39 +26,54 @@ public class LikesServiceImpl implements LikesService {
     @Override
     @Transactional
     public Long addLikes(String email, Long opineId) {
-        Member member = fetchMember(email);
-        Opin opin = opinService.getOpin(opineId, email);
 
-        // 좋아요 중복 검사.
-        checkForDuplicateLikes(email, opineId);
+        /* 좋아요 누른 사람 */
+        Member likedMember = findMemberByEmail(email);
+        /* 좋아요 추가될 타겟 */
+        Opin opin = findOpinById(opineId);
 
-        likesRepository.save(Likes.of(member, opin));
+        /* 좋아요 중복 검사*/
+        checkDuplicateLike(email, opineId);
+
+        /* 좋아요 저장 */
+        likesRepository.save(Likes.of(likedMember, opin));
+        /* 오핀 Likes 카운트 증가 */
         opin.addLikes();
+
         return opineId;
     }
 
     @Override
     @Transactional
-    public Long cancelLikes(String email, Long opineId) {
-        Likes likes = fetchLikes(email, opineId);
+    public Long cancelLikes(String cancelerEmail, Long opineId) {
+
+        /* 취소자 이메일 + 최소 대상 Opin 을 통해 `좋아요` 조회 */
+        Likes likes = findLikesByEmailAndOpinId(cancelerEmail, opineId);
+
+        /* 좋아요 취소 */
         likes.cancelLikes();
+        /* 좋아요 엔티티 삭제 */
         likesRepository.delete(likes);
         return opineId;
     }
 
 
-    private Likes fetchLikes(String email, Long opineId) {
-        return likesRepository.findLikesByMember_EmailAndOpin_Id(email, opineId).orElseThrow(
-            () -> new CustomException(ErrorCode.LIKES_NOT_FOUND)
-        );
+    private Likes findLikesByEmailAndOpinId(String email, Long opineId) {
+        return likesRepository.fetchLikesByEmailAndOpinId(email, opineId);
     }
 
-    private Member fetchMember(String email) {
+    private Member findMemberByEmail(String email) {
         return memberRepository.findByEmail(email);
     }
 
-    private void checkForDuplicateLikes(String email, Long opineId) {
-        if (likesRepository.existsByMember_EmailAndOpin_Id(email, opineId)) {
+    private Opin findOpinById(Long opineId) {
+        return opinRepository.findById(opineId).orElseThrow(
+            () -> new CustomException(ErrorCode.OPIN_NOT_FOUND)
+        );
+    }
+
+    private void checkDuplicateLike(String email, Long opineId) {
+        if (findLikesByEmailAndOpinId(email, opineId) == null) {
             throw new CustomException(ErrorCode.LIKES_ALREADY_EXISTS);
         }
     }

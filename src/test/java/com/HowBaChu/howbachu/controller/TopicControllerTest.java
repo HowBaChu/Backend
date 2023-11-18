@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.HowBaChu.howbachu.domain.dto.topic.TopicResponseDto;
 import com.HowBaChu.howbachu.domain.entity.Topic;
 import com.HowBaChu.howbachu.domain.entity.embedded.SubTitle;
 import com.HowBaChu.howbachu.domain.entity.embedded.VotingStatus;
@@ -45,7 +46,7 @@ public class TopicControllerTest {
 
         // given
         Topic topic = sample();
-        given(topicService.getTopicDto(null)).willReturn(topic);
+        given(topicService.getTopicDto(null)).willReturn(TopicResponseDto.of(topic, new VotingStatus()));
 
         // when & then
         mockMvc.perform(get("/api/v1/topic")
@@ -66,7 +67,7 @@ public class TopicControllerTest {
         // given
         LocalDate today = LocalDate.of(2023, 8, 12);
         Topic topic = sample();
-        given(topicService.getTopicDto(today)).willReturn(topic);
+        given(topicService.getTopicDto(today)).willReturn(TopicResponseDto.of(topic, new VotingStatus()));
 
         // when & then
         mockMvc.perform(get("/api/v1/topic")

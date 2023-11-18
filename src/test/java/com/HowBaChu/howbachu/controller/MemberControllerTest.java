@@ -53,7 +53,7 @@ class MemberControllerTest {
     @BeforeEach
     void init() {
         memberSignupDto = new MemberRequestDto.signup("testEmail@naver.com", "testPassword!123", "testUsername",
-            MBTI.ENTJ, "testStatusMessage");
+            MBTI.ENTJ);
         memberLoginDto = new login("testEmail@naver.com", "testPassword!123");
         memberService.signup(memberSignupDto);
         memberSignupDto.encodePassword("testPassword@naver.com");
@@ -86,7 +86,7 @@ class MemberControllerTest {
     @DisplayName("회원 정보 수정 테스트 - 컨틀롤러")
     void updateMemberDetail() throws Exception {
         //given
-        MemberRequestDto.update updateRequestDto = new MemberRequestDto.update("testEmail@naver.com", "testPassword!123", "testUsername22",
+        MemberRequestDto.update updateRequestDto = new MemberRequestDto.update("testEmail@naver.com", "testPassword!123",
             MBTI.ENTJ, "testStatusMessage");
         Gson gson = new Gson();
         content = gson.toJson(updateRequestDto);

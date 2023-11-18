@@ -30,6 +30,7 @@ public class EmailValidator implements ConstraintValidator<EmailValid,String> {
             context.buildConstraintViolationWithTemplate(lengthMessage).addConstraintViolation();
             return false;
         }
+
         if (!value.matches(regex)) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(formatMessage).addConstraintViolation();

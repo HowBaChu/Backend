@@ -27,7 +27,7 @@ public class RefreshToken {
     private int expiration;
 
     public void validateRefreshTokenRotate(String refreshToken) {
-        if (!this.value.equals(refreshToken)) {
+        if (!this.key.equals(refreshToken)) {
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
     }

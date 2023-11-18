@@ -38,7 +38,8 @@ public class MemberServiceImpl implements MemberService {
     private final String PROFILE_URL = "profile";
 
     private final VoteRepository voteRepository;
-    private final MemberRepository memberRepository;
+    private final MemberRepository
+        memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtProvider jwtProvider;
@@ -50,6 +51,7 @@ public class MemberServiceImpl implements MemberService {
     public MemberResponseDto signup(MemberRequestDto.signup requestDto) {
         requestDto.encodePassword(passwordEncoder.encode(requestDto.getPassword()));
         checkMemberDuplicateByEmail(requestDto.getEmail());
+        checkMemberDuplicateByMemberName("", requestDto.getUsername());
         return MemberResponseDto.of(memberRepository.save(Member.toEntity(requestDto)));
     }
 

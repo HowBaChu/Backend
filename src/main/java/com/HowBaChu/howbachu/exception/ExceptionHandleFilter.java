@@ -7,12 +7,14 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
+@Slf4j
 public class ExceptionHandleFilter extends OncePerRequestFilter {
 
     @Override
@@ -22,6 +24,7 @@ public class ExceptionHandleFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
         } catch (CustomException e) {
+            log.error("CustomException", e);
             ResponseEntity<String> errorResponse = handleCustomException(e);
             response.setStatus(errorResponse.getStatusCodeValue());
             response.setContentType("application/json");

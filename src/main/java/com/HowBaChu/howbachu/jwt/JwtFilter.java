@@ -94,7 +94,7 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private RefreshToken fetchRefreshTokenById(String refreshToken) {
-        return refreshTokenRepository.findByValue(refreshToken)
+        return refreshTokenRepository.findById(refreshToken)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_REFRESH_TOKEN));
     }
 

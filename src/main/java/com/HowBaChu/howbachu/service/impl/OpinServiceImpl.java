@@ -10,7 +10,9 @@ import com.HowBaChu.howbachu.exception.constants.ErrorCode;
 import com.HowBaChu.howbachu.repository.OpinRepository;
 import com.HowBaChu.howbachu.repository.VoteRepository;
 import com.HowBaChu.howbachu.service.OpinService;
+
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -28,9 +30,7 @@ public class OpinServiceImpl implements OpinService {
     @Transactional
     public Long createOpin(OpinRequestDto requestDto, String email, Long parentId) {
 
-        Vote vote = voteRepository.findVoteByEmail(email).orElseThrow(
-            () -> new CustomException(ErrorCode.VOTE_NOT_FOUND)
-        );
+        Vote vote = voteRepository.fetchVoteByEmail(email);
 
         Opin opin;
         if (parentId == null) {
@@ -47,14 +47,14 @@ public class OpinServiceImpl implements OpinService {
     }
 
     @Override
-    public Page<OpinResponseDto> getOpinList(int page) {
-        return opinRepository.fetchParentOpinList(page);
+    public Page<OpinResponseDto> getOpinList(int page, String email) {
+        return opinRepository.fetchParentOpinList(page, email);
     }
 
     @Override
-    public OpinThreadResponseDto getOpinThread(Long parentId) {
-        OpinResponseDto parentOpin = opinRepository.fetchParentOpin(parentId);
-        List<OpinResponseDto> childOpinList = opinRepository.fetchOpinChildList(parentId);
+    public OpinThreadResponseDto getOpinThread(Long parentId, String email) {
+        OpinResponseDto parentOpin = opinRepository.fetchParentOpin(parentId, email);
+        List<OpinResponseDto> childOpinList = opinRepository.fetchChildOpinList(parentId, email);
         return new OpinThreadResponseDto(parentOpin, childOpinList);
     }
 
@@ -75,14 +75,12 @@ public class OpinServiceImpl implements OpinService {
 
     @Override
     public Opin getOpin(Long opinId, String email) {
-        return opinRepository.findByOpinIdAndEmail(opinId, email).orElseThrow(
-            () -> new CustomException(ErrorCode.OPIN_MISS_MATCH)
-        );
+        return opinRepository.fetchOpinByIdAndEmail(opinId, email);
     }
 
     @Override
-    public Page<OpinResponseDto> getOpinListForMember(Long memberId, int page) {
-        return opinRepository.fetchOpinListByMemberId(memberId, page);
+    public Page<OpinResponseDto> getMyOpinList(int page, String email) {
+        return opinRepository.fetchMyOpinList(page, email);
     }
 
 }

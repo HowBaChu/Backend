@@ -17,5 +17,6 @@ public class OpinResponseDto {
     private String nickname;
     private String content;
     private int likeCnt;
+    private boolean isOwner;
 
 }

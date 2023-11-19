@@ -2,28 +2,29 @@ package com.HowBaChu.howbachu.repository;
 
 import com.HowBaChu.howbachu.domain.constants.MBTI;
 import com.HowBaChu.howbachu.domain.constants.Selection;
+import com.HowBaChu.howbachu.domain.dto.opin.OpinResponseDto;
 import com.HowBaChu.howbachu.domain.entity.Member;
 import com.HowBaChu.howbachu.domain.entity.Opin;
 import com.HowBaChu.howbachu.domain.entity.Topic;
 import com.HowBaChu.howbachu.domain.entity.Vote;
 import com.HowBaChu.howbachu.domain.entity.embedded.SubTitle;
 import com.HowBaChu.howbachu.domain.entity.embedded.VotingStatus;
-import com.HowBaChu.howbachu.exception.CustomException;
-import com.HowBaChu.howbachu.exception.constants.ErrorCode;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 @DataJpaTest
+@Transactional
 @ActiveProfiles(value = "test")
 class OpinRepositoryTest {
 
@@ -32,55 +33,103 @@ class OpinRepositoryTest {
     }
 
     @Autowired
+    MemberRepository memberRepository;
+
+    @Autowired
+    TopicRepository topicRepository;
+
+    @Autowired
+    VoteRepository voteRepository;
+
+    @Autowired
     OpinRepository opinRepository;
 
-    @PersistenceContext
-    EntityManager em;
 
-    private Vote vote;
+    private Topic duumyTopic;
+    private Member dummyMember;
+    private Vote dummyVote;
+    private Opin dummyOpin;
 
     @BeforeEach
     public void init() {
-        Topic topic = Topic.builder()
-            .title("탕수육은 부먹인가, 찍먹인가")
+        duumyTopic = Topic.builder()
+            .title("탕수육은 부먹인가, 찍먹인가?")
+            .subTitle(new SubTitle("부먹이다", "찍먹이다"))
             .date(LocalDate.now())
-            .subTitle(new SubTitle("부먹", "찍먹"))
             .votingStatus(new VotingStatus())
             .build();
-        em.persist(topic);
+        topicRepository.save(duumyTopic);
 
-        Member member = Member.builder()
-            .email("eamil@email.com")
-            .password("123123123")
-            .username("username")
+        dummyMember = Member.builder()
+            .email("how@ba.chu")
+            .password("123123")
+            .username("하우바츄")
             .mbti(MBTI.ENFJ)
-            .statusMessage("statusMessage")
+            .isDeleted(false)
+            .statusMessage("취업시켜줘...")
+            .avatar(null)
+            .build();
+        memberRepository.save(dummyMember);
+
+        dummyVote = Vote.builder()
+            .topic(duumyTopic)
+            .member(dummyMember)
+            .selection(Selection.A)
+            .selectSubTitle(duumyTopic.getSubTitle().getSub_A())
+            .build();
+        voteRepository.save(dummyVote);
+
+        dummyOpin = Opin.builder()
+            .vote(dummyVote)
+            .parent(null)
+            .content("아니.. 당연히 부먹이지.. 미친 거 아닌가")
             .isDeleted(false)
             .build();
-        em.persist(member);
-
-
-        vote = Vote.builder()
-            .topic(topic)
-            .member(member)
-            .selection(Selection.A)
-            .build();
-        em.persist(vote);
+        opinRepository.save(dummyOpin);
     }
 
     @Test
-    @DisplayName(value = "Opin - 루트 생성 테스트")
-    public void opinCreateTest() {
+    @DisplayName("Opin - 삭제를 위한, 조회 by opinID & email")
+    public void fetchOpinByIdAndEmail_test() throws Exception {
         // given
-        Opin opin = Opin.of("나는 아무래도 찍먹이다,..", vote);
+        Long opinId = dummyOpin.getId();
+        String email = dummyMember.getEmail();
 
         // when
-        Long savedId = opinRepository.save(opin).getId();
-        Opin findOpin = opinRepository.findById(savedId).orElseThrow(
-            () -> new CustomException(ErrorCode.OPIN_NOT_FOUND)
-        );
+        Opin findOpin = opinRepository.fetchOpinByIdAndEmail(opinId, email);
 
         // then
-        Assertions.assertThat(findOpin.getContent()).isEqualTo(opin.getContent());
+        assertThat(findOpin.getContent()).isEqualTo(dummyOpin.getContent());
+        assertThat(findOpin.getVote().getSelection()).isEqualTo(dummyVote.getSelection());
+    }
+
+    @Test
+    @DisplayName("Opin - 내가 쓴글 보기")
+    public void fetchMyOpinList_test() throws Exception {
+        // given
+        String email = dummyMember.getEmail();
+        for (int i = 1; i < 10; i++) {
+            saveDummyOpin(i + "번째 Opin");
+        }
+
+        // when
+        Page<OpinResponseDto> results = opinRepository.fetchMyOpinList(0, email);
+
+        // then
+        assertThat(results.getContent().size()).isEqualTo(10);
+        assertThat(results.getContent().get(0).getContent()).isEqualTo("9번째 Opin");
+
+        for (OpinResponseDto responseDto : results.getContent()) {
+            System.out.println(responseDto.getContent());
+        }
+    }
+
+    private void saveDummyOpin(String content) {
+        opinRepository.save(Opin.builder()
+            .vote(dummyVote)
+            .parent(null)
+            .content(content)
+            .isDeleted(false)
+            .build());
     }
 }

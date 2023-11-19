@@ -1,6 +1,7 @@
 package com.HowBaChu.howbachu.domain.entity;
 
 import com.HowBaChu.howbachu.domain.base.BaseEntity;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +27,7 @@ import org.hibernate.annotations.Where;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE opin SET is_deleted = true WHERE opin_id = ? OR report_cnt >= ReportCriteria.OPIN_SUSPENSION_COUNT.getCount()")
+@SQLDelete(sql = "UPDATE opin SET is_deleted = TRUE WHERE opin_id = ?")
 @Where(clause = "is_deleted != true")
 public class Opin extends BaseEntity {
 
@@ -100,7 +102,6 @@ public class Opin extends BaseEntity {
     public void updateContent(String content) {
         this.content = content;
     }
-
 
     public void addLikes() {
         this.likeCnt++;

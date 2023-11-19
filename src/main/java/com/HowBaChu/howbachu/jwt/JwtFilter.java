@@ -159,14 +159,19 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private String resolveTokenFromCookie(HttpServletRequest request, String tokenType) {
-        for (Cookie cookie : request.getCookies()) {
-            if (!tokenType.equals(cookie.getName())) {
-                continue;
-            }
-            return cookie.getValue();
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies == null) {
+            return null;
         }
+
+        for (Cookie cookie : cookies) {
+            if (tokenType.equals(cookie.getName())) {
+                return cookie.getValue();
+            }
+        }
+
         return null;
     }
-
 
 }

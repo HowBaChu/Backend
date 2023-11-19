@@ -1,6 +1,7 @@
 package com.HowBaChu.howbachu.exception;
 
 import com.HowBaChu.howbachu.exception.constants.ErrorCode;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +41,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<?> handlerException(Exception e) {
         log.error("Unexpected_Exception : " + e.getMessage());
+        log.error("Unexpected_Exception : " + Arrays.toString(e.getStackTrace()));
         return ErrorCode.UNEXPECTED_EXCEPTION.toResponse(null);
     }
 }

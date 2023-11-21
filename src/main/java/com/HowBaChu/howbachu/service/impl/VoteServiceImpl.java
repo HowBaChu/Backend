@@ -1,6 +1,7 @@
 package com.HowBaChu.howbachu.service.impl;
 
 import com.HowBaChu.howbachu.domain.dto.vote.VoteRequestDto;
+import com.HowBaChu.howbachu.domain.dto.vote.VoteResponseDto;
 import com.HowBaChu.howbachu.domain.entity.Member;
 import com.HowBaChu.howbachu.domain.entity.Topic;
 import com.HowBaChu.howbachu.domain.entity.Vote;
@@ -39,8 +40,13 @@ public class VoteServiceImpl implements VoteService {
         return voteRepository.save(Vote.of(requestDto, topic, member)).getId();
     }
 
+    @Override
+    public VoteResponseDto getVotingStatus(String email) {
+        return new VoteResponseDto(voteRepository.fetchVoteByEmail(email).getSelection());
+    }
+
     @Transactional(readOnly = true)
     public boolean hasAlreadyVoted(Long topicId, Long memberId) {
-        return voteRepository.findVoteByTopicAndMember(topicId, memberId);
+        return voteRepository.fetchVoteByTopicAndMember(topicId, memberId);
     }
 }

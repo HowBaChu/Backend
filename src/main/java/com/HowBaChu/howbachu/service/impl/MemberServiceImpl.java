@@ -13,17 +13,17 @@ import com.HowBaChu.howbachu.exception.constants.ErrorCode;
 import com.HowBaChu.howbachu.jwt.JwtProvider;
 import com.HowBaChu.howbachu.repository.MemberRepository;
 import com.HowBaChu.howbachu.repository.RefreshTokenRepository;
-import com.HowBaChu.howbachu.repository.VoteRepository;
 import com.HowBaChu.howbachu.service.MemberService;
 import com.HowBaChu.howbachu.utils.CookieUtil;
-import java.util.Optional;
-import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -37,9 +37,7 @@ public class MemberServiceImpl implements MemberService {
     private final String VOTE = "Vote";
     private final String PROFILE_URL = "profile";
 
-    private final VoteRepository voteRepository;
-    private final MemberRepository
-        memberRepository;
+    private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtProvider jwtProvider;
@@ -74,9 +72,6 @@ public class MemberServiceImpl implements MemberService {
         // 리프레쉬 토큰 외에는 세션 토큰.
         cookieUtil.setCookie(response, REFRESH_TOKEN, tokenDto.getRefreshToken(), jwtProvider.getRefreshTokenExpiredTime());
         cookieUtil.setCookie(response, ACCESS_TOKEN, tokenDto.getAccessToken());
-        cookieUtil.setCookie(response, MEMBER_ID, String.valueOf(member.getId()));
-        voteRepository.findVoteByEmail(member.getEmail())
-            .ifPresent(value -> cookieUtil.setCookie(response, VOTE, value.getSelection().toString()));
 
         return TokenResponseDto.builder()
             .accessToken(tokenDto.getAccessToken())
@@ -127,7 +122,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public MemberResponseDto uploadAvatar(String email, MultipartFile image){
+    public MemberResponseDto uploadAvatar(String email, MultipartFile image) {
         Member member = findMemberByEmail(email);
         member.uploadAvatar(awsFileManager.upload(PROFILE_URL, image));
 

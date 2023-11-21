@@ -22,59 +22,57 @@ public class LikesServiceImpl implements LikesService {
     private final LikesRepository likesRepository;
     private final MemberRepository memberRepository;
 
-
     @Override
     @Transactional
-    public Long addLikes(String email, Long opineId) {
+    public Long addLikes(String email, Long opinId) {
 
         /* 좋아요 누른 사람 */
         Member likedMember = findMemberByEmail(email);
         /* 좋아요 추가될 타겟 */
-        Opin opin = findOpinById(opineId);
-
-        /* 좋아요 중복 검사*/
-        checkDuplicateLike(email, opineId);
-
+        Opin opin = findOpinById(opinId);
         /* 좋아요 저장 */
         likesRepository.save(Likes.of(likedMember, opin));
         /* 오핀 Likes 카운트 증가 */
         opin.addLikes();
 
-        return opineId;
+        return opinId;
     }
 
     @Override
     @Transactional
-    public Long cancelLikes(String cancelerEmail, Long opineId) {
+    public Long cancelLikes(String cancelerEmail, Long opinId) {
 
         /* 취소자 이메일 + 최소 대상 Opin 을 통해 `좋아요` 조회 */
-        Likes likes = findLikesByEmailAndOpinId(cancelerEmail, opineId);
-
+        Likes likes = findLikesByEmailAndOpinId(cancelerEmail, opinId);
         /* 좋아요 취소 */
         likes.cancelLikes();
         /* 좋아요 엔티티 삭제 */
         likesRepository.delete(likes);
-        return opineId;
+
+        return opinId;
     }
 
 
-    private Likes findLikesByEmailAndOpinId(String email, Long opineId) {
-        return likesRepository.fetchLikesByEmailAndOpinId(email, opineId);
+    @Override
+    public boolean checkDuplicateLike(String email, Long opinId) {
+        if (findLikesByEmailAndOpinId(email, opinId) != null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private Likes findLikesByEmailAndOpinId(String email, Long opinId) {
+        return likesRepository.fetchLikesByEmailAndOpinId(email, opinId);
     }
 
     private Member findMemberByEmail(String email) {
         return memberRepository.findByEmail(email);
     }
 
-    private Opin findOpinById(Long opineId) {
-        return opinRepository.findById(opineId).orElseThrow(
+    private Opin findOpinById(Long opinId) {
+        return opinRepository.findById(opinId).orElseThrow(
             () -> new CustomException(ErrorCode.OPIN_NOT_FOUND)
         );
-    }
-
-    private void checkDuplicateLike(String email, Long opineId) {
-        if (findLikesByEmailAndOpinId(email, opineId) == null) {
-            throw new CustomException(ErrorCode.LIKES_ALREADY_EXISTS);
-        }
     }
 }

@@ -1,6 +1,9 @@
 package com.HowBaChu.howbachu.service;
 
 public interface LikesService {
-    Long addLikes(String email, Long opineId);
-    Long cancelLikes(String email, Long opineId);
+    Long addLikes(String email, Long opinId);
+
+    Long cancelLikes(String email, Long opinId);
+
+    boolean checkDuplicateLike(String email, Long opinId);
 }

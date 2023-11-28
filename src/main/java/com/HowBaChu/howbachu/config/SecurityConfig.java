@@ -61,8 +61,8 @@ public class SecurityConfig {
                 "/api/v1/topic",
                 "/api/v1/auth/signup",
                 "/api/v1/auth/login",
-                "/api/v1/member/email/{email}/exists",
-                "/api/v1/member/username/{username}/exists",
+                "/api/v1/member/exists/email/{email}",
+                "/api/v1/member/exists/username/{username}",
                 "/api/v1/auth/mail-verification"
             ).permitAll()
             .anyRequest().authenticated();

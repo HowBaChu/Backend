@@ -52,13 +52,13 @@ public class MemberController {
     }
 
     /*이메일 중복 검사*/
-    @GetMapping("/email/{email}/exists")
+    @GetMapping("/exists/email/{email}")
     public ResponseEntity<?> checkEmailDuplicate(@PathVariable String email) {
         return ResponseCode.MEMBER_EXISTS.toResponse(memberService.checkEmailDuplicate(email));
     }
 
     /*닉네임 중복 검사*/
-    @GetMapping("/username/{username}/exists")
+    @GetMapping("/exists/username/{username}")
     public ResponseEntity<?> checkUsernameDuplicate(@PathVariable String username) {
         return ResponseCode.MEMBER_EXISTS.toResponse(
             memberService.checkUsernameDuplicate(username));

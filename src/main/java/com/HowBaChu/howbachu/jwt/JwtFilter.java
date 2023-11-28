@@ -52,8 +52,10 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private boolean isLoginRequest(HttpServletRequest request) {
+        log.info("request.getRequestURI() : {}", request.getRequestURI());
         return request.getRequestURI().equals("/api/v1/auth/login")
-            || request.getRequestURI().equals("/api/v1/auth/signup");
+            || request.getRequestURI().equals("/api/v1/auth/signup")
+            || request.getRequestURI().startsWith("/api/v1/member/exists");
     }
 
     private void handleTokens(String accessToken, String refreshToken, HttpServletRequest request,

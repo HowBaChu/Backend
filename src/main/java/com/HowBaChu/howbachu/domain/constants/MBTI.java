@@ -4,7 +4,9 @@ import com.HowBaChu.howbachu.exception.CustomException;
 import com.HowBaChu.howbachu.exception.constants.ErrorCode;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.stream.Stream;
+import lombok.Getter;
 
+@Getter
 public enum MBTI {
     ISTJ, ISFJ, INFJ, INTJ, ISTP, ISFP, INFP, INTP,
     ESTP, ESFP, ENFP, ENTP, ESTJ, ESFJ, ENFJ, ENTJ;
@@ -15,5 +17,10 @@ public enum MBTI {
             .filter(c -> c.name().equals(code))
             .findAny()
             .orElseThrow(() -> new CustomException(ErrorCode.NONE_MATCHED_MBTI));
+    }
+
+    public static boolean isExists(String code) {
+        return Stream.of(MBTI.values())
+            .anyMatch(c -> c.name().equals(code));
     }
 }

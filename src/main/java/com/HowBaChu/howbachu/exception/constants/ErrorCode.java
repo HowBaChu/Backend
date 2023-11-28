@@ -21,7 +21,7 @@ public enum ErrorCode {
     INVALID_TOKEN_TYPE(HttpStatus.UNAUTHORIZED, "401", "로그인 정보 형식이 올바르지 않습니다."),
     INVALID_TOKEN_STRUCTURE(HttpStatus.UNAUTHORIZED, "401", "로그인 정보가 올바르지 않습니다."),
     MODIFIED_TOKEN_DETECTED(HttpStatus.UNAUTHORIZED, "401", "로그인 정보가 변경되었습니다."),
-    EMAIL_VERIFICATION_FAILED(HttpStatus.FORBIDDEN, "403", "인증에 실패하였습니다."),
+    EMAIL_VERIFICATION_FAILED(HttpStatus.BAD_REQUEST, "400", "이메일 인증에 실패하였습니다."),
     EXPIRED_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "403", "토큰 정보가 만료되었습니다. 로그인이 필요합니다."),
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "401", "토큰이 존재하지 않습니다."),
 

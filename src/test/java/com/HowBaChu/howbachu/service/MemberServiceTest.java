@@ -13,20 +13,15 @@ import com.HowBaChu.howbachu.domain.entity.Member;
 import com.HowBaChu.howbachu.jwt.JwtProvider;
 import com.HowBaChu.howbachu.repository.MemberRepository;
 import com.HowBaChu.howbachu.repository.RefreshTokenRepository;
-
-import java.util.Optional;
-
+import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletResponse;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -58,7 +53,7 @@ class MemberServiceTest {
     @BeforeEach
     void init() {
         memberSignupDto = new signup("testEmail@naver.com", "testPassword!123", "testUsername",
-            MBTI.ENTJ);
+            MBTI.ENTJ.name());
         memberLoginDto = new login("testEmail@naver.com", "testPassword!123");
     }
 
@@ -104,7 +99,7 @@ class MemberServiceTest {
 
         //when
         MemberRequestDto.update updateRequestDto = new update("testEmail@naver.com", "testPassword!123",
-            MBTI.ENTJ, "testStatusMessage");
+            MBTI.ENTJ.name(), "testStatusMessage");
         MemberResponseDto memberResponseDto = memberService.updateMember(memberSignupDto.getEmail(), updateRequestDto);
 
         //then

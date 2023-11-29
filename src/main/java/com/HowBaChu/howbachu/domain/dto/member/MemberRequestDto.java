@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 
 public class MemberRequestDto {
 
+    private MemberRequestDto() {}
+
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
@@ -31,7 +33,7 @@ public class MemberRequestDto {
         private String username;
 
         @MBTIValid(enumClass = MBTI.class)
-        private MBTI mbti;
+        private String mbti;
 
         public void encodePassword(String encoded) {
             this.password = encoded;
@@ -65,7 +67,7 @@ public class MemberRequestDto {
         private String username;
 
         @MBTIValid(enumClass = MBTI.class)
-        private MBTI mbti;
+        private String mbti;
 
         @StatusMessageValid
         @Schema(description = "상태메세지", example = "testStatusMessageUpdated")

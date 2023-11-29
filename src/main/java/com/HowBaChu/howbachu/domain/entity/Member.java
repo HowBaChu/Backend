@@ -62,7 +62,7 @@ public class Member extends BaseEntity {
             .email(requestDto.getEmail())
             .password(requestDto.getPassword())
             .username(requestDto.getUsername())
-            .mbti(requestDto.getMbti())
+            .mbti(MBTI.findByCode(requestDto.getMbti()))
             .isDeleted(false)
             .build();
     }
@@ -70,7 +70,7 @@ public class Member extends BaseEntity {
     public void update(MemberRequestDto.update requestDto) {
         this.password = requestDto.getPassword();
         this.username = requestDto.getUsername();
-        this.mbti = requestDto.getMbti();
+        this.mbti = MBTI.findByCode(requestDto.getMbti());
         this.statusMessage = requestDto.getStatusMessage();
     }
 
@@ -88,4 +88,5 @@ public class Member extends BaseEntity {
         if (!(o instanceof Member )) return false;
         return id != null && id.equals(((Member) o).getId());
     }
+
 }

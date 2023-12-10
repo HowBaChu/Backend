@@ -45,6 +45,9 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MBTI mbti;
 
+    @Column(nullable = false)
+    private int reportCnt;
+
     @Column
     private Boolean isDeleted;
 
@@ -54,8 +57,6 @@ public class Member extends BaseEntity {
     @Column
     private String avatar;
 
-    @Column
-    private int reportCnt = 0;
 
     public static Member toEntity(MemberRequestDto.signup requestDto) {
         return Member.builder()
@@ -64,6 +65,7 @@ public class Member extends BaseEntity {
             .username(requestDto.getUsername())
             .mbti(MBTI.findByCode(requestDto.getMbti()))
             .isDeleted(false)
+            .reportCnt(0)
             .build();
     }
 

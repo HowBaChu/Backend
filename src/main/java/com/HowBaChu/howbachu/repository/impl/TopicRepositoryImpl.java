@@ -17,6 +17,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +33,7 @@ public class TopicRepositoryImpl extends Querydsl4RepositorySupport implements T
     }
 
     @Override
+    @Cacheable(value = "topic", key = "#date")
     public Topic getTopicByDate(@Nullable LocalDate date) {
         return Optional.ofNullable(
             selectFrom(topic)

@@ -47,8 +47,6 @@ public class JwtFilter extends OncePerRequestFilter {
             resolveTokenFromCookie(request, REFRESH_TOKEN_HEADER),
             request, response);
 
-        response.setHeader("Access-Control-Allow-Origin", "*");
-
         chain.doFilter(request, response);
 
     }

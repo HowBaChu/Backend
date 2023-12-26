@@ -13,7 +13,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableSwagger2
 @Configuration
-@OpenAPIDefinition(servers = {@Server(url = "http://howbachu.kro.kr", description = "HowBaChu API Server")})
+@OpenAPIDefinition(servers = {@Server(url = "https://howbachu.kro.kr", description = "HowBaChu API Server")})
 public class SwaggerConfig {
 
     @Bean

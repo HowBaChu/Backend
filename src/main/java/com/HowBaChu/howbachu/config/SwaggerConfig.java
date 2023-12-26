@@ -1,5 +1,7 @@
 package com.HowBaChu.howbachu.config;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -11,6 +13,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableSwagger2
 @Configuration
+@OpenAPIDefinition(servers = {@Server(url = "http://howbachu.kro.kr", description = "HowBaChu API Server")})
 public class SwaggerConfig {
 
     @Bean

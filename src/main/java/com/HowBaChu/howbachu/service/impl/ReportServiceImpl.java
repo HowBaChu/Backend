@@ -38,7 +38,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public List<ReportResponseDto> findReports(String memberEmail) {
         return reportRepository.findAll().stream()
-            .filter(report -> report.getReporter().getEmail().equals(memberEmail))
+            .filter(report -> report.isReported(memberEmail))
             .map(ReportResponseDto::of).collect(Collectors.toList());
     }
 

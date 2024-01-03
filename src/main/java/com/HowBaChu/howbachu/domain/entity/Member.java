@@ -82,6 +82,10 @@ public class Member extends BaseEntity {
         this.reportCnt++;
     }
 
+    public boolean isReported(String email) {
+        return this.email.equals(email);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

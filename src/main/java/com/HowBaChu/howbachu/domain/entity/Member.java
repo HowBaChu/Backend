@@ -23,7 +23,7 @@ import org.hibernate.annotations.Where;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE member SET is_deleted = true WHERE member_id = ? OR report_cnt >= ReportCriteria.MEMBER_SUSPENSION_COUNT.getCount()")
+@SQLDelete(sql = "UPDATE member SET is_deleted = true WHERE member_id = ?")
 @Where(clause = "is_deleted != true")
 public class Member extends BaseEntity {
 

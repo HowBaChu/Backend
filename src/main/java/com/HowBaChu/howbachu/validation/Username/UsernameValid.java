@@ -16,7 +16,7 @@ import javax.validation.Payload;
 @Inherited
 @Target(ElementType.FIELD)
 @Constraint(validatedBy = {UsernameValidator.class})
-@ExternalDocumentation(description = "이름 형식이 맞는지 검사합니다.",url = "https://howbachu.shop/swagger-ui.html#/User")
+@ExternalDocumentation(description = "이름 형식이 맞는지 검사합니다.")
 public @interface UsernameValid {
     String message() default "이름은 (" + userNameMinLength + "~" + userNameMaxLength + ")자 이어야 합니다.";
     Class<?>[] groups() default { };

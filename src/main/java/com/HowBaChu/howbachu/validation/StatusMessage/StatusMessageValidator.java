@@ -15,6 +15,9 @@ public class StatusMessageValidator implements ConstraintValidator<StatusMessage
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
+        if (value == null) {
+            return true;
+        }
         if (value.length() > maxLength) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(message).addConstraintViolation();

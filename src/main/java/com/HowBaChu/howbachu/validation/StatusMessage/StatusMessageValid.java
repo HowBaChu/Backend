@@ -13,7 +13,7 @@ import javax.validation.Payload;
 @Inherited
 @Target(ElementType.FIELD)
 @Constraint(validatedBy = {StatusMessageValidator.class})
-@ExternalDocumentation(description = "상태메세지 형식이 맞는지 검사합니다.",url = "https://howbachu.shop/swagger-ui.html#/User")
+@ExternalDocumentation(description = "상태메세지 형식이 맞는지 검사합니다.")
 public @interface StatusMessageValid {
     String message() default "상태메세지는 30자까지 입력할 수 있습니다.";
     Class<?>[] groups() default { };

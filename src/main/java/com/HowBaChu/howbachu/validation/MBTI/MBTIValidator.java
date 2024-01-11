@@ -13,6 +13,9 @@ public class MBTIValidator implements ConstraintValidator<MBTIValid, String> {
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
+        if (value == null) {
+            return true;
+        }
         return MBTI.isExists(value);
     }
 }

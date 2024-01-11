@@ -21,6 +21,9 @@ public class UsernameValidator implements ConstraintValidator<UsernameValid, Str
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
+        if (value == null) {
+            return true;
+        }
         if (value.length() > maxLength || value.length() < minLength) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(lengthMessage).addConstraintViolation();

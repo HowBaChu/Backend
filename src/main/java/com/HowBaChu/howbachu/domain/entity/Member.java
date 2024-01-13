@@ -68,10 +68,10 @@ public class Member extends BaseEntity {
     }
 
     public void update(MemberRequestDto.update requestDto) {
-        this.password = requestDto.getPassword();
-        this.username = requestDto.getUsername();
-        this.mbti = MBTI.findByCode(requestDto.getMbti());
-        this.statusMessage = requestDto.getStatusMessage();
+        this.password = requestDto.getPassword() == null ? this.password : requestDto.getPassword();
+        this.username = requestDto.getUsername() == null ? this.username : requestDto.getUsername();
+        this.mbti = requestDto.getMbti() == null ? this.mbti : MBTI.findByCode(requestDto.getMbti());
+        this.statusMessage = requestDto.getStatusMessage() == null ? this.statusMessage : requestDto.getStatusMessage();
     }
 
     public void uploadAvatar(String url) {

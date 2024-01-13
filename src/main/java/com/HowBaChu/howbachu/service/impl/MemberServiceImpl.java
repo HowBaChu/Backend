@@ -88,8 +88,12 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public MemberResponseDto updateMember(String email, MemberRequestDto.update requestDto) {
         Member member = findMemberByEmail(email);
-        checkMemberDuplicateByMemberName(member.getUsername(), requestDto.getUsername());
-        requestDto.encodePassword(passwordEncoder.encode(requestDto.getPassword()));
+        if (requestDto.getUsername() != null) {
+            checkMemberDuplicateByMemberName(member.getUsername(), requestDto.getUsername());
+        }
+        if (requestDto.getPassword() != null) {
+            requestDto.encodePassword(passwordEncoder.encode(requestDto.getPassword()));
+        }
         member.update(requestDto);
         return MemberResponseDto.of(member);
     }

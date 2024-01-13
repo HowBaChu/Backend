@@ -1,9 +1,12 @@
 package com.HowBaChu.howbachu.validation.Password;
 
 import com.HowBaChu.howbachu.validation.LimitBound;
+import lombok.extern.slf4j.Slf4j;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+@Slf4j
 public class PasswordValidator implements ConstraintValidator<PasswordValid, String> {
 
     private final int maxLength = LimitBound.passwordMaxLength;
@@ -17,6 +20,9 @@ public class PasswordValidator implements ConstraintValidator<PasswordValid, Str
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
+        if (value == null) {
+            return true;
+        }
         if (!value.matches(regex)) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(message).addConstraintViolation();

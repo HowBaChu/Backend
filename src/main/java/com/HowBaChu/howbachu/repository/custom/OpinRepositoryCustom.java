@@ -1,7 +1,7 @@
 package com.HowBaChu.howbachu.repository.custom;
 
-
 import com.HowBaChu.howbachu.domain.dto.opin.OpinResponseDto;
+import com.HowBaChu.howbachu.domain.dto.opin.TrendingOpinResponseDto;
 import com.HowBaChu.howbachu.domain.dto.search.SearchResultResponseDto;
 
 import java.util.List;
@@ -13,18 +13,13 @@ import org.springframework.data.domain.Pageable;
 public interface OpinRepositoryCustom {
 
     /* 단건 Opin 조회 - 삭제용(opinId, email )*/
-    Opin fetchOpinByIdAndEmail(Long opinId, String email);
+    Opin fetchOpin(Long opinId, String email);
+
     /* 부모 댓글 검색 결과 */
-    List<SearchResultResponseDto.ParentsOpinSearchResponseDto> fetchParentOpinSearch(String condition);
+    Page<SearchResultResponseDto.ParentsOpinSearchResponseDto> fetchParentOpinSearch(String condition, String email, Pageable pageable);
 
     /* 자식 댓글 검색 결과 */
-    List<SearchResultResponseDto.ChildOpinSearchResponseDto> fetchChildOpinSearch(String condition);
-
-    /* 부모 댓글 검색 결과 - 페이징 적용 <더보기> */
-    Page<SearchResultResponseDto.ParentsOpinSearchResponseDto> fetchParentOpinSearch(String condition, Pageable pageable);
-
-    /* 자식 댓글 검색 결과 - 페이징 적용 <더보기> */
-    Page<SearchResultResponseDto.ChildOpinSearchResponseDto> fetchChildOpinSearch(String condition, Pageable pageable);
+    Page<SearchResultResponseDto.ChildOpinSearchResponseDto> fetchChildOpinSearch(String condition, String email, Pageable pageable);
 
     /* 자식 댓글 리스트 조회 */
     List<OpinResponseDto> fetchChildOpinList(Long parentId, String email);
@@ -33,8 +28,11 @@ public interface OpinRepositoryCustom {
     OpinResponseDto fetchParentOpin(Long opinId, String email);
 
     /* 댓글 조회 */
-    Page<OpinResponseDto> fetchParentOpinList(int page, String email);
+    Page<OpinResponseDto> fetchParentOpinList(Pageable pageable, String email);
 
     /* 특정 회원이 쓴 댓글 조회 -> 내가 쓴 댓글 포함 */
-    Page<OpinResponseDto> fetchMyOpinList(int page, String email);
+    Page<OpinResponseDto> fetchMyOpinList(Pageable pageable, String email);
+
+    /* 지난 1시간 동안 가장 핫한 게시글 조회 */
+    TrendingOpinResponseDto fetchHotOpin();
 }

@@ -15,8 +15,10 @@ public class OpinResponseDto {
     private String topicSubTitle;
     private Selection selection;
     private String nickname;
+    private String profileImg;
     private String content;
     private int likeCnt;
     private boolean isOwner;
+    private boolean isLiked;
 
 }

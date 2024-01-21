@@ -41,6 +41,7 @@ public enum ErrorCode {
     /* OPIN */
     OPIN_NOT_FOUND(HttpStatus.BAD_REQUEST, "400", "존재하지 않는 오핀입니다."),
     OPIN_MISS_MATCH(HttpStatus.BAD_REQUEST, "400", "해당 오핀과 정보가 일치하는 유저가 없습니다."),
+    OPIN_HOT_NOT_FOUND(HttpStatus.BAD_REQUEST, "400", "핫오핀을 찾을 수 없습니다"),
 
     /* TOPIC */
     TOPIC_NOT_FOUND(HttpStatus.NOT_FOUND, "404", "토픽 정보가 존재하지 않습니다."),

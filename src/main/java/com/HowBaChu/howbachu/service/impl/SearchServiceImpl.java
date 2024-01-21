@@ -17,22 +17,22 @@ public class SearchServiceImpl implements SearchService {
     private final TopicRepository topicRepository;
 
     @Override
-    public SearchResultResponseDto fetchSearchResult(String condition) {
+    public SearchResultResponseDto fetchSearchResult(String condition, String email, Pageable pageable) {
         return new SearchResultResponseDto(
-            opinRepository.fetchParentOpinSearch(condition),
-            opinRepository.fetchChildOpinSearch(condition),
-            topicRepository.fetchTopicSearch(condition)
+            opinRepository.fetchParentOpinSearch(condition, email, pageable),
+            opinRepository.fetchChildOpinSearch(condition, email, pageable),
+            topicRepository.fetchTopicSearch(condition, pageable)
         );
     }
 
     @Override
-    public Page<SearchResultResponseDto.ParentsOpinSearchResponseDto> fetchMoreParentOpins(String condition, Pageable pageable) {
-        return opinRepository.fetchParentOpinSearch(condition, pageable);
+    public Page<SearchResultResponseDto.ParentsOpinSearchResponseDto> fetchMoreParentOpins(String condition, String email, Pageable pageable) {
+        return opinRepository.fetchParentOpinSearch(condition, email, pageable);
     }
 
     @Override
-    public Page<SearchResultResponseDto.ChildOpinSearchResponseDto> fetchMoreChildOpins(String condition, Pageable pageable) {
-        return opinRepository.fetchChildOpinSearch(condition, pageable);
+    public Page<SearchResultResponseDto.ChildOpinSearchResponseDto> fetchMoreChildOpins(String condition, String email, Pageable pageable) {
+        return opinRepository.fetchChildOpinSearch(condition, email, pageable);
     }
 
     @Override

@@ -3,10 +3,7 @@ package com.HowBaChu.howbachu.repository;
 import com.HowBaChu.howbachu.domain.constants.MBTI;
 import com.HowBaChu.howbachu.domain.constants.Selection;
 import com.HowBaChu.howbachu.domain.dto.opin.OpinResponseDto;
-import com.HowBaChu.howbachu.domain.entity.Member;
-import com.HowBaChu.howbachu.domain.entity.Opin;
-import com.HowBaChu.howbachu.domain.entity.Topic;
-import com.HowBaChu.howbachu.domain.entity.Vote;
+import com.HowBaChu.howbachu.domain.entity.*;
 import com.HowBaChu.howbachu.domain.entity.embedded.SubTitle;
 import com.HowBaChu.howbachu.domain.entity.embedded.VotingStatus;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +41,9 @@ class OpinRepositoryTest {
 
     @Autowired
     OpinRepository opinRepository;
+
+    @Autowired
+    LikesRepository likesRepository;
 
 
     private Topic duumyTopic;
@@ -96,7 +97,7 @@ class OpinRepositoryTest {
         String email = dummyMember.getEmail();
 
         // when
-        Opin findOpin = opinRepository.fetchOpinByIdAndEmail(opinId, email);
+        Opin findOpin = opinRepository.fetchOpin(opinId, email);
 
         // then
         assertThat(findOpin.getContent()).isEqualTo(dummyOpin.getContent());
@@ -113,7 +114,7 @@ class OpinRepositoryTest {
         }
 
         // when
-        Page<OpinResponseDto> results = opinRepository.fetchMyOpinList(0, email);
+        Page<OpinResponseDto> results = opinRepository.fetchMyOpinList(PageRequest.of(20, 0), email);
 
         // then
         assertThat(results.getContent().size()).isEqualTo(10);

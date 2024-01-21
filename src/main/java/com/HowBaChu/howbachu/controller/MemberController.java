@@ -4,7 +4,9 @@ import com.HowBaChu.howbachu.domain.constants.ResponseCode;
 import com.HowBaChu.howbachu.domain.dto.member.MemberRequestDto;
 import com.HowBaChu.howbachu.domain.dto.member.StatusResponseDto;
 import com.HowBaChu.howbachu.service.MemberService;
+
 import javax.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +41,7 @@ public class MemberController {
     /*회원정보 수정*/
     @PatchMapping
     public ResponseEntity<?> updateMemberDetail(@ApiIgnore Authentication authentication,
-        @Valid @RequestBody MemberRequestDto.update requestDto) {
+                                                @Valid @RequestBody MemberRequestDto.update requestDto) {
         return ResponseCode.MEMBER_UPDATE.toResponse(
             memberService.updateMember(authentication.getName(), requestDto));
     }
@@ -65,9 +67,8 @@ public class MemberController {
     }
 
     @PostMapping("/password-verification")
-    public ResponseEntity<?> checkPasswordVerification(
-        @Valid @RequestBody MemberRequestDto.passwordVerification requestDto,
-        @ApiIgnore Authentication authentication) {
+    public ResponseEntity<?> checkPasswordVerification(@Valid @RequestBody MemberRequestDto.passwordVerification requestDto,
+                                                       @ApiIgnore Authentication authentication) {
         StatusResponseDto responseDto = memberService.checkPassword(requestDto.getPassword(),
             authentication.getName());
         return responseDto.passwordCheck().toResponse(responseDto);
@@ -76,7 +77,7 @@ public class MemberController {
     /*프로필 사진 추가*/
     @PostMapping("/avatar")
     public ResponseEntity<?> uploadAvatar(@ApiIgnore Authentication authentication,
-        @RequestPart(value = "file") MultipartFile image) {
+                                          @RequestPart(value = "file") MultipartFile image) {
         return ResponseCode.AVATAR_UPLOAD.toResponse(
             memberService.uploadAvatar(authentication.getName(), image));
     }

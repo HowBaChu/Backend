@@ -72,7 +72,7 @@ class VoteControllerTest {
 
         // given
         VoteRequestDto requestDto = new VoteRequestDto(Selection.A);
-        given(voteService.voting(requestDto, authentication.getName(), response))
+        given(voteService.voting(requestDto, authentication.getName()))
             .willReturn(1L);
 
         // when
@@ -89,7 +89,7 @@ class VoteControllerTest {
             .andExpect(jsonPath("$.data").exists())
             .andDo(print());
 
-        verify(voteService).voting(requestDto, authentication.getName(), response);
+        verify(voteService).voting(requestDto, authentication.getName());
     }
 
 }

@@ -4,6 +4,8 @@ import com.HowBaChu.howbachu.domain.constants.ResponseCode;
 import com.HowBaChu.howbachu.domain.dto.opin.OpinRequestDto;
 import com.HowBaChu.howbachu.service.OpinService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +25,9 @@ public class OpinController {
     }
 
     @GetMapping
-    public ResponseEntity<?> listOpin(@RequestParam(name = "page", defaultValue = "0") int page,
+    public ResponseEntity<?> listOpin(@PageableDefault(size = 20) Pageable pageable,
                                       @ApiIgnore Authentication authentication) {
-        return ResponseCode.OPIN_LIST.toResponse(opinService.getOpinList(page, authentication.getName()));
+        return ResponseCode.OPIN_LIST.toResponse(opinService.getOpinList(pageable, authentication.getName()));
     }
 
     @GetMapping(value = "/{id}")
@@ -48,9 +50,14 @@ public class OpinController {
     }
 
     @GetMapping(value = "/my")
-    public ResponseEntity<?> listMyOpin(@RequestParam(name = "page", defaultValue = "0") int page,
+    public ResponseEntity<?> listMyOpin(@PageableDefault(size = 20) Pageable pageable,
                                         @ApiIgnore Authentication authentication) {
-        return ResponseCode.OPIN_LIST.toResponse(opinService.getMyOpinList(page, authentication.getName()));
+        return ResponseCode.OPIN_LIST.toResponse(opinService.getMyOpinList(pageable, authentication.getName()));
+    }
+
+    @GetMapping("/trending")
+    public ResponseEntity<?> hotOpin() {
+        return ResponseCode.OPIN_HOT.toResponse(opinService.getHotOpin());
     }
 
 }

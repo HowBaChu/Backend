@@ -3,10 +3,13 @@ package com.HowBaChu.howbachu.domain.entity.embedded;
 
 import com.HowBaChu.howbachu.domain.constants.Selection;
 import javax.persistence.Embeddable;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @Embeddable
+@AllArgsConstructor
 public class VotingStatus {
 
     private int A;

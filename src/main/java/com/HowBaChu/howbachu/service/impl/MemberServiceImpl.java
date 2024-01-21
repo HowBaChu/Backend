@@ -70,7 +70,7 @@ public class MemberServiceImpl implements MemberService {
 
         // cookie 설정
         // 리프레쉬 토큰 외에는 세션 토큰.
-        cookieUtil.setCookie(response, REFRESH_TOKEN, tokenDto.getRefreshToken(), jwtProvider.getRefreshTokenExpiredTime());
+        cookieUtil.setCookie(response, REFRESH_TOKEN, tokenDto.getRefreshToken());
         cookieUtil.setCookie(response, ACCESS_TOKEN, tokenDto.getAccessToken());
 
         return TokenResponseDto.builder()

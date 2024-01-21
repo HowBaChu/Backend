@@ -1,12 +1,11 @@
 package com.HowBaChu.howbachu.domain.dto.search;
 
+import com.HowBaChu.howbachu.domain.entity.embedded.SubTitle;
+import com.HowBaChu.howbachu.domain.entity.embedded.VotingStatus;
+import lombok.*;
+import org.springframework.data.domain.Page;
+
 import java.time.LocalDate;
-import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @Setter
@@ -15,9 +14,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SearchResultResponseDto {
 
-    List<ParentsOpinSearchResponseDto> parentsOpinList;
-    List<ChildOpinSearchResponseDto> childOpinList;
-    List<TopicSearchResponseDto> topicList;
+    Page<ParentsOpinSearchResponseDto> parentsOpinList;
+    Page<ChildOpinSearchResponseDto> childOpinList;
+    Page<TopicSearchResponseDto> topicList;
 
     @Getter
     @Setter
@@ -25,11 +24,13 @@ public class SearchResultResponseDto {
     @AllArgsConstructor  /* P-Opin 검색 결과 */
     public static class ParentsOpinSearchResponseDto {
 
+        private Long opinId;
+
         /* 댓글 작성자 프로필 이미지 */
         private String profileImg;
 
         /* 댓글 작성자 */
-        private String author;
+        private String nickname;
 
         /* 댓글 내용 */
         private String content;
@@ -40,6 +41,9 @@ public class SearchResultResponseDto {
         /* 투표한 부제 */
         private String topicSubtitle;
 
+        /* 좋아요 여부 */
+        private boolean isLiked;
+
     }
 
     @Getter
@@ -48,11 +52,13 @@ public class SearchResultResponseDto {
     @AllArgsConstructor  /* Ch-Opin 검색 결과 */
     public static class ChildOpinSearchResponseDto {
 
+        private Long opinId;
+
         /* 댓글 작성자 프로필 이미지 */
         private String profileImg;
 
         /* 댓글 작성자 */
-        private String author;
+        private String nickname;
 
         /* 댓글 내용 */
         private String content;
@@ -66,6 +72,9 @@ public class SearchResultResponseDto {
         /* 부모 댓글 Id */
         private Long parentOpinId;
 
+        /* 좋아요 여부 */
+        private boolean isLiked;
+
     }
 
 
@@ -75,16 +84,16 @@ public class SearchResultResponseDto {
     @AllArgsConstructor  /* Topic 검색 결과 */
     public static class TopicSearchResponseDto {
 
+        private Long topicId;
+
         /* 토픽 제목 */
         private String title;
 
-        /* 토픽 부제목(sub_A, sub_B) */
-        private String subTitleA;
-        private String subTitleB;
+        /* 토픽 부제목 */
+        private SubTitle subTitle;
 
-        /* 투표 현황(A, B) */
-        private int countA;
-        private int countB;
+        /* 투표 현황 */
+        private VotingStatus votingStatus;
 
         /* 토픽 날짜(MM:dd) */
         private LocalDate date;

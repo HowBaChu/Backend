@@ -10,7 +10,7 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 
-@ExternalDocumentation(description = "Enum에 있는 값인지 검사합니다.",url = "https://howbachu.shop/swagger-ui.html#/User")
+@ExternalDocumentation(description = "Enum에 있는 값인지 검사합니다.")
 @Target(FIELD)
 @Retention(RUNTIME)
 @Constraint(validatedBy = {MBTIValidator.class})

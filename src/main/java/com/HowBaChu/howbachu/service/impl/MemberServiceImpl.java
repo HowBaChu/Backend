@@ -70,7 +70,7 @@ public class MemberServiceImpl implements MemberService {
 
         // cookie 설정
         // 리프레쉬 토큰 외에는 세션 토큰.
-        cookieUtil.setCookie(response, REFRESH_TOKEN, tokenDto.getRefreshToken(), jwtProvider.getRefreshTokenExpiredTime());
+        cookieUtil.setCookie(response, REFRESH_TOKEN, tokenDto.getRefreshToken());
         cookieUtil.setCookie(response, ACCESS_TOKEN, tokenDto.getAccessToken());
 
         return TokenResponseDto.builder()
@@ -88,8 +88,12 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public MemberResponseDto updateMember(String email, MemberRequestDto.update requestDto) {
         Member member = findMemberByEmail(email);
-        checkMemberDuplicateByMemberName(member.getUsername(), requestDto.getUsername());
-        requestDto.encodePassword(passwordEncoder.encode(requestDto.getPassword()));
+        if (requestDto.getUsername() != null) {
+            checkMemberDuplicateByMemberName(member.getUsername(), requestDto.getUsername());
+        }
+        if (requestDto.getPassword() != null) {
+            requestDto.encodePassword(passwordEncoder.encode(requestDto.getPassword()));
+        }
         member.update(requestDto);
         return MemberResponseDto.of(member);
     }

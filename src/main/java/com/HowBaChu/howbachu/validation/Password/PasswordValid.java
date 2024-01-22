@@ -13,7 +13,7 @@ import javax.validation.Payload;
 @Inherited
 @Target(ElementType.FIELD)
 @Constraint(validatedBy = {PasswordValidator.class})
-@ExternalDocumentation(description = "비밀번호 형식이 맞는지 검사합니다.",url = "https://howbachu.shop/swagger-ui.html#/User")
+@ExternalDocumentation(description = "비밀번호 형식이 맞는지 검사합니다.")
 public @interface PasswordValid {
     String message() default "비밀번호 형식이 맞지 않습니다.";
     Class<?>[] groups() default { };

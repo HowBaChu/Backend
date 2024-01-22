@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OpinResponseDto {
-
+public class TrendingOpinResponseDto {
     private Long id;
     private Long memberId;
     private String topicSubTitle;
@@ -18,7 +17,4 @@ public class OpinResponseDto {
     private String profileImg;
     private String content;
     private int likeCnt;
-    private boolean isOwner;
-    private boolean isLiked;
-
 }

@@ -5,8 +5,10 @@ import com.HowBaChu.howbachu.validation.LimitBound;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
+@Slf4j
 public class EmailValidator implements ConstraintValidator<EmailValid,String> {
 
     private final MemberRepository memberRepository;
@@ -24,7 +26,6 @@ public class EmailValidator implements ConstraintValidator<EmailValid,String> {
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-
         if (value.length() > maxLength || value.isEmpty()) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(lengthMessage).addConstraintViolation();

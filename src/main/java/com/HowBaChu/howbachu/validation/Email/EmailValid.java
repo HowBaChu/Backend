@@ -12,7 +12,7 @@ import javax.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Target(ElementType.FIELD)
-@ExternalDocumentation(description = "이메일 형식이 맞는지 검사합니다.",url = "https://howbachu.shop/swagger-ui.html#/User")
+@ExternalDocumentation(description = "이메일 형식이 맞는지 검사합니다.")
 @Constraint(validatedBy = {EmailValidator.class})
 public @interface EmailValid {
     String message() default "이메일 형식이 맞지 않습니다.";

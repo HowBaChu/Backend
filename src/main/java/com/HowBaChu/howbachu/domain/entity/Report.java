@@ -60,4 +60,8 @@ public class Report extends BaseEntity {
     public String getReportedContent() {
         return reported.getContent();
     }
+
+    public boolean isReported(String email) {
+        return reported.getMember().isReported(email);
+    }
 }
